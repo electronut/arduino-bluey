@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2014-2015 Arduino LLC.  All right reserved.
+  Copyright (c) 2014 Arduino.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -16,11 +16,27 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "variant.h"
+#ifndef _WIRING_SHIFT_
+#define _WIRING_SHIFT_
 
-Uart Serial( NRF_UART0, RX_PIN_NUMBER, TX_PIN_NUMBER );
+#ifdef __cplusplus
+ extern "C" {
+#endif
 
-void UARTE0_UART0_IRQHandler()
-{
-  Serial.IrqHandler();
+/*
+ * \brief
+ */
+extern uint32_t shiftIn( uint32_t ulDataPin, uint32_t ulClockPin, uint32_t ulBitOrder ) ;
+
+
+/*
+ * \brief
+ */
+extern void shiftOut( uint32_t ulDataPin, uint32_t ulClockPin, uint32_t ulBitOrder, uint32_t ulVal ) ;
+
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* _WIRING_SHIFT_ */

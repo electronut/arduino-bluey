@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2014-2015 Arduino LLC.  All right reserved.
+  Copyright (c) 2015 Arduino LLC.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -16,11 +16,19 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "variant.h"
+#pragma once
 
-Uart Serial( NRF_UART0, RX_PIN_NUMBER, TX_PIN_NUMBER );
+#ifdef __cplusplus
+extern "C"{
+#endif
 
-void UARTE0_UART0_IRQHandler()
-{
-  Serial.IrqHandler();
-}
+//extern void itoa( int n, char s[] ) ;
+
+// extern char* itoa( int value, char *string, int radix ) ;
+extern char* ltoa( long value, char *string, int radix ) ;
+// extern char* utoa( unsigned long value, char *string, int radix ) ;
+extern char* ultoa( unsigned long value, char *string, int radix ) ;
+
+#ifdef __cplusplus
+} // extern "C"
+#endif

@@ -16,34 +16,36 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "nrf.h"
+#pragma once
 
-#include "Arduino.h"
+#include "HardwareSerial.h"
+#include "nrf_uart.h"
+#include "RingBuffer.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <cstddef>
 
-/*
- * Arduino Zero board initialization
- *
- * Good to know:
- *   - At reset, ResetHandler did the system clock configuration. Core is running at 48MHz.
- *   - Watchdog is disabled by default, unless someone plays with NVM User page
- *   - During reset, all PORT lines are configured as inputs with input buffers, output buffers and pull disabled.
- */
-void init( void )
+class Uart : public HardwareSerial
 {
-  uint32_t ul ;
+  public:
+    Uart(NRF_UART_Type *_nrfUart, uint8_t _pinRX, uint8_t _pinTX);
+    void begin(unsigned long baudRate);
+    void begin(unsigned long baudrate, uint16_t config);
+    void end();
+    int available();
+    int peek();
+    int read();
+    void flush();
+    size_t write(const uint8_t data);
+    using Print::write; // pull in write(str) and write(buf, size) from Print
 
-  // Set Systick to 1ms interval, common to all Cortex-M variants
-  if ( SysTick_Config( SystemCoreClock / 1000 ) )
-  {
-    // Capture error
-    while ( 1 ) ;
-  }
-}
+    void IrqHandler();
 
-#ifdef __cplusplus
-}
-#endif
+    operator bool() { return true; }
+
+  private:
+    NRF_UART_Type *nrfUart;
+    RingBuffer rxBuffer;
+
+    uint8_t uc_pinRX;
+    uint8_t uc_pinTX;
+};

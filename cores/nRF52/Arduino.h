@@ -13,25 +13,22 @@ typedef uint16_t word;
 
 // some libraries and sketches depend on this AVR stuff,
 // assuming Arduino.h or WProgram.h automatically includes it...
-//
-// #include "avr/pgmspace.h"
-// #include "avr/interrupt.h"
 
-// #include "binary.h"
-// #include "itoa.h"
+#include "avr/pgmspace.h"
+#include "avr/interrupt.h"
+
+#include "binary.h"
+#include "itoa.h"
 
 #ifdef __cplusplus
 extern "C"{
 #endif // __cplusplus
 
-// Include Atmel headers
-// // #include "sam.h"
-
 #include "wiring_constants.h"
 
-// #define clockCyclesPerMicrosecond() ( SystemCoreClock / 1000000L )
-// #define clockCyclesToMicroseconds(a) ( ((a) * 1000L) / (SystemCoreClock / 1000L) )
-// #define microsecondsToClockCycles(a) ( (a) * (SystemCoreClock / 1000000L) )
+#define clockCyclesPerMicrosecond() ( SystemCoreClock / 1000000L )
+#define clockCyclesToMicroseconds(a) ( ((a) * 1000L) / (SystemCoreClock / 1000L) )
+#define microsecondsToClockCycles(a) ( (a) * (SystemCoreClock / 1000000L) )
 
 void yield( void ) ;
 
@@ -39,7 +36,7 @@ void yield( void ) ;
 void setup( void ) ;
 void loop( void ) ;
 
-// #include "WVariant.h"
+#include "WVariant.h"
 
 #ifdef __cplusplus
 } // extern "C"
@@ -47,16 +44,16 @@ void loop( void ) ;
 
 // The following headers are for C++ only compilation
 #ifdef __cplusplus
-  // #include "WCharacter.h"
-  // #include "WString.h"
+  #include "WCharacter.h"
+  #include "WString.h"
   // #include "Tone.h"
-  // #include "WMath.h"
-  // #include "HardwareSerial.h"
-  // #include "pulse.h"
+  #include "WMath.h"
+  #include "HardwareSerial.h"
+  #include "pulse.h"
 #endif
 #include "delay.h"
 #ifdef __cplusplus
-  // #include "Uart.h"
+  #include "Uart.h"
 #endif
 
 // Include board variant
@@ -64,9 +61,9 @@ void loop( void ) ;
 
 #include "wiring.h"
 #include "wiring_digital.h"
-// #include "wiring_analog.h"
-// #include "wiring_shift.h"
-// #include "WInterrupts.h"
+#include "wiring_analog.h"
+#include "wiring_shift.h"
+#include "WInterrupts.h"
 
 // undefine stdlib's abs if encountered
 #ifdef abs

@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2014-2015 Arduino LLC.  All right reserved.
+  Copyright (c) 2014 Arduino.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -16,11 +16,23 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "variant.h"
+#ifndef Printable_h
+#define Printable_h
 
-Uart Serial( NRF_UART0, RX_PIN_NUMBER, TX_PIN_NUMBER );
+#include <stdlib.h>
 
-void UARTE0_UART0_IRQHandler()
+class Print;
+
+/** The Printable class provides a way for new classes to allow themselves to be printed.
+    By deriving from Printable and implementing the printTo method, it will then be possible
+    for users to print out instances of this class by passing them into the usual
+    Print::print and Print::println methods.
+*/
+
+class Printable
 {
-  Serial.IrqHandler();
-}
+  public:
+    virtual size_t printTo(Print& p) const = 0;
+};
+
+#endif

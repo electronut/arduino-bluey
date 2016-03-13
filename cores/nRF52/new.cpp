@@ -1,5 +1,5 @@
 /*
-  Copyright (c) 2014-2015 Arduino LLC.  All right reserved.
+  Copyright (c) 2014 Arduino.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -16,11 +16,20 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "variant.h"
+#include <stdlib.h>
 
-Uart Serial( NRF_UART0, RX_PIN_NUMBER, TX_PIN_NUMBER );
+void *operator new(size_t size) {
+  return malloc(size);
+}
 
-void UARTE0_UART0_IRQHandler()
-{
-  Serial.IrqHandler();
+void *operator new[](size_t size) {
+  return malloc(size);
+}
+
+void operator delete(void * ptr) {
+  free(ptr);
+}
+
+void operator delete[](void * ptr) {
+  free(ptr);
 }
