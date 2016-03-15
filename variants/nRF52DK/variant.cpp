@@ -18,9 +18,12 @@
 
 #include "variant.h"
 
-Uart Serial( NRF_UART0, RX_PIN_NUMBER, TX_PIN_NUMBER );
+Uart Serial( NRF_UART0, UARTE0_UART0_IRQn, RX_PIN_NUMBER, TX_PIN_NUMBER );
 
-void UARTE0_UART0_IRQHandler()
+extern "C"
 {
-  Serial.IrqHandler();
+  void UARTE0_UART0_IRQHandler()
+  {
+    Serial.IrqHandler();
+  }
 }

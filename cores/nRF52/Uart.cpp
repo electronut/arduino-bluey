@@ -20,9 +20,10 @@
 #include "Arduino.h"
 #include "wiring_private.h"
 
-Uart::Uart(NRF_UART_Type *_nrfUart, uint8_t _pinRX, uint8_t _pinTX)
+Uart::Uart(NRF_UART_Type *_nrfUart, IRQn_Type _IRQn, uint8_t _pinRX, uint8_t _pinTX)
 {
   nrfUart = _nrfUart;
+  IRQn = _IRQn;
   uc_pinRX = _pinRX;
   uc_pinTX = _pinTX;
 }
@@ -35,7 +36,7 @@ void Uart::begin(unsigned long baudrate)
 void Uart::begin(unsigned long baudrate, uint16_t /*config*/)
 {
   pinMode(uc_pinTX, OUTPUT);
-  pinMode(uc_pinRX, INPUT_PULLUP);
+  pinMode(uc_pinRX, INPUT);
 
   nrf_uart_txrx_pins_set(nrfUart, uc_pinTX, uc_pinRX);
   nrf_uart_configure(nrfUart, NRF_UART_PARITY_EXCLUDED, NRF_UART_HWFC_DISABLED);
@@ -80,13 +81,32 @@ void Uart::begin(unsigned long baudrate, uint16_t /*config*/)
 
   nrf_uart_enable(nrfUart);
 
+  nrf_uart_event_clear(nrfUart, NRF_UART_EVENT_RXDRDY);
+  nrf_uart_event_clear(nrfUart, NRF_UART_EVENT_TXDRDY);
+
+  nrf_uart_task_trigger(nrfUart, NRF_UART_TASK_STARTRX);
   nrf_uart_task_trigger(nrfUart, NRF_UART_TASK_STARTTX);
+
+  nrf_uart_int_enable(nrfUart, NRF_UART_INT_MASK_RXDRDY);
+
+  NVIC_ClearPendingIRQ(IRQn);
+  NVIC_SetPriority(IRQn, 3);
+  NVIC_EnableIRQ(IRQn);
 }
 
 void Uart::end()
 {
-  nrf_uart_txrx_pins_disconnect(nrfUart);
+  NVIC_DisableIRQ(IRQn);
+
+  nrf_uart_int_disable(nrfUart, NRF_UART_INT_MASK_RXDRDY);
+
+  nrf_uart_task_trigger(nrfUart, NRF_UART_TASK_STOPRX);
+  nrf_uart_task_trigger(nrfUart, NRF_UART_TASK_STOPTX);
+
   nrf_uart_disable(nrfUart);
+
+  nrf_uart_txrx_pins_disconnect(nrfUart);
+
   rxBuffer.clear();
 }
 
@@ -96,6 +116,12 @@ void Uart::flush()
 
 void Uart::IrqHandler()
 {
+  if (nrf_uart_event_check(nrfUart, NRF_UART_EVENT_RXDRDY))
+  {
+    rxBuffer.store_char(nrf_uart_rxd_get(nrfUart));
+
+    nrf_uart_event_clear(nrfUart, NRF_UART_EVENT_RXDRDY);
+  }
 }
 
 int Uart::available()
@@ -117,7 +143,9 @@ size_t Uart::write(const uint8_t data)
 {
   nrf_uart_txd_set(nrfUart, data);
 
-  delay(10);
+  while(!nrf_uart_event_check(nrfUart, NRF_UART_EVENT_TXDRDY));
+
+  nrf_uart_event_clear(nrfUart, NRF_UART_EVENT_TXDRDY);
 
   return 1;
 }

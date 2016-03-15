@@ -27,7 +27,7 @@
 class Uart : public HardwareSerial
 {
   public:
-    Uart(NRF_UART_Type *_nrfUart, uint8_t _pinRX, uint8_t _pinTX);
+    Uart(NRF_UART_Type *_nrfUart, IRQn_Type _IRQn, uint8_t _pinRX, uint8_t _pinTX);
     void begin(unsigned long baudRate);
     void begin(unsigned long baudrate, uint16_t config);
     void end();
@@ -45,6 +45,8 @@ class Uart : public HardwareSerial
   private:
     NRF_UART_Type *nrfUart;
     RingBuffer rxBuffer;
+
+    IRQn_Type IRQn;
 
     uint8_t uc_pinRX;
     uint8_t uc_pinTX;
