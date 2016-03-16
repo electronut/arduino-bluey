@@ -21,6 +21,7 @@ nRF52DK.pid.0=0x1015
 
 nRF52DK.upload.tool=Nordic:openocd
 nRF52DK.upload.protocol=jlink
+nRF52DK.upload.maximum_size=524288
 nRF52DK.upload.setup_command=transport select swd
 nRF52DK.upload.use_1200bps_touch=false
 nRF52DK.upload.wait_for_upload_port=false
