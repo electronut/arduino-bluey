@@ -48,10 +48,12 @@ compiler.define=-DARDUINO=
 # this can be overriden in boards.txt
 build.extra_flags=
 
+compiler.nrf.flags=-DNRF52 "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/toolchain/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/toolchain/gcc/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/drivers_nrf/hal/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/device/"
+
 # These can be overridden in platform.local.txt
-compiler.c.extra_flags=-DNRF52 "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/toolchain/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/toolchain/gcc/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/drivers_nrf/delay/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/drivers_nrf/hal/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/device/"
+compiler.c.extra_flags={compiler.nrf.flags}
 compiler.c.elf.extra_flags=
-compiler.cpp.extra_flags=-DNRF52 "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/toolchain/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/toolchain/gcc/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/drivers_nrf/delay/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/drivers_nrf/hal/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/device/"
+compiler.cpp.extra_flags={compiler.nrf.flags}
 compiler.S.extra_flags=
 compiler.ar.extra_flags=
 compiler.elf2hex.extra_flags=
@@ -96,4 +98,4 @@ tools.openocd.cmd.windows=bin/openocd.exe
 
 tools.openocd.upload.params.verbose=-d2
 tools.openocd.upload.params.quiet=-d0
-tools.openocd.upload.pattern="{path}/{cmd}" {upload.verbose} -f interface/{upload.protocol}.cfg -c "{upload.setup_command}" -f target/nrf51.cfg -c "init ; reset halt ; nrf51 mass_erase ; sleep 500 ; program {{{build.path}/{build.project_name}.bin}} verify reset 0x0; shutdown; "
+tools.openocd.upload.pattern="{path}/{cmd}" {upload.verbose} -f interface/{upload.interface}.cfg -c "{upload.setup_command}" -f target/{upload.target}.cfg -c "program {{{build.path}/{build.project_name}.bin}} verify reset {upload.address}; shutdown; "

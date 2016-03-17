@@ -20,17 +20,21 @@ nRF52DK.vid.0=0x1366
 nRF52DK.pid.0=0x1015
 
 nRF52DK.upload.tool=Nordic:openocd
-nRF52DK.upload.protocol=jlink
+nRF52DK.upload.protocol=
+nRF52DK.upload.interface=jlink
+nRF52DK.upload.target=nrf51
+nRF52DK.upload.address=0x0
 nRF52DK.upload.maximum_size=524288
 nRF52DK.upload.setup_command=transport select swd
 nRF52DK.upload.use_1200bps_touch=false
 nRF52DK.upload.wait_for_upload_port=false
 nRF52DK.upload.native_usb=false
+
 nRF52DK.build.mcu=cortex-m4
 nRF52DK.build.f_cpu=16000000
 nRF52DK.build.board=NRF52_DK
 nRF52DK.build.core=nRF52
 nRF52DK.build.variant=nRF52DK
 nRF52DK.build.variant_system_lib=
-nRF52DK.build.extra_flags=-DGLAH
+nRF52DK.build.extra_flags=
 nRF52DK.build.ldscript=linker_scripts/gcc/nRF52DK.ld
