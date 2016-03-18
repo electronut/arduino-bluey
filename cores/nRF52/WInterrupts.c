@@ -16,36 +16,28 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#include <nrf_gpiote.h>
+
 #include "Arduino.h"
 #include "wiring_private.h"
 
 #include <string.h>
 
-// static voidFuncPtr callbacksInt[EXTERNAL_NUM_INTERRUPTS];
+static voidFuncPtr callbacksInt[NUMBER_OF_GPIO_TE];
+static int8_t channelMap[NUMBER_OF_GPIO_TE];
+static int enabled = 0;
 
-// /* Configure I/O interrupt sources */
-// static void __initialize()
-// {
-//   memset(callbacksInt, 0, sizeof(callbacksInt));
+/* Configure I/O interrupt sources */
+static void __initialize()
+{
+  memset(callbacksInt, 0, sizeof(callbacksInt));
+  memset(channelMap, -1, sizeof(channelMap));
 
-//   NVIC_DisableIRQ(EIC_IRQn);
-//   NVIC_ClearPendingIRQ(EIC_IRQn);
-//   NVIC_SetPriority(EIC_IRQn, 0);
-//   NVIC_EnableIRQ(EIC_IRQn);
-
-//   // Enable GCLK for IEC (External Interrupt Controller)
-//   GCLK->CLKCTRL.reg = (uint16_t) (GCLK_CLKCTRL_CLKEN | GCLK_CLKCTRL_GEN_GCLK0 | GCLK_CLKCTRL_ID(GCM_EIC));
-
-// /* Shall we do that?
-//   // Do a software reset on EIC
-//   EIC->CTRL.SWRST.bit = 1 ;
-//   while ((EIC->CTRL.SWRST.bit == 1) && (EIC->STATUS.SYNCBUSY.bit == 1)) { }
-// */
-
-//   // Enable EIC
-//   EIC->CTRL.bit.ENABLE = 1;
-//   while (EIC->STATUS.bit.SYNCBUSY == 1) { }
-// }
+  NVIC_DisableIRQ(GPIOTE_IRQn);
+  NVIC_ClearPendingIRQ(GPIOTE_IRQn);
+  NVIC_SetPriority(GPIOTE_IRQn, 1);
+  NVIC_EnableIRQ(GPIOTE_IRQn);
+}
 
 /*
  * \brief Specifies a named Interrupt Service Routine (ISR) to call when an interrupt occurs.
@@ -53,62 +45,42 @@
  */
 void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode)
 {
-  // static int enabled = 0;
-  // uint32_t config;
-  // uint32_t pos;
+  if (!enabled) {
+    __initialize();
+    enabled = 1;
+  }
 
-  // EExt_Interrupts in = digitalPinToInterrupt(pin);
-  // if (in == NOT_AN_INTERRUPT || in == EXTERNAL_INT_NMI)
-  //   return;
+  nrf_gpiote_polarity_t polarity;
 
-  // if (!enabled) {
-  //   __initialize();
-  //   enabled = 1;
-  // }
+  switch (mode) {
+    case CHANGE:
+      polarity = NRF_GPIOTE_POLARITY_TOGGLE;
+      break;
 
-  // // Enable wakeup capability on pin in case being used during sleep
-  // EIC->WAKEUP.reg |= (1 << in);
+    case FALLING:
+      polarity = NRF_GPIOTE_POLARITY_HITOLO;
+      break;
 
-  // // Assign pin to EIC
-  // pinPeripheral(pin, PIO_EXTINT);
+    case RISING:
+      polarity = NRF_GPIOTE_POLARITY_LOTOHI;
+      break;
 
-  // // Assign callback to interrupt
-  // callbacksInt[in] = callback;
+    default:
+      return;
+  }
 
-  // // Look for right CONFIG register to be addressed
-  // if (in > EXTERNAL_INT_7) {
-  //   config = 1;
-  // } else {
-  //   config = 0;
-  // }
+  for (int ch = 0; ch < NUMBER_OF_GPIO_TE; ch++) {
+    if (channelMap[ch] == -1 || (uint32_t)channelMap[ch] == pin) {
+      channelMap[ch] = pin;
+      callbacksInt[ch] = callback;
 
-  // // Configure the interrupt mode
-  // pos = (in - (8 * config)) << 2;
-  // switch (mode)
-  // {
-  //   case LOW:
-  //     EIC->CONFIG[config].reg |= EIC_CONFIG_SENSE0_LOW_Val << pos;
-  //     break;
+      nrf_gpiote_event_configure(ch, pin, polarity);
+      nrf_gpiote_event_enable(ch);
+      nrf_gpiote_int_enable(1 << ch);
 
-  //   case HIGH:
-  //     EIC->CONFIG[config].reg |= EIC_CONFIG_SENSE0_HIGH_Val << pos;
-  //     break;
-
-  //   case CHANGE:
-  //     EIC->CONFIG[config].reg |= EIC_CONFIG_SENSE0_BOTH_Val << pos;
-  //     break;
-
-  //   case FALLING:
-  //     EIC->CONFIG[config].reg |= EIC_CONFIG_SENSE0_FALL_Val << pos;
-  //     break;
-
-  //   case RISING:
-  //     EIC->CONFIG[config].reg |= EIC_CONFIG_SENSE0_RISE_Val << pos;
-  //     break;
-  // }
-
-  // // Enable the interrupt
-  // EIC->INTENSET.reg = EIC_INTENSET_EXTINT(1 << in);
+      break;
+    }
+  }
 }
 
 /*
@@ -116,33 +88,32 @@ void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode)
  */
 void detachInterrupt(uint32_t pin)
 {
-  // EExt_Interrupts in = digitalPinToInterrupt(pin);
-  // if (in == NOT_AN_INTERRUPT || in == EXTERNAL_INT_NMI)
-  //   return;
+  for (int ch = 0; ch < NUMBER_OF_GPIO_TE; ch++) {
+    if ((uint32_t)channelMap[ch] == pin) {
+      channelMap[ch] = -1;
+      callbacksInt[ch] = NULL;
 
-  // EIC->INTENCLR.reg = EIC_INTENCLR_EXTINT(1 << in);
+      nrf_gpiote_event_disable(ch);
+      nrf_gpiote_int_disable(1 << ch);
 
-  // // Disable wakeup capability on pin during sleep
-  // EIC->WAKEUP.reg &= ~(1 << in);
+      break;
+    }
+  }
 }
 
-// /*
-//  * External Interrupt Controller NVIC Interrupt Handler
-//  */
-// void EIC_Handler(void)
-// {
-//   // Test the 16 normal interrupts
-//   for (uint32_t i=EXTERNAL_INT_0; i<=EXTERNAL_INT_15; i++)
-//   {
-//     if ((EIC->INTFLAG.reg & (1 << i)) != 0)
-//     {
-//       // Call the callback function if assigned
-//       if (callbacksInt[i]) {
-//         callbacksInt[i]();
-//       }
+void GPIOTE_IRQHandler()
+{
+  nrf_gpiote_events_t event = NRF_GPIOTE_EVENTS_IN_0;
 
-//       // Clear the interrupt
-//       EIC->INTFLAG.reg = 1 << i;
-//     }
-//   }
-// }
+  for (int ch = 0; ch < NUMBER_OF_GPIO_TE; ch++) {
+    if (nrf_gpiote_event_is_set(event) && nrf_gpiote_int_is_enabled(1 << ch)) {
+      if (channelMap[ch] != -1 && callbacksInt[ch]) {
+        callbacksInt[ch]();
+      }
+
+      nrf_gpiote_event_clear(event);
+    }
+
+    event = (nrf_gpiote_events_t)((uint32_t)event + 4);
+  }
+}
