@@ -48,7 +48,7 @@ compiler.define=-DARDUINO=
 # this can be overriden in boards.txt
 build.extra_flags=
 
-compiler.nrf.flags=-DNRF52 "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/toolchain/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/toolchain/gcc/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/drivers_nrf/hal/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/device/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/libraries/util/"
+compiler.nrf.flags=-DNRF52 "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/toolchain/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/toolchain/CMSIS/Include" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/toolchain/gcc/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/drivers_nrf/hal/" "-I{runtime.platform.path}/cores/nRF52/nRF52_SDK_0/components/device/"
 
 # These can be overridden in platform.local.txt
 compiler.c.extra_flags={compiler.nrf.flags}

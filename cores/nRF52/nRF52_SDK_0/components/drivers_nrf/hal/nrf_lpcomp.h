@@ -22,7 +22,7 @@
  * @defgroup nrf_lpcomp_hal LPCOMP HAL
  * @{
  * @ingroup nrf_lpcomp
- * @brief Hardware abstraction layer for managing the Low Power Comparator (LPCOMP).
+ * @brief Hardware access layer for managing the Low Power Comparator (LPCOMP).
  */
 
 #include "nrf.h"
@@ -259,7 +259,7 @@ __STATIC_INLINE void nrf_lpcomp_int_disable(uint32_t lpcomp_int_mask)
 
 
 /**
- * @brief Function for getting the enabled interrupts of LCOMP.
+ * @brief Function for getting the enabled interrupts of LPCOMP.
  *
  * @param[in] lpcomp_int_mask Mask of interrupts to be checked.
  *

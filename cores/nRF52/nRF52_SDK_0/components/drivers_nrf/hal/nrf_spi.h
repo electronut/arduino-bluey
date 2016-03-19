@@ -15,7 +15,7 @@
  * @{
  * @ingroup nrf_spi_master
  *
- * @brief Hardware abstraction layer for accessing the SPI peripheral.
+ * @brief Hardware access layer for accessing the SPI peripheral.
  */
 
 #ifndef NRF_SPI_H__
@@ -29,9 +29,9 @@
 
 
 /**
- * @brief Value that may be used as a parameter in the nrf_spi_pins_set()
- *        function call to specify that a given SPI signal (SCK, MOSI or MISO)
- *        shall not be connected to any physical pin.
+ * @brief This value can be used as a parameter for the @ref nrf_spi_pins_set
+ *        function to specify that a given SPI signal (SCK, MOSI, or MISO)
+ *        shall not be connected to a physical pin.
  */
 #define NRF_SPI_PIN_NOT_CONNECTED  0xFFFFFFFF
 
@@ -95,7 +95,7 @@ typedef enum
  * @brief Function for clearing a specific SPI event.
  *
  * @param[in] p_spi     SPI instance.
- * @param     spi_event Event to clear.
+ * @param[in] spi_event Event to clear.
  */
 __STATIC_INLINE void nrf_spi_event_clear(NRF_SPI_Type * p_spi,
                                          nrf_spi_event_t spi_event);
@@ -104,21 +104,21 @@ __STATIC_INLINE void nrf_spi_event_clear(NRF_SPI_Type * p_spi,
  * @brief Function for checking the state of a specific SPI event.
  *
  * @param[in] p_spi     SPI instance.
- * @param     spi_event Event to check.
+ * @param[in] spi_event Event to check.
  *
- * @retval true  if the event is set,
- * @retval false otherwise.
+ * @retval true  If the event is set.
+ * @retval false If the event is not set.
  */
 __STATIC_INLINE bool nrf_spi_event_check(NRF_SPI_Type * p_spi,
                                          nrf_spi_event_t spi_event);
 
 /**
- * @brief Function for returning the address of a specific SPI event register.
+ * @brief Function for getting the address of a specific SPI event register.
  *
  * @param[in] p_spi     SPI instance.
- * @param     spi_event Desired event.
+ * @param[in] spi_event Requested event.
  *
- * @return Address of specified event register.
+ * @return Address of the specified event register.
  */
 __STATIC_INLINE uint32_t * nrf_spi_event_address_get(NRF_SPI_Type  * p_spi,
                                                      nrf_spi_event_t spi_event);
@@ -127,7 +127,7 @@ __STATIC_INLINE uint32_t * nrf_spi_event_address_get(NRF_SPI_Type  * p_spi,
  * @brief Function for enabling specified interrupts.
  *
  * @param[in] p_spi         SPI instance.
- * @param     spi_int_mask  Interrupts to enable.
+ * @param[in] spi_int_mask  Interrupts to enable.
  */
 __STATIC_INLINE void nrf_spi_int_enable(NRF_SPI_Type * p_spi,
                                         uint32_t spi_int_mask);
@@ -136,7 +136,7 @@ __STATIC_INLINE void nrf_spi_int_enable(NRF_SPI_Type * p_spi,
  * @brief Function for disabling specified interrupts.
  *
  * @param[in] p_spi         SPI instance.
- * @param     spi_int_mask  Interrupts to disable.
+ * @param[in] spi_int_mask  Interrupts to disable.
  */
 __STATIC_INLINE void nrf_spi_int_disable(NRF_SPI_Type * p_spi,
                                          uint32_t spi_int_mask);
@@ -145,10 +145,10 @@ __STATIC_INLINE void nrf_spi_int_disable(NRF_SPI_Type * p_spi,
  * @brief Function for retrieving the state of a given interrupt.
  *
  * @param[in] p_spi   SPI instance.
- * @param     spi_int Interrupt to check.
+ * @param[in] spi_int Interrupt to check.
  *
- * @retval true  if the interrupt is enabled,
- * @retval false otherwise.
+ * @retval true  If the interrupt is enabled.
+ * @retval false If the interrupt is not enabled.
  */
 __STATIC_INLINE bool nrf_spi_int_enable_check(NRF_SPI_Type * p_spi,
                                               nrf_spi_int_mask_t spi_int);
@@ -174,9 +174,9 @@ __STATIC_INLINE void nrf_spi_disable(NRF_SPI_Type * p_spi);
  * value instead of its pin number.
  *
  * @param[in] p_spi     SPI instance.
- * @param     sck_pin   SCK pin number.
- * @param     mosi_pin  MOSI pin number.
- * @param     miso_pin  MISO pin number.
+ * @param[in] sck_pin   SCK pin number.
+ * @param[in] mosi_pin  MOSI pin number.
+ * @param[in] miso_pin  MISO pin number.
  */
 __STATIC_INLINE void nrf_spi_pins_set(NRF_SPI_Type * p_spi,
                                       uint32_t sck_pin,
@@ -184,15 +184,15 @@ __STATIC_INLINE void nrf_spi_pins_set(NRF_SPI_Type * p_spi,
                                       uint32_t miso_pin);
 
 /**
- * @brief Function for writing data to SPI transmitter register.
+ * @brief Function for writing data to the SPI transmitter register.
  *
  * @param[in] p_spi SPI instance.
- * @param     data  TX data to send.
+ * @param[in] data  TX data to send.
  */
 __STATIC_INLINE void nrf_spi_txd_set(NRF_SPI_Type * p_spi, uint8_t data);
 
 /**
- * @brief Function for reading data from SPI receiver register.
+ * @brief Function for reading data from the SPI receiver register.
  *
  * @param[in] p_spi SPI instance.
  *
@@ -204,7 +204,7 @@ __STATIC_INLINE uint8_t nrf_spi_rxd_get(NRF_SPI_Type * p_spi);
  * @brief Function for setting the SPI master data rate.
  *
  * @param[in] p_spi     SPI instance.
- * @param     frequency SPI frequency.
+ * @param[in] frequency SPI frequency.
  */
 __STATIC_INLINE void nrf_spi_frequency_set(NRF_SPI_Type * p_spi,
                                            nrf_spi_frequency_t frequency);
@@ -213,8 +213,8 @@ __STATIC_INLINE void nrf_spi_frequency_set(NRF_SPI_Type * p_spi,
  * @brief Function for setting the SPI configuration.
  *
  * @param[in] p_spi         SPI instance.
- * @param     spi_mode      SPI mode.
- * @param     spi_bit_order SPI bit order.
+ * @param[in] spi_mode      SPI mode.
+ * @param[in] spi_bit_order SPI bit order.
  */
 __STATIC_INLINE void nrf_spi_configure(NRF_SPI_Type * p_spi,
                                        nrf_spi_mode_t spi_mode,

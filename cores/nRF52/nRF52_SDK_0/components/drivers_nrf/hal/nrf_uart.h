@@ -22,7 +22,7 @@
  * @{
  * @ingroup nrf_uart
  *
- * @brief Hardware abstraction layer for accessing the UART peripheral.
+ * @brief Hardware access layer for accessing the UART peripheral.
  */
 
 #define NRF_UART_PSEL_DISCONNECTED 0xFFFFFFFF
@@ -459,7 +459,7 @@ __STATIC_INLINE void nrf_uart_configure(NRF_UART_Type   * p_reg,
                                             nrf_uart_parity_t parity,
                                             nrf_uart_hwfc_t   hwfc)
 {
-    p_reg->CONFIG = parity | hwfc;
+    p_reg->CONFIG = (uint32_t)parity | (uint32_t)hwfc;
 }
 
 __STATIC_INLINE void nrf_uart_baudrate_set(NRF_UART_Type   * p_reg, nrf_uart_baudrate_t baudrate)

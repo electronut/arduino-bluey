@@ -12,7 +12,7 @@
 #ifndef NRF_QDEC_H__
 #define NRF_QDEC_H__
 
-#include "stddef.h"
+#include <stddef.h>
 #include "nrf_error.h"
 #include "nrf.h"
 
@@ -22,7 +22,7 @@
  * @defgroup nrf_qdec_hal QDEC HAL
  * @{
  * @ingroup nrf_qdec
- * @brief Hardware abstraction layer for accessing the quadrature decoder (QDEC) peripheral.
+ * @brief Hardware access layer for accessing the quadrature decoder (QDEC) peripheral.
  */
 
 /**

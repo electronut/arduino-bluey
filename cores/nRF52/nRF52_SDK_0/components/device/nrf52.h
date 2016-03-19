@@ -6,10 +6,10 @@
  *           nrf52 from Nordic Semiconductor.
  *
  * @version  V1
- * @date     15. June 2015
+ * @date     23. February 2016
  *
  * @note     Generated with SVDConv V2.81d 
- *           from CMSIS SVD File 'nrf52.xml' Version 1,
+ *           from CMSIS SVD File 'nrf52.svd' Version 1,
  *
  * @par      Copyright (c) 2015, Nordic Semiconductor ASA
  *           All rights reserved.
@@ -112,7 +112,8 @@ typedef enum {
   PWM2_IRQn                     =  34,              /*!<  34  PWM2                                                             */
   SPIM2_SPIS2_SPI2_IRQn         =  35,              /*!<  35  SPIM2_SPIS2_SPI2                                                 */
   RTC2_IRQn                     =  36,              /*!<  36  RTC2                                                             */
-  I2S_IRQn                      =  37               /*!<  37  I2S                                                              */
+  I2S_IRQn                      =  37,              /*!<  37  I2S                                                              */
+  FPU_IRQn                      =  38               /*!<  38  FPU                                                              */
 } IRQn_Type;
 
 
@@ -166,12 +167,32 @@ typedef enum {
 
 typedef struct {
   __I  uint32_t  PART;                              /*!< Part code                                                             */
-  __I  uint32_t  VARIANT;                           /*!< Part variant                                                          */
+  __I  uint32_t  VARIANT;                           /*!< Part Variant, Hardware version and Production configuration           */
   __I  uint32_t  PACKAGE;                           /*!< Package option                                                        */
   __I  uint32_t  RAM;                               /*!< RAM variant                                                           */
   __I  uint32_t  FLASH;                             /*!< Flash variant                                                         */
   __IO uint32_t  UNUSED0[3];                        /*!< Description collection[0]: Unspecified                                */
 } FICR_INFO_Type;
+
+typedef struct {
+  __I  uint32_t  A0;                                /*!< Slope definition A0.                                                  */
+  __I  uint32_t  A1;                                /*!< Slope definition A1.                                                  */
+  __I  uint32_t  A2;                                /*!< Slope definition A2.                                                  */
+  __I  uint32_t  A3;                                /*!< Slope definition A3.                                                  */
+  __I  uint32_t  A4;                                /*!< Slope definition A4.                                                  */
+  __I  uint32_t  A5;                                /*!< Slope definition A5.                                                  */
+  __I  uint32_t  B0;                                /*!< y-intercept B0.                                                       */
+  __I  uint32_t  B1;                                /*!< y-intercept B1.                                                       */
+  __I  uint32_t  B2;                                /*!< y-intercept B2.                                                       */
+  __I  uint32_t  B3;                                /*!< y-intercept B3.                                                       */
+  __I  uint32_t  B4;                                /*!< y-intercept B4.                                                       */
+  __I  uint32_t  B5;                                /*!< y-intercept B5.                                                       */
+  __I  uint32_t  T0;                                /*!< Segment end T0.                                                       */
+  __I  uint32_t  T1;                                /*!< Segment end T1.                                                       */
+  __I  uint32_t  T2;                                /*!< Segment end T2.                                                       */
+  __I  uint32_t  T3;                                /*!< Segment end T3.                                                       */
+  __I  uint32_t  T4;                                /*!< Segment end T4.                                                       */
+} FICR_TEMP_Type;
 
 typedef struct {
   __I  uint32_t  TAGHEADER0;                        /*!< Default header for NFC Tag. Software can read these values to
@@ -192,6 +213,25 @@ typedef struct {
 } POWER_RAM_Type;
 
 typedef struct {
+  __IO uint32_t  CPU0;                              /*!< AHB bus master priority register for CPU0                             */
+  __IO uint32_t  SPIS1;                             /*!< AHB bus master priority register for SPIM1, SPIS1, TWIM1 and
+                                                         TWIS1                                                                 */
+  __IO uint32_t  RADIO;                             /*!< AHB bus master priority register for RADIO                            */
+  __IO uint32_t  ECB;                               /*!< AHB bus master priority register for ECB                              */
+  __IO uint32_t  CCM;                               /*!< AHB bus master priority register for CCM                              */
+  __IO uint32_t  AAR;                               /*!< AHB bus master priority register for AAR                              */
+  __IO uint32_t  SAADC;                             /*!< AHB bus master priority register for SAADC                            */
+  __IO uint32_t  UARTE;                             /*!< AHB bus master priority register for UARTE                            */
+  __IO uint32_t  SERIAL0;                           /*!< AHB bus master priority register for SPIM0, SPIS0, TWIM0 and
+                                                         TWIS0                                                                 */
+  __IO uint32_t  SERIAL2;                           /*!< AHB bus master priority register for SPIM2 and SPIS2                  */
+  __IO uint32_t  NFCT;                              /*!< AHB bus master priority register for NFCT                             */
+  __IO uint32_t  I2S;                               /*!< AHB bus master priority register for I2S                              */
+  __IO uint32_t  PDM;                               /*!< AHB bus master priority register for PDM                              */
+  __IO uint32_t  PWM;                               /*!< AHB bus master priority register for PWM0, PWM1 and PWM2              */
+} AMLI_RAMPRI_Type;
+
+typedef struct {
   __IO uint32_t  RTS;                               /*!< Pin select for RTS signal                                             */
   __IO uint32_t  TXD;                               /*!< Pin select for TXD signal                                             */
   __IO uint32_t  CTS;                               /*!< Pin select for CTS signal                                             */
@@ -200,13 +240,13 @@ typedef struct {
 
 typedef struct {
   __IO uint32_t  PTR;                               /*!< Data pointer                                                          */
-  __IO uint32_t  MAXCNT;                            /*!< Maximum number of bytes in buffer                                     */
+  __IO uint32_t  MAXCNT;                            /*!< Maximum number of bytes in receive buffer                             */
   __I  uint32_t  AMOUNT;                            /*!< Number of bytes transferred in the last transaction                   */
 } UARTE_RXD_Type;
 
 typedef struct {
   __IO uint32_t  PTR;                               /*!< Data pointer                                                          */
-  __IO uint32_t  MAXCNT;                            /*!< Maximum number of bytes in buffer                                     */
+  __IO uint32_t  MAXCNT;                            /*!< Maximum number of bytes in transmit buffer                            */
   __I  uint32_t  AMOUNT;                            /*!< Number of bytes transferred in the last transaction                   */
 } UARTE_TXD_Type;
 
@@ -218,14 +258,14 @@ typedef struct {
 
 typedef struct {
   __IO uint32_t  PTR;                               /*!< Data pointer                                                          */
-  __IO uint32_t  MAXCNT;                            /*!< Maximum number of buffer words to transfer                            */
+  __IO uint32_t  MAXCNT;                            /*!< Maximum number of bytes in receive buffer                             */
   __I  uint32_t  AMOUNT;                            /*!< Number of bytes transferred in the last transaction                   */
   __IO uint32_t  LIST;                              /*!< EasyDMA list type                                                     */
 } SPIM_RXD_Type;
 
 typedef struct {
   __IO uint32_t  PTR;                               /*!< Data pointer                                                          */
-  __IO uint32_t  MAXCNT;                            /*!< Maximum number of buffer words to transfer                            */
+  __IO uint32_t  MAXCNT;                            /*!< Maximum number of bytes in transmit buffer                            */
   __I  uint32_t  AMOUNT;                            /*!< Number of bytes transferred in the last transaction                   */
   __IO uint32_t  LIST;                              /*!< EasyDMA list type                                                     */
 } SPIM_TXD_Type;
@@ -256,14 +296,14 @@ typedef struct {
 
 typedef struct {
   __IO uint32_t  PTR;                               /*!< Data pointer                                                          */
-  __IO uint32_t  MAXCNT;                            /*!< Maximum number of buffer words to transfer                            */
+  __IO uint32_t  MAXCNT;                            /*!< Maximum number of bytes in receive buffer                             */
   __I  uint32_t  AMOUNT;                            /*!< Number of bytes transferred in the last transaction                   */
   __IO uint32_t  LIST;                              /*!< EasyDMA list type                                                     */
 } TWIM_RXD_Type;
 
 typedef struct {
   __IO uint32_t  PTR;                               /*!< Data pointer                                                          */
-  __IO uint32_t  MAXCNT;                            /*!< Maximum number of buffer words to transfer                            */
+  __IO uint32_t  MAXCNT;                            /*!< Maximum number of bytes in transmit buffer                            */
   __I  uint32_t  AMOUNT;                            /*!< Number of bytes transferred in the last transaction                   */
   __IO uint32_t  LIST;                              /*!< EasyDMA list type                                                     */
 } TWIM_TXD_Type;
@@ -382,12 +422,12 @@ typedef struct {
 } MWU_EVENTS_PREGION_Type;
 
 typedef struct {
-  __IO uint32_t  SUBSTATWA;                         /*!< Description cluster[0]: Source of interrupt in region 0, write
-                                                         access detected while corresponding subregion was enabled for
-                                                          watching                                                             */
-  __IO uint32_t  SUBSTATRA;                         /*!< Description cluster[0]: Source of interrupt in region 0, read
-                                                         access detected while corresponding subregion was enabled for
-                                                          watching                                                             */
+  __IO uint32_t  SUBSTATWA;                         /*!< Description cluster[0]: Source of event/interrupt in region
+                                                         0, write access detected while corresponding subregion was enabled
+                                                          for watching                                                         */
+  __IO uint32_t  SUBSTATRA;                         /*!< Description cluster[0]: Source of event/interrupt in region
+                                                         0, read access detected while corresponding subregion was enabled
+                                                          for watching                                                         */
 } MWU_PERREGION_Type;
 
 typedef struct {
@@ -399,12 +439,12 @@ typedef struct {
 typedef struct {
   __I  uint32_t  START;                             /*!< Description cluster[0]: Reserved for future use                       */
   __I  uint32_t  END;                               /*!< Description cluster[0]: Reserved for future use                       */
-  __IO uint32_t  SUBS;                              /*!< Description cluster[0]: Sub regions of region 0                       */
+  __IO uint32_t  SUBS;                              /*!< Description cluster[0]: Subregions of region 0                        */
   __I  uint32_t  RESERVED3;
 } MWU_PREGION_Type;
 
 typedef struct {
-  __IO uint32_t  MODE;                              /*!< I<sup>2</sup>S mode.                                                  */
+  __IO uint32_t  MODE;                              /*!< I2S mode.                                                             */
   __IO uint32_t  RXEN;                              /*!< Reception (RX) enable.                                                */
   __IO uint32_t  TXEN;                              /*!< Transmission (TX) enable.                                             */
   __IO uint32_t  MCKEN;                             /*!< Master clock generator enable.                                        */
@@ -450,8 +490,7 @@ typedef struct {                                    /*!< FICR Structure         
   __I  uint32_t  RESERVED0[4];
   __I  uint32_t  CODEPAGESIZE;                      /*!< Code memory page size                                                 */
   __I  uint32_t  CODESIZE;                          /*!< Code memory size                                                      */
-  __I  uint32_t  RESERVED1[17];
-  __I  uint32_t  CONFIGID;                          /*!< Configuration identifier                                              */
+  __I  uint32_t  RESERVED1[18];
   __I  uint32_t  DEVICEID[2];                       /*!< Description collection[0]: Device identifier                          */
   __I  uint32_t  RESERVED2[6];
   __I  uint32_t  ER[4];                             /*!< Description collection[0]: Encryption Root, word 0                    */
@@ -460,7 +499,9 @@ typedef struct {                                    /*!< FICR Structure         
   __I  uint32_t  DEVICEADDR[2];                     /*!< Description collection[0]: Device address 0                           */
   __I  uint32_t  RESERVED3[21];
   FICR_INFO_Type INFO;                              /*!< Device info                                                           */
-  __I  uint32_t  RESERVED4[204];
+  __I  uint32_t  RESERVED4[185];
+  FICR_TEMP_Type TEMP;                              /*!< Registers storing factory TEMP module linearization coefficients      */
+  __I  uint32_t  RESERVED5[2];
   FICR_NFC_Type NFC;                                /*!< Unspecified                                                           */
 } NRF_FICR_Type;
 
@@ -486,7 +527,7 @@ typedef struct {                                    /*!< UICR Structure         
   __I  uint32_t  RESERVED1[64];
   __IO uint32_t  PSELRESET[2];                      /*!< Description collection[0]: Mapping of the nRESET function (see
                                                          POWER chapter for details)                                            */
-  __IO uint32_t  APPROTECT;                         /*!< Access port protection                                                */
+  __IO uint32_t  APPROTECT;                         /*!< Access Port protection                                                */
   __IO uint32_t  NFCPINS;                           /*!< Setting of pins dedicated to NFC functionality: NFC antenna
                                                          or GPIO                                                               */
 } NRF_UICR_Type;
@@ -505,7 +546,7 @@ typedef struct {                                    /*!< BPROT Structure        
   __I  uint32_t  RESERVED0[384];
   __IO uint32_t  CONFIG0;                           /*!< Block protect configuration register 0                                */
   __IO uint32_t  CONFIG1;                           /*!< Block protect configuration register 1                                */
-  __IO uint32_t  DISABLEINDEBUG;                    /*!< Disable protection mechanism in debug mode                            */
+  __IO uint32_t  DISABLEINDEBUG;                    /*!< Disable protection mechanism in debug interface mode                  */
   __IO uint32_t  UNUSED0;                           /*!< Unspecified                                                           */
   __IO uint32_t  CONFIG2;                           /*!< Block protect configuration register 2                                */
   __IO uint32_t  CONFIG3;                           /*!< Block protect configuration register 3                                */
@@ -570,7 +611,7 @@ typedef struct {                                    /*!< CLOCK Structure        
   __O  uint32_t  TASKS_HFCLKSTOP;                   /*!< Stop HFCLK crystal oscillator                                         */
   __O  uint32_t  TASKS_LFCLKSTART;                  /*!< Start LFCLK source                                                    */
   __O  uint32_t  TASKS_LFCLKSTOP;                   /*!< Stop LFCLK source                                                     */
-  __O  uint32_t  TASKS_CAL;                         /*!< Start calibration of LFRC or LFULP oscillator                         */
+  __O  uint32_t  TASKS_CAL;                         /*!< Start calibration of LFRC oscillator                                  */
   __O  uint32_t  TASKS_CTSTART;                     /*!< Start calibration timer                                               */
   __O  uint32_t  TASKS_CTSTOP;                      /*!< Stop calibration timer                                                */
   __I  uint32_t  RESERVED0[57];
@@ -584,10 +625,10 @@ typedef struct {                                    /*!< CLOCK Structure        
   __IO uint32_t  INTENCLR;                          /*!< Disable interrupt                                                     */
   __I  uint32_t  RESERVED3[63];
   __I  uint32_t  HFCLKRUN;                          /*!< Status indicating that HFCLKSTART task has been triggered             */
-  __I  uint32_t  HFCLKSTAT;                         /*!< Which HFCLK source is running                                         */
+  __I  uint32_t  HFCLKSTAT;                         /*!< HFCLK status                                                          */
   __I  uint32_t  RESERVED4;
   __I  uint32_t  LFCLKRUN;                          /*!< Status indicating that LFCLKSTART task has been triggered             */
-  __I  uint32_t  LFCLKSTAT;                         /*!< Which LFCLK source is running                                         */
+  __I  uint32_t  LFCLKSTAT;                         /*!< LFCLK status                                                          */
   __I  uint32_t  LFCLKSRCCOPY;                      /*!< Copy of LFCLKSRC register, set when LFCLKSTART task was triggered     */
   __I  uint32_t  RESERVED5[62];
   __IO uint32_t  LFCLKSRC;                          /*!< Clock source for the LFCLK                                            */
@@ -597,6 +638,21 @@ typedef struct {                                    /*!< CLOCK Structure        
   __I  uint32_t  RESERVED7[8];
   __IO uint32_t  TRACECONFIG;                       /*!< Clocking options for the Trace Port debug interface                   */
 } NRF_CLOCK_Type;
+
+
+/* ================================================================================ */
+/* ================                      AMLI                      ================ */
+/* ================================================================================ */
+
+
+/**
+  * @brief AHB Multi-Layer Interface (AMLI)
+  */
+
+typedef struct {                                    /*!< AMLI Structure                                                        */
+  __I  uint32_t  RESERVED0[896];
+  AMLI_RAMPRI_Type RAMPRI;                          /*!< RAM configurable priority configuration structure                     */
+} NRF_AMLI_Type;
 
 
 /* ================================================================================ */
@@ -627,11 +683,9 @@ typedef struct {                                    /*!< RADIO Structure        
   __IO uint32_t  EVENTS_DISABLED;                   /*!< RADIO has been disabled                                               */
   __IO uint32_t  EVENTS_DEVMATCH;                   /*!< A device address match occurred on the last received packet           */
   __IO uint32_t  EVENTS_DEVMISS;                    /*!< No device address match occurred on the last received packet          */
-  __IO uint32_t  EVENTS_RSSIEND;                    /*!< Sampling of receive signal strength complete. A new RSSI sample
-                                                         is ready for readout from the "RADIO.RSSISAMPLE" register             */
+  __IO uint32_t  EVENTS_RSSIEND;                    /*!< Sampling of receive signal strength complete.                         */
   __I  uint32_t  RESERVED1[2];
-  __IO uint32_t  EVENTS_BCMATCH;                    /*!< Bit counter reached bit count value specified in the "RADIO.BCC"
-                                                         register                                                              */
+  __IO uint32_t  EVENTS_BCMATCH;                    /*!< Bit counter reached bit count value.                                  */
   __I  uint32_t  RESERVED2;
   __IO uint32_t  EVENTS_CRCOK;                      /*!< Packet received with CRC ok                                           */
   __IO uint32_t  EVENTS_CRCERROR;                   /*!< Packet received with CRC error                                        */
@@ -736,6 +790,55 @@ typedef struct {                                    /*!< UARTE Structure        
 
 
 /* ================================================================================ */
+/* ================                      UART                      ================ */
+/* ================================================================================ */
+
+
+/**
+  * @brief Universal Asynchronous Receiver/Transmitter (UART)
+  */
+
+typedef struct {                                    /*!< UART Structure                                                        */
+  __O  uint32_t  TASKS_STARTRX;                     /*!< Start UART receiver                                                   */
+  __O  uint32_t  TASKS_STOPRX;                      /*!< Stop UART receiver                                                    */
+  __O  uint32_t  TASKS_STARTTX;                     /*!< Start UART transmitter                                                */
+  __O  uint32_t  TASKS_STOPTX;                      /*!< Stop UART transmitter                                                 */
+  __I  uint32_t  RESERVED0[3];
+  __O  uint32_t  TASKS_SUSPEND;                     /*!< Suspend UART                                                          */
+  __I  uint32_t  RESERVED1[56];
+  __IO uint32_t  EVENTS_CTS;                        /*!< CTS is activated (set low). Clear To Send.                            */
+  __IO uint32_t  EVENTS_NCTS;                       /*!< CTS is deactivated (set high). Not Clear To Send.                     */
+  __IO uint32_t  EVENTS_RXDRDY;                     /*!< Data received in RXD                                                  */
+  __I  uint32_t  RESERVED2[4];
+  __IO uint32_t  EVENTS_TXDRDY;                     /*!< Data sent from TXD                                                    */
+  __I  uint32_t  RESERVED3;
+  __IO uint32_t  EVENTS_ERROR;                      /*!< Error detected                                                        */
+  __I  uint32_t  RESERVED4[7];
+  __IO uint32_t  EVENTS_RXTO;                       /*!< Receiver timeout                                                      */
+  __I  uint32_t  RESERVED5[46];
+  __IO uint32_t  SHORTS;                            /*!< Shortcut register                                                     */
+  __I  uint32_t  RESERVED6[64];
+  __IO uint32_t  INTENSET;                          /*!< Enable interrupt                                                      */
+  __IO uint32_t  INTENCLR;                          /*!< Disable interrupt                                                     */
+  __I  uint32_t  RESERVED7[93];
+  __IO uint32_t  ERRORSRC;                          /*!< Error source                                                          */
+  __I  uint32_t  RESERVED8[31];
+  __IO uint32_t  ENABLE;                            /*!< Enable UART                                                           */
+  __I  uint32_t  RESERVED9;
+  __IO uint32_t  PSELRTS;                           /*!< Pin select for RTS                                                    */
+  __IO uint32_t  PSELTXD;                           /*!< Pin select for TXD                                                    */
+  __IO uint32_t  PSELCTS;                           /*!< Pin select for CTS                                                    */
+  __IO uint32_t  PSELRXD;                           /*!< Pin select for RXD                                                    */
+  __I  uint32_t  RXD;                               /*!< RXD register                                                          */
+  __O  uint32_t  TXD;                               /*!< TXD register                                                          */
+  __I  uint32_t  RESERVED10;
+  __IO uint32_t  BAUDRATE;                          /*!< Baud rate                                                             */
+  __I  uint32_t  RESERVED11[17];
+  __IO uint32_t  CONFIG;                            /*!< Configuration of parity and hardware flow control                     */
+} NRF_UART_Type;
+
+
+/* ================================================================================ */
 /* ================                      SPIM                      ================ */
 /* ================================================================================ */
 
@@ -797,31 +900,33 @@ typedef struct {                                    /*!< SPIS Structure         
   __O  uint32_t  TASKS_RELEASE;                     /*!< Release SPI semaphore, enabling the SPI slave to acquire it           */
   __I  uint32_t  RESERVED1[54];
   __IO uint32_t  EVENTS_END;                        /*!< Granted transaction completed                                         */
-  __I  uint32_t  RESERVED2[8];
+  __I  uint32_t  RESERVED2[2];
+  __IO uint32_t  EVENTS_ENDRX;                      /*!< End of RXD buffer reached                                             */
+  __I  uint32_t  RESERVED3[5];
   __IO uint32_t  EVENTS_ACQUIRED;                   /*!< Semaphore acquired                                                    */
-  __I  uint32_t  RESERVED3[53];
+  __I  uint32_t  RESERVED4[53];
   __IO uint32_t  SHORTS;                            /*!< Shortcut register                                                     */
-  __I  uint32_t  RESERVED4[64];
+  __I  uint32_t  RESERVED5[64];
   __IO uint32_t  INTENSET;                          /*!< Enable interrupt                                                      */
   __IO uint32_t  INTENCLR;                          /*!< Disable interrupt                                                     */
-  __I  uint32_t  RESERVED5[61];
+  __I  uint32_t  RESERVED6[61];
   __I  uint32_t  SEMSTAT;                           /*!< Semaphore status register                                             */
-  __I  uint32_t  RESERVED6[15];
+  __I  uint32_t  RESERVED7[15];
   __IO uint32_t  STATUS;                            /*!< Status from last transaction                                          */
-  __I  uint32_t  RESERVED7[47];
+  __I  uint32_t  RESERVED8[47];
   __IO uint32_t  ENABLE;                            /*!< Enable SPI slave                                                      */
-  __I  uint32_t  RESERVED8;
+  __I  uint32_t  RESERVED9;
   SPIS_PSEL_Type PSEL;                              /*!< Unspecified                                                           */
-  __I  uint32_t  RESERVED9[7];
+  __I  uint32_t  RESERVED10[7];
   SPIS_RXD_Type RXD;                                /*!< Unspecified                                                           */
-  __I  uint32_t  RESERVED10;
-  SPIS_TXD_Type TXD;                                /*!< Unspecified                                                           */
   __I  uint32_t  RESERVED11;
-  __IO uint32_t  CONFIG;                            /*!< Configuration register                                                */
+  SPIS_TXD_Type TXD;                                /*!< Unspecified                                                           */
   __I  uint32_t  RESERVED12;
+  __IO uint32_t  CONFIG;                            /*!< Configuration register                                                */
+  __I  uint32_t  RESERVED13;
   __IO uint32_t  DEF;                               /*!< Default character. Character clocked out in case of an ignored
                                                          transaction.                                                          */
-  __I  uint32_t  RESERVED13[24];
+  __I  uint32_t  RESERVED14[24];
   __IO uint32_t  ORC;                               /*!< Over-read character                                                   */
 } NRF_SPIS_Type;
 
@@ -840,7 +945,8 @@ typedef struct {                                    /*!< TWIM Structure         
   __I  uint32_t  RESERVED0;
   __O  uint32_t  TASKS_STARTTX;                     /*!< Start TWI transmit sequence                                           */
   __I  uint32_t  RESERVED1[2];
-  __O  uint32_t  TASKS_STOP;                        /*!< Stop TWI transaction                                                  */
+  __O  uint32_t  TASKS_STOP;                        /*!< Stop TWI transaction. Must be issued while the TWI master is
+                                                         not suspended.                                                        */
   __I  uint32_t  RESERVED2;
   __O  uint32_t  TASKS_SUSPEND;                     /*!< Suspend TWI transaction                                               */
   __O  uint32_t  TASKS_RESUME;                      /*!< Resume TWI transaction                                                */
@@ -848,7 +954,9 @@ typedef struct {                                    /*!< TWIM Structure         
   __IO uint32_t  EVENTS_STOPPED;                    /*!< TWI stopped                                                           */
   __I  uint32_t  RESERVED4[7];
   __IO uint32_t  EVENTS_ERROR;                      /*!< TWI error                                                             */
-  __I  uint32_t  RESERVED5[9];
+  __I  uint32_t  RESERVED5[8];
+  __IO uint32_t  EVENTS_SUSPENDED;                  /*!< Last byte has been sent out after the SUSPEND task has been
+                                                         issued, TWI traffic is now suspended.                                 */
   __IO uint32_t  EVENTS_RXSTARTED;                  /*!< Receive sequence started                                              */
   __IO uint32_t  EVENTS_TXSTARTED;                  /*!< Transmit sequence started                                             */
   __I  uint32_t  RESERVED6[2];
@@ -1082,8 +1190,7 @@ typedef struct {                                    /*!< NFCT Structure         
   __IO uint32_t  NFCID1_LAST;                       /*!< Last NFCID1 part (4, 7 or 10 bytes ID)                                */
   __IO uint32_t  NFCID1_2ND_LAST;                   /*!< Second last NFCID1 part (7 or 10 bytes ID)                            */
   __IO uint32_t  NFCID1_3RD_LAST;                   /*!< Third last NFCID1 part (10 bytes ID)                                  */
-  __IO uint32_t  AUTOCOLRESCONFIG;                  /*!< Controls the Auto collision resolution function. This setting
-                                                         must be done before the NFCT peripheral is enabled.                   */
+  __I  uint32_t  RESERVED14;
   __IO uint32_t  SENSRES;                           /*!< NFC-A SENS_RES auto-response settings                                 */
   __IO uint32_t  SELRES;                            /*!< NFC-A SEL_RES auto-response settings                                  */
 } NRF_NFCT_Type;
@@ -1142,7 +1249,7 @@ typedef struct {                                    /*!< SAADC Structure        
   __IO uint32_t  EVENTS_DONE;                       /*!< A conversion task has been completed. Depending on the mode,
                                                          multiple conversions might be needed for a result to be transferred
                                                           to RAM.                                                              */
-  __IO uint32_t  EVENTS_RESULTDONE;                 /*!< A result is ready to get transferred to RAM                           */
+  __IO uint32_t  EVENTS_RESULTDONE;                 /*!< A result is ready to get transferred to RAM.                          */
   __IO uint32_t  EVENTS_CALIBRATEDONE;              /*!< Calibration is complete                                               */
   __IO uint32_t  EVENTS_STOPPED;                    /*!< The ADC has stopped                                                   */
   SAADC_EVENTS_CH_Type EVENTS_CH[8];                /*!< Unspecified                                                           */
@@ -1181,7 +1288,7 @@ typedef struct {                                    /*!< TIMER Structure        
   __O  uint32_t  TASKS_STOP;                        /*!< Stop Timer                                                            */
   __O  uint32_t  TASKS_COUNT;                       /*!< Increment Timer (Counter mode only)                                   */
   __O  uint32_t  TASKS_CLEAR;                       /*!< Clear time                                                            */
-  __O  uint32_t  TASKS_SHUTDOWN;                    /*!< Shut down timer                                                       */
+  __O  uint32_t  TASKS_SHUTDOWN;                    /*!< Deprecated register - Shut down timer                                 */
   __I  uint32_t  RESERVED0[11];
   __O  uint32_t  TASKS_CAPTURE[6];                  /*!< Description collection[0]: Capture Timer value to CC[0] register      */
   __I  uint32_t  RESERVED1[58];
@@ -1254,7 +1361,27 @@ typedef struct {                                    /*!< TEMP Structure         
   __IO uint32_t  INTENSET;                          /*!< Enable interrupt                                                      */
   __IO uint32_t  INTENCLR;                          /*!< Disable interrupt                                                     */
   __I  uint32_t  RESERVED2[127];
-  __I  int32_t   TEMP;                              /*!< Temperature in degC                                                   */
+  __I  int32_t   TEMP;                              /*!< Temperature in degC (0.25deg steps)                                   */
+  __I  uint32_t  RESERVED3[5];
+  __IO uint32_t  A0;                                /*!< Slope of 1st piece wise linear function                               */
+  __IO uint32_t  A1;                                /*!< Slope of 2nd piece wise linear function                               */
+  __IO uint32_t  A2;                                /*!< Slope of 3rd piece wise linear function                               */
+  __IO uint32_t  A3;                                /*!< Slope of 4th piece wise linear function                               */
+  __IO uint32_t  A4;                                /*!< Slope of 5th piece wise linear function                               */
+  __IO uint32_t  A5;                                /*!< Slope of 6th piece wise linear function                               */
+  __I  uint32_t  RESERVED4[2];
+  __IO uint32_t  B0;                                /*!< y-intercept of 1st piece wise linear function                         */
+  __IO uint32_t  B1;                                /*!< y-intercept of 2nd piece wise linear function                         */
+  __IO uint32_t  B2;                                /*!< y-intercept of 3rd piece wise linear function                         */
+  __IO uint32_t  B3;                                /*!< y-intercept of 4th piece wise linear function                         */
+  __IO uint32_t  B4;                                /*!< y-intercept of 5th piece wise linear function                         */
+  __IO uint32_t  B5;                                /*!< y-intercept of 6th piece wise linear function                         */
+  __I  uint32_t  RESERVED5[2];
+  __IO uint32_t  T0;                                /*!< End point of 1st piece wise linear function                           */
+  __IO uint32_t  T1;                                /*!< End point of 2nd piece wise linear function                           */
+  __IO uint32_t  T2;                                /*!< End point of 3rd piece wise linear function                           */
+  __IO uint32_t  T3;                                /*!< End point of 4th piece wise linear function                           */
+  __IO uint32_t  T4;                                /*!< End point of 5th piece wise linear function                           */
 } NRF_TEMP_Type;
 
 
@@ -1750,16 +1877,16 @@ typedef struct {                                    /*!< MWU Structure          
   */
 
 typedef struct {                                    /*!< I2S Structure                                                         */
-  __O  uint32_t  TASKS_START;                       /*!< Starts continuous I<sup>2</sup>S transfer. Also starts MCK generator
-                                                         when this is enabled.                                                 */
-  __O  uint32_t  TASKS_STOP;                        /*!< Stops I<sup>2</sup>S transfer. Also stops MCK generator. Triggering
-                                                         this task will cause the STOPPED event to be generated.               */
+  __O  uint32_t  TASKS_START;                       /*!< Starts continuous I2S transfer. Also starts MCK generator when
+                                                         this is enabled.                                                      */
+  __O  uint32_t  TASKS_STOP;                        /*!< Stops I2S transfer. Also stops MCK generator. Triggering this
+                                                         task will cause the {event:STOPPED} event to be generated.            */
   __I  uint32_t  RESERVED0[63];
   __IO uint32_t  EVENTS_RXPTRUPD;                   /*!< The RXD.PTR register has been copied to internal double-buffers.
                                                          When the I2S module is started and RX is enabled, this event
                                                           will be generated for every RXTXD.MAXCNT words that are received
                                                           on the SDIN pin.                                                     */
-  __IO uint32_t  EVENTS_STOPPED;                    /*!< I<sup>2</sup>S transfer stopped.                                      */
+  __IO uint32_t  EVENTS_STOPPED;                    /*!< I2S transfer stopped.                                                 */
   __I  uint32_t  RESERVED1[2];
   __IO uint32_t  EVENTS_TXPTRUPD;                   /*!< The TDX.PTR register has been copied to internal double-buffers.
                                                          When the I2S module is started and TX is enabled, this event
@@ -1770,7 +1897,7 @@ typedef struct {                                    /*!< I2S Structure          
   __IO uint32_t  INTENSET;                          /*!< Enable interrupt                                                      */
   __IO uint32_t  INTENCLR;                          /*!< Disable interrupt                                                     */
   __I  uint32_t  RESERVED3[125];
-  __IO uint32_t  ENABLE;                            /*!< Enable I<sup>2</sup>S module.                                         */
+  __IO uint32_t  ENABLE;                            /*!< Enable I2S module.                                                    */
   I2S_CONFIG_Type CONFIG;                           /*!< Unspecified                                                           */
   __I  uint32_t  RESERVED4[3];
   I2S_RXD_Type RXD;                                 /*!< Unspecified                                                           */
@@ -1781,6 +1908,20 @@ typedef struct {                                    /*!< I2S Structure          
   __I  uint32_t  RESERVED7[3];
   I2S_PSEL_Type PSEL;                               /*!< Unspecified                                                           */
 } NRF_I2S_Type;
+
+
+/* ================================================================================ */
+/* ================                       FPU                      ================ */
+/* ================================================================================ */
+
+
+/**
+  * @brief FPU (FPU)
+  */
+
+typedef struct {                                    /*!< FPU Structure                                                         */
+  __I  uint32_t  UNUSED;                            /*!< Unused.                                                               */
+} NRF_FPU_Type;
 
 
 /* ================================================================================ */
@@ -1801,61 +1942,12 @@ typedef struct {                                    /*!< GPIO Structure         
   __IO uint32_t  DIR;                               /*!< Direction of GPIO pins                                                */
   __IO uint32_t  DIRSET;                            /*!< DIR set register                                                      */
   __IO uint32_t  DIRCLR;                            /*!< DIR clear register                                                    */
-  __IO uint32_t  LATCH;                             /*!< Latch indicating which GPIO pins have met the criteria set in
-                                                         PIN_CNF[n].SENSE register                                             */
+  __IO uint32_t  LATCH;                             /*!< Latch register indicating what GPIO pins that have met the criteria
+                                                         set in the PIN_CNF[n].SENSE registers                                 */
   __IO uint32_t  DETECTMODE;                        /*!< Select between default DETECT signal behaviour and LDETECT mode       */
   __I  uint32_t  RESERVED1[118];
   __IO uint32_t  PIN_CNF[32];                       /*!< Description collection[0]: Configuration of GPIO pins                 */
 } NRF_GPIO_Type;
-
-
-/* ================================================================================ */
-/* ================                      UART                      ================ */
-/* ================================================================================ */
-
-
-/**
-  * @brief Universal Asynchronous Receiver/Transmitter (UART)
-  */
-
-typedef struct {                                    /*!< UART Structure                                                        */
-  __O  uint32_t  TASKS_STARTRX;                     /*!< Start UART receiver                                                   */
-  __O  uint32_t  TASKS_STOPRX;                      /*!< Stop UART receiver                                                    */
-  __O  uint32_t  TASKS_STARTTX;                     /*!< Start UART transmitter                                                */
-  __O  uint32_t  TASKS_STOPTX;                      /*!< Stop UART transmitter                                                 */
-  __I  uint32_t  RESERVED0[3];
-  __O  uint32_t  TASKS_SUSPEND;                     /*!< Suspend UART                                                          */
-  __I  uint32_t  RESERVED1[56];
-  __IO uint32_t  EVENTS_CTS;                        /*!< CTS is activated (set low). Clear To Send.                            */
-  __IO uint32_t  EVENTS_NCTS;                       /*!< CTS is deactivated (set high). Not Clear To Send.                     */
-  __IO uint32_t  EVENTS_RXDRDY;                     /*!< Data received in RXD                                                  */
-  __I  uint32_t  RESERVED2[4];
-  __IO uint32_t  EVENTS_TXDRDY;                     /*!< Data sent from TXD                                                    */
-  __I  uint32_t  RESERVED3;
-  __IO uint32_t  EVENTS_ERROR;                      /*!< Error detected                                                        */
-  __I  uint32_t  RESERVED4[7];
-  __IO uint32_t  EVENTS_RXTO;                       /*!< Receiver timeout                                                      */
-  __I  uint32_t  RESERVED5[46];
-  __IO uint32_t  SHORTS;                            /*!< Shortcut register                                                     */
-  __I  uint32_t  RESERVED6[64];
-  __IO uint32_t  INTENSET;                          /*!< Enable interrupt                                                      */
-  __IO uint32_t  INTENCLR;                          /*!< Disable interrupt                                                     */
-  __I  uint32_t  RESERVED7[93];
-  __IO uint32_t  ERRORSRC;                          /*!< Error source                                                          */
-  __I  uint32_t  RESERVED8[31];
-  __IO uint32_t  ENABLE;                            /*!< Enable UART                                                           */
-  __I  uint32_t  RESERVED9;
-  __IO uint32_t  PSELRTS;                           /*!< Pin select for RTS                                                    */
-  __IO uint32_t  PSELTXD;                           /*!< Pin select for TXD                                                    */
-  __IO uint32_t  PSELCTS;                           /*!< Pin select for CTS                                                    */
-  __IO uint32_t  PSELRXD;                           /*!< Pin select for RXD                                                    */
-  __I  uint32_t  RXD;                               /*!< RXD register                                                          */
-  __O  uint32_t  TXD;                               /*!< TXD register                                                          */
-  __I  uint32_t  RESERVED10;
-  __IO uint32_t  BAUDRATE;                          /*!< Baud rate                                                             */
-  __I  uint32_t  RESERVED11[17];
-  __IO uint32_t  CONFIG;                            /*!< Configuration of parity and hardware flow control                     */
-} NRF_UART_Type;
 
 
 /* --------------------  End of section using anonymous unions  ------------------- */
@@ -1885,8 +1977,10 @@ typedef struct {                                    /*!< UART Structure         
 #define NRF_BPROT_BASE                  0x40000000UL
 #define NRF_POWER_BASE                  0x40000000UL
 #define NRF_CLOCK_BASE                  0x40000000UL
+#define NRF_AMLI_BASE                   0x40000000UL
 #define NRF_RADIO_BASE                  0x40001000UL
 #define NRF_UARTE0_BASE                 0x40002000UL
+#define NRF_UART0_BASE                  0x40002000UL
 #define NRF_SPIM0_BASE                  0x40003000UL
 #define NRF_SPIS0_BASE                  0x40003000UL
 #define NRF_TWIM0_BASE                  0x40003000UL
@@ -1898,6 +1992,7 @@ typedef struct {                                    /*!< UART Structure         
 #define NRF_TWIM1_BASE                  0x40004000UL
 #define NRF_TWIS1_BASE                  0x40004000UL
 #define NRF_SPI1_BASE                   0x40004000UL
+#define NRF_TWI1_BASE                   0x40004000UL
 #define NRF_NFCT_BASE                   0x40005000UL
 #define NRF_GPIOTE_BASE                 0x40006000UL
 #define NRF_SAADC_BASE                  0x40007000UL
@@ -1941,9 +2036,8 @@ typedef struct {                                    /*!< UART Structure         
 #define NRF_SPI2_BASE                   0x40023000UL
 #define NRF_RTC2_BASE                   0x40024000UL
 #define NRF_I2S_BASE                    0x40025000UL
+#define NRF_FPU_BASE                    0x40026000UL
 #define NRF_P0_BASE                     0x50000000UL
-#define NRF_TWI1_BASE                   0x40004000UL
-#define NRF_UART0_BASE                  0x40002000UL
 
 
 /* ================================================================================ */
@@ -1955,8 +2049,10 @@ typedef struct {                                    /*!< UART Structure         
 #define NRF_BPROT                       ((NRF_BPROT_Type          *) NRF_BPROT_BASE)
 #define NRF_POWER                       ((NRF_POWER_Type          *) NRF_POWER_BASE)
 #define NRF_CLOCK                       ((NRF_CLOCK_Type          *) NRF_CLOCK_BASE)
+#define NRF_AMLI                        ((NRF_AMLI_Type           *) NRF_AMLI_BASE)
 #define NRF_RADIO                       ((NRF_RADIO_Type          *) NRF_RADIO_BASE)
 #define NRF_UARTE0                      ((NRF_UARTE_Type          *) NRF_UARTE0_BASE)
+#define NRF_UART0                       ((NRF_UART_Type           *) NRF_UART0_BASE)
 #define NRF_SPIM0                       ((NRF_SPIM_Type           *) NRF_SPIM0_BASE)
 #define NRF_SPIS0                       ((NRF_SPIS_Type           *) NRF_SPIS0_BASE)
 #define NRF_TWIM0                       ((NRF_TWIM_Type           *) NRF_TWIM0_BASE)
@@ -1968,6 +2064,7 @@ typedef struct {                                    /*!< UART Structure         
 #define NRF_TWIM1                       ((NRF_TWIM_Type           *) NRF_TWIM1_BASE)
 #define NRF_TWIS1                       ((NRF_TWIS_Type           *) NRF_TWIS1_BASE)
 #define NRF_SPI1                        ((NRF_SPI_Type            *) NRF_SPI1_BASE)
+#define NRF_TWI1                        ((NRF_TWI_Type            *) NRF_TWI1_BASE)
 #define NRF_NFCT                        ((NRF_NFCT_Type           *) NRF_NFCT_BASE)
 #define NRF_GPIOTE                      ((NRF_GPIOTE_Type         *) NRF_GPIOTE_BASE)
 #define NRF_SAADC                       ((NRF_SAADC_Type          *) NRF_SAADC_BASE)
@@ -2011,9 +2108,8 @@ typedef struct {                                    /*!< UART Structure         
 #define NRF_SPI2                        ((NRF_SPI_Type            *) NRF_SPI2_BASE)
 #define NRF_RTC2                        ((NRF_RTC_Type            *) NRF_RTC2_BASE)
 #define NRF_I2S                         ((NRF_I2S_Type            *) NRF_I2S_BASE)
+#define NRF_FPU                         ((NRF_FPU_Type            *) NRF_FPU_BASE)
 #define NRF_P0                          ((NRF_GPIO_Type           *) NRF_P0_BASE)
-#define NRF_TWI1                        ((NRF_TWI_Type            *) NRF_TWI1_BASE)
-#define NRF_UART0                       ((NRF_UART_Type           *) NRF_UART0_BASE)
 
 
 /** @} */ /* End of group Device_Peripheral_Registers */

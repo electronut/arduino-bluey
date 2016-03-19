@@ -15,7 +15,7 @@
  * @{
  * @ingroup nrf_spi_master
  *
- * @brief Hardware abstraction layer for accessing the SPIM peripheral.
+ * @brief Hardware access layer for accessing the SPIM peripheral.
  */
 
 #ifndef NRF_SPIM_H__
@@ -29,9 +29,9 @@
 
 
 /**
- * @brief Value that may be used as a parameter in the nrf_spim_pins_set()
- *        function call to specify that a given SPI signal (SCK, MOSI or MISO)
- *        shall not be connected to any physical pin.
+ * @brief This value can be used as a parameter for the @ref nrf_spim_pins_set
+ *        function to specify that a given SPI signal (SCK, MOSI, or MISO)
+ *        shall not be connected to a physical pin.
  */
 #define NRF_SPIM_PIN_NOT_CONNECTED  0xFFFFFFFF
 
@@ -130,7 +130,7 @@ typedef enum
  * @brief Function for activating a specific SPIM task.
  *
  * @param[in] p_spim    SPIM instance.
- * @param     spim_task Task to activate.
+ * @param[in] spim_task Task to activate.
  */
 __STATIC_INLINE void nrf_spim_task_trigger(NRF_SPIM_Type * p_spim,
                                            nrf_spim_task_t spim_task);
@@ -139,18 +139,18 @@ __STATIC_INLINE void nrf_spim_task_trigger(NRF_SPIM_Type * p_spim,
  * @brief Function for getting the address of a specific SPIM task register.
  *
  * @param[in] p_spim    SPIM instance.
- * @param     spim_task Desired task.
+ * @param[in] spim_task Requested task.
  *
- * @return Address of specified task register.
+ * @return Address of the specified task register.
  */
-__STATIC_INLINE uint32_t * nrf_spim_task_address_get(NRF_SPIM_Type * p_spim,
-                                                     nrf_spim_task_t spim_task);
+__STATIC_INLINE uint32_t nrf_spim_task_address_get(NRF_SPIM_Type * p_spim,
+                                                   nrf_spim_task_t spim_task);
 
 /**
  * @brief Function for clearing a specific SPIM event.
  *
  * @param[in] p_spim     SPIM instance.
- * @param     spim_event Event to clear.
+ * @param[in] spim_event Event to clear.
  */
 __STATIC_INLINE void nrf_spim_event_clear(NRF_SPIM_Type * p_spim,
                                           nrf_spim_event_t spim_event);
@@ -159,30 +159,30 @@ __STATIC_INLINE void nrf_spim_event_clear(NRF_SPIM_Type * p_spim,
  * @brief Function for checking the state of a specific SPIM event.
  *
  * @param[in] p_spim     SPIM instance.
- * @param     spim_event Event to check.
+ * @param[in] spim_event Event to check.
  *
- * @retval true  if event is set,
- * @retval false otherwise.
+ * @retval true  If the event is set.
+ * @retval false If the event is not set.
  */
 __STATIC_INLINE bool nrf_spim_event_check(NRF_SPIM_Type * p_spim,
                                           nrf_spim_event_t spim_event);
 
 /**
- * @brief Function for returning the address of a specific SPIM event register.
+ * @brief Function for getting the address of a specific SPIM event register.
  *
  * @param[in] p_spim     SPIM instance.
- * @param     spim_event Desired event.
+ * @param[in] spim_event Requested event.
  *
- * @return Address of specified event register.
+ * @return Address of the specified event register.
  */
-__STATIC_INLINE uint32_t * nrf_spim_event_address_get(NRF_SPIM_Type  * p_spim,
-                                                      nrf_spim_event_t spim_event);
+__STATIC_INLINE uint32_t nrf_spim_event_address_get(NRF_SPIM_Type  * p_spim,
+                                                    nrf_spim_event_t spim_event);
 #ifdef NRF52
 /**
  * @brief Function for enabling specified shortcuts.
  *
  * @param[in] p_spim           SPIM instance.
- * @param     spim_shorts_mask Shortcuts to enable.
+ * @param[in] spim_shorts_mask Shortcuts to enable.
  */
 __STATIC_INLINE void nrf_spim_shorts_enable(NRF_SPIM_Type * p_spim,
                                             uint32_t spim_shorts_mask);
@@ -191,16 +191,23 @@ __STATIC_INLINE void nrf_spim_shorts_enable(NRF_SPIM_Type * p_spim,
  * @brief Function for disabling specified shortcuts.
  *
  * @param[in] p_spim           SPIM instance.
- * @param     spim_shorts_mask Shortcuts to disable.
+ * @param[in] spim_shorts_mask Shortcuts to disable.
  */
 __STATIC_INLINE void nrf_spim_shorts_disable(NRF_SPIM_Type * p_spim,
                                              uint32_t spim_shorts_mask);
+
+/**
+ * @brief Function for getting shorts setting.
+ *
+ * @param[in] p_spim           SPIM instance.
+ */
+__STATIC_INLINE uint32_t nrf_spim_shorts_get(NRF_SPIM_Type * p_spim);
 #endif
 /**
  * @brief Function for enabling specified interrupts.
  *
  * @param[in] p_spim        SPIM instance.
- * @param     spim_int_mask Interrupts to enable.
+ * @param[in] spim_int_mask Interrupts to enable.
  */
 __STATIC_INLINE void nrf_spim_int_enable(NRF_SPIM_Type * p_spim,
                                          uint32_t spim_int_mask);
@@ -209,7 +216,7 @@ __STATIC_INLINE void nrf_spim_int_enable(NRF_SPIM_Type * p_spim,
  * @brief Function for disabling specified interrupts.
  *
  * @param[in] p_spim        SPIM instance.
- * @param     spim_int_mask Interrupts to disable.
+ * @param[in] spim_int_mask Interrupts to disable.
  */
 __STATIC_INLINE void nrf_spim_int_disable(NRF_SPIM_Type * p_spim,
                                           uint32_t spim_int_mask);
@@ -218,10 +225,10 @@ __STATIC_INLINE void nrf_spim_int_disable(NRF_SPIM_Type * p_spim,
  * @brief Function for retrieving the state of a given interrupt.
  *
  * @param[in] p_spim   SPIM instance.
- * @param     spim_int Interrupt to check.
+ * @param[in] spim_int Interrupt to check.
  *
- * @retval true  if the interrupt is enabled,
- * @retval false otherwise.
+ * @retval true  If the interrupt is enabled.
+ * @retval false If the interrupt is not enabled.
  */
 __STATIC_INLINE bool nrf_spim_int_enable_check(NRF_SPIM_Type * p_spim,
                                                nrf_spim_int_mask_t spim_int);
@@ -247,9 +254,9 @@ __STATIC_INLINE void nrf_spim_disable(NRF_SPIM_Type * p_spim);
  * value instead of its pin number.
  *
  * @param[in] p_spim    SPIM instance.
- * @param     sck_pin   SCK pin number.
- * @param     mosi_pin  MOSI pin number.
- * @param     miso_pin  MISO pin number.
+ * @param[in] sck_pin   SCK pin number.
+ * @param[in] mosi_pin  MOSI pin number.
+ * @param[in] miso_pin  MISO pin number.
  */
 __STATIC_INLINE void nrf_spim_pins_set(NRF_SPIM_Type * p_spim,
                                        uint32_t sck_pin,
@@ -260,7 +267,7 @@ __STATIC_INLINE void nrf_spim_pins_set(NRF_SPIM_Type * p_spim,
  * @brief Function for setting the SPI master data rate.
  *
  * @param[in] p_spim    SPIM instance.
- * @param     frequency SPI frequency.
+ * @param[in] frequency SPI frequency.
  */
 __STATIC_INLINE void nrf_spim_frequency_set(NRF_SPIM_Type * p_spim,
                                             nrf_spim_frequency_t frequency);
@@ -270,7 +277,7 @@ __STATIC_INLINE void nrf_spim_frequency_set(NRF_SPIM_Type * p_spim,
  *
  * @param[in]  p_spim   SPIM instance.
  * @param[in]  p_buffer Pointer to the buffer with data to send.
- * @param      length   Maximum number of data bytes to transmit.
+ * @param[in]  length   Maximum number of data bytes to transmit.
  */
 __STATIC_INLINE void nrf_spim_tx_buffer_set(NRF_SPIM_Type * p_spim,
                                             uint8_t const * p_buffer,
@@ -281,7 +288,7 @@ __STATIC_INLINE void nrf_spim_tx_buffer_set(NRF_SPIM_Type * p_spim,
  *
  * @param[in] p_spim   SPIM instance.
  * @param[in] p_buffer Pointer to the buffer for received data.
- * @param     length   Maximum number of data bytes to receive.
+ * @param[in] length   Maximum number of data bytes to receive.
  */
 __STATIC_INLINE void nrf_spim_rx_buffer_set(NRF_SPIM_Type * p_spim,
                                             uint8_t * p_buffer,
@@ -291,8 +298,8 @@ __STATIC_INLINE void nrf_spim_rx_buffer_set(NRF_SPIM_Type * p_spim,
  * @brief Function for setting the SPI configuration.
  *
  * @param[in] p_spim        SPIM instance.
- * @param     spi_mode      SPI mode.
- * @param     spi_bit_order SPI bit order.
+ * @param[in] spi_mode      SPI mode.
+ * @param[in] spi_bit_order SPI bit order.
  */
 __STATIC_INLINE void nrf_spim_configure(NRF_SPIM_Type * p_spim,
                                         nrf_spim_mode_t spi_mode,
@@ -302,13 +309,41 @@ __STATIC_INLINE void nrf_spim_configure(NRF_SPIM_Type * p_spim,
  * @brief Function for setting the over-read character.
  *
  * @param[in] p_spim SPIM instance.
- * @param     orc    Over-read character. Character clocked out in case of
- *                   over-read of the TXD buffer.
+ * @param[in] orc    Over-read character that is clocked out in case of
+ *                   an over-read of the TXD buffer.
  */
 __STATIC_INLINE void nrf_spim_orc_set(NRF_SPIM_Type * p_spim,
                                       uint8_t orc);
 
+#ifdef NRF52
+/**
+ * @brief Function for enabling the TX list feature.
+ *
+ * @param[in] p_spim SPIM instance.
+ */
+__STATIC_INLINE void nrf_spim_tx_list_enable(NRF_SPIM_Type * p_spim);
 
+/**
+ * @brief Function for disabling the TX list feature.
+ *
+ * @param[in] p_spim SPIM instance.
+ */
+__STATIC_INLINE void nrf_spim_tx_list_disable(NRF_SPIM_Type * p_spim);
+
+/**
+ * @brief Function for enabling the RX list feature.
+ *
+ * @param[in] p_spim SPIM instance.
+ */
+__STATIC_INLINE void nrf_spim_rx_list_enable(NRF_SPIM_Type * p_spim);
+
+/**
+ * @brief Function for disabling the RX list feature.
+ *
+ * @param[in] p_spim SPIM instance.
+ */
+__STATIC_INLINE void nrf_spim_rx_list_disable(NRF_SPIM_Type * p_spim);
+#endif
 #ifndef SUPPRESS_INLINE_IMPLEMENTATION
 
 __STATIC_INLINE void nrf_spim_task_trigger(NRF_SPIM_Type * p_spim,
@@ -317,10 +352,10 @@ __STATIC_INLINE void nrf_spim_task_trigger(NRF_SPIM_Type * p_spim,
     *((volatile uint32_t *)((uint8_t *)p_spim + (uint32_t)spim_task)) = 0x1UL;
 }
 
-__STATIC_INLINE uint32_t * nrf_spim_task_address_get(NRF_SPIM_Type * p_spim,
-                                                     nrf_spim_task_t spim_task)
+__STATIC_INLINE uint32_t nrf_spim_task_address_get(NRF_SPIM_Type * p_spim,
+                                                   nrf_spim_task_t spim_task)
 {
-    return (uint32_t *)((uint8_t *)p_spim + (uint32_t)spim_task);
+    return (uint32_t)((uint8_t *)p_spim + (uint32_t)spim_task);
 }
 
 __STATIC_INLINE void nrf_spim_event_clear(NRF_SPIM_Type * p_spim,
@@ -335,10 +370,10 @@ __STATIC_INLINE bool nrf_spim_event_check(NRF_SPIM_Type * p_spim,
     return (bool)*(volatile uint32_t *)((uint8_t *)p_spim + (uint32_t)spim_event);
 }
 
-__STATIC_INLINE uint32_t * nrf_spim_event_address_get(NRF_SPIM_Type * p_spim,
-                                                      nrf_spim_event_t spim_event)
+__STATIC_INLINE uint32_t nrf_spim_event_address_get(NRF_SPIM_Type * p_spim,
+                                                    nrf_spim_event_t spim_event)
 {
-    return (uint32_t *)((uint8_t *)p_spim + (uint32_t)spim_event);
+    return (uint32_t)((uint8_t *)p_spim + (uint32_t)spim_event);
 }
 
 #ifdef NRF52
@@ -352,6 +387,11 @@ __STATIC_INLINE void nrf_spim_shorts_disable(NRF_SPIM_Type * p_spim,
                                              uint32_t spim_shorts_mask)
 {
     p_spim->SHORTS &= ~(spim_shorts_mask);
+}
+
+__STATIC_INLINE uint32_t nrf_spim_shorts_get(NRF_SPIM_Type * p_spim)
+{
+    return p_spim->SHORTS;
 }
 #endif
 __STATIC_INLINE void nrf_spim_int_enable(NRF_SPIM_Type * p_spim,
@@ -452,6 +492,27 @@ __STATIC_INLINE void nrf_spim_orc_set(NRF_SPIM_Type * p_spim,
     p_spim->ORC = orc;
 }
 
+#ifdef NRF52
+__STATIC_INLINE void nrf_spim_tx_list_enable(NRF_SPIM_Type * p_spim)
+{
+    p_spim->TXD.LIST = 1;
+}
+
+__STATIC_INLINE void nrf_spim_tx_list_disable(NRF_SPIM_Type * p_spim)
+{
+    p_spim->TXD.LIST = 0;
+}
+
+__STATIC_INLINE void nrf_spim_rx_list_enable(NRF_SPIM_Type * p_spim)
+{
+    p_spim->RXD.LIST = 1;
+}
+
+__STATIC_INLINE void nrf_spim_rx_list_disable(NRF_SPIM_Type * p_spim)
+{
+    p_spim->RXD.LIST = 0;
+}
+#endif
 #endif // SUPPRESS_INLINE_IMPLEMENTATION
 
 #endif // NRF_SPIM_H__
