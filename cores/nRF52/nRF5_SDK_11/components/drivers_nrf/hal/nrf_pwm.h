@@ -27,8 +27,9 @@
 #include <stdint.h>
 
 #include "nrf.h"
+#ifndef ARDUINO
 #include "nrf_assert.h"
-
+#endif
 
 /**
  * @brief This value can be provided as a parameter for the @ref nrf_pwm_pins_set
@@ -584,7 +585,9 @@ __STATIC_INLINE void nrf_pwm_configure(NRF_PWM_Type * p_pwm,
                                        nrf_pwm_mode_t mode,
                                        uint16_t       top_value)
 {
+#ifndef ARDUINO
     ASSERT(top_value <= PWM_COUNTERTOP_COUNTERTOP_Msk);
+#endif
 
     p_pwm->PRESCALER  = base_clock;
     p_pwm->MODE       = mode;
@@ -595,7 +598,9 @@ __STATIC_INLINE void nrf_pwm_sequence_set(NRF_PWM_Type * p_pwm,
                                           uint8_t                    seq_id,
                                           nrf_pwm_sequence_t const * p_seq)
 {
+#ifndef ARDUINO
     ASSERT(p_seq != NULL);
+#endif
 
     nrf_pwm_seq_ptr_set(      p_pwm, seq_id, p_seq->values.p_raw);
     nrf_pwm_seq_cnt_set(      p_pwm, seq_id, p_seq->length);
@@ -607,8 +612,10 @@ __STATIC_INLINE void nrf_pwm_seq_ptr_set(NRF_PWM_Type * p_pwm,
                                          uint8_t          seq_id,
                                          uint16_t const * p_values)
 {
+#ifndef ARDUINO
     ASSERT(seq_id <= 1);
     ASSERT(p_values != NULL);
+#endif
     p_pwm->SEQ[seq_id].PTR = (uint32_t)p_values;
 }
 
@@ -616,9 +623,11 @@ __STATIC_INLINE void nrf_pwm_seq_cnt_set(NRF_PWM_Type * p_pwm,
                                          uint8_t  seq_id,
                                          uint16_t length)
 {
+#ifndef ARDUINO
     ASSERT(seq_id <= 1);
     ASSERT(length != 0);
     ASSERT(length <= PWM_SEQ_CNT_CNT_Msk);
+#endif
     p_pwm->SEQ[seq_id].CNT = length;
 }
 
@@ -626,8 +635,10 @@ __STATIC_INLINE void nrf_pwm_seq_refresh_set(NRF_PWM_Type * p_pwm,
                                              uint8_t  seq_id,
                                              uint32_t refresh)
 {
+#ifndef ARDUINO
     ASSERT(seq_id <= 1);
     ASSERT(refresh <= PWM_SEQ_REFRESH_CNT_Msk);
+#endif
     p_pwm->SEQ[seq_id].REFRESH  = refresh;
 }
 
@@ -635,8 +646,10 @@ __STATIC_INLINE void nrf_pwm_seq_end_delay_set(NRF_PWM_Type * p_pwm,
                                                uint8_t  seq_id,
                                                uint32_t end_delay)
 {
+#ifndef ARDUINO
     ASSERT(seq_id <= 1);
     ASSERT(end_delay <= PWM_SEQ_ENDDELAY_CNT_Msk);
+#endif
     p_pwm->SEQ[seq_id].ENDDELAY = end_delay;
 }
 
