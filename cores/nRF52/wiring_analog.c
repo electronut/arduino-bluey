@@ -40,12 +40,15 @@ static uint32_t pwmChannelPins[PWM_COUNT] = {
   NRF_PWM_PIN_NOT_CONNECTED
 };
 
+static nrf_saadc_reference_t saadcReference = NRF_SAADC_REFERENCE_INTERNAL;
 static uint16_t pwmChannelSequence[PWM_COUNT];
 
+static int readResolution = 10;
 static int writeResolution = 8;
 
 void analogReadResolution( int res )
 {
+  readResolution = res;
 }
 
 void analogWriteResolution( int res )
@@ -78,11 +81,104 @@ static inline uint32_t mapResolution( uint32_t value, uint32_t from, uint32_t to
  */
 void analogReference( eAnalogReference ulMode )
 {
+  switch ( ulMode ) {
+    case AR_DEFAULT:
+    case AR_INTERNAL:
+    default:
+      saadcReference = NRF_SAADC_REFERENCE_INTERNAL;
+      break;
+
+    case AR_VDD4:
+      saadcReference = NRF_SAADC_REFERENCE_VDD4;
+      break;
+  }
 }
 
 uint32_t analogRead( uint32_t ulPin )
 {
-  return 0;
+  nrf_saadc_input_t pin = NRF_SAADC_INPUT_DISABLED;
+  nrf_saadc_channel_config_t config;
+  nrf_saadc_resolution_t saadcResolution;
+  uint32_t resolution;
+  nrf_saadc_value_t value;
+
+  switch ( ulPin ) {
+    case 3:
+      pin = NRF_SAADC_INPUT_AIN1;
+      break;
+
+    case 4:
+      pin = NRF_SAADC_INPUT_AIN2;
+      break;
+
+    case 28:
+      pin = NRF_SAADC_INPUT_AIN4;
+      break;
+
+    case 29:
+      pin = NRF_SAADC_INPUT_AIN5;
+      break;
+
+    case 30:
+      pin = NRF_SAADC_INPUT_AIN6;
+      break;
+
+    case 31:
+      pin = NRF_SAADC_INPUT_AIN7;
+      break;
+
+    default:
+      return 0;
+  }
+
+  config.acq_time = NRF_SAADC_ACQTIME_3US;
+  config.gain = NRF_SAADC_GAIN1;
+  config.mode = NRF_SAADC_MODE_SINGLE_ENDED;
+  config.pin_p = pin;
+  config.pin_n = pin; // Single ended -> should be ground to zero
+  config.reference = saadcReference;
+  config.resistor_p = NRF_SAADC_RESISTOR_DISABLED;
+  config.resistor_n = NRF_SAADC_RESISTOR_DISABLED;
+
+  if (readResolution <= 8) {
+    resolution = 8;
+    saadcResolution = NRF_SAADC_RESOLUTION_8BIT;
+  } else if (readResolution <= 10) {
+    resolution = 10;
+    saadcResolution = NRF_SAADC_RESOLUTION_10BIT;
+  } else if (readResolution <= 12) {
+    resolution = 12;
+    saadcResolution = NRF_SAADC_RESOLUTION_12BIT;
+  } else {
+    resolution = 14;
+    saadcResolution = NRF_SAADC_RESOLUTION_14BIT;
+  }
+
+  nrf_saadc_resolution_set(saadcResolution);
+
+  nrf_saadc_enable();
+  nrf_saadc_channel_init(pin, &config);
+  nrf_saadc_buffer_init(&value, 1); // One sample
+
+  nrf_saadc_task_trigger(NRF_SAADC_TASK_START);
+
+  while (!nrf_saadc_event_check(NRF_SAADC_EVENT_STARTED));
+  nrf_saadc_event_clear(NRF_SAADC_EVENT_STARTED);
+
+  nrf_saadc_task_trigger(NRF_SAADC_TASK_SAMPLE);
+
+  while (!nrf_saadc_event_check(NRF_SAADC_EVENT_END));
+  nrf_saadc_event_clear(NRF_SAADC_EVENT_END);
+
+  nrf_saadc_task_trigger(NRF_SAADC_TASK_STOP);
+  while (!nrf_saadc_event_check(NRF_SAADC_EVENT_STOPPED));
+  nrf_saadc_event_clear(NRF_SAADC_EVENT_STOPPED);
+
+  if (value < 0) {
+    value = 0;
+  }
+
+  return mapResolution(value, resolution, readResolution);
 }
 
 // Right now, PWM output only works on the pins with
