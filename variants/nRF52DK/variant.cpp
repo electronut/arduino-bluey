@@ -18,7 +18,46 @@
 
 #include "variant.h"
 
-Uart Serial( NRF_UART0, UARTE0_UART0_IRQn, RX_PIN_NUMBER, TX_PIN_NUMBER );
+const uint32_t g_ADigitalPinMap[] = {
+  // D0 - D7
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+
+  // D8 - D13
+  19,
+  20,
+  22,
+  23,
+  24,
+  25,
+
+  // A0 - A5
+  3,
+  4,
+  28,
+  29,
+  30,
+  31,
+
+  // SCL, SDA
+  27,
+  26,
+
+  // RX, TX
+  8,
+  6,
+
+  // AREF
+  2
+};
+
+Uart Serial( NRF_UART0, UARTE0_UART0_IRQn, PIN_SERIAL_RX, PIN_SERIAL_TX );
 
 extern "C"
 {

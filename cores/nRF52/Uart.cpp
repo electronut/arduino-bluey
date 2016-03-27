@@ -24,8 +24,8 @@ Uart::Uart(NRF_UART_Type *_nrfUart, IRQn_Type _IRQn, uint8_t _pinRX, uint8_t _pi
 {
   nrfUart = _nrfUart;
   IRQn = _IRQn;
-  uc_pinRX = _pinRX;
-  uc_pinTX = _pinTX;
+  uc_pinRX = g_ADigitalPinMap[_pinRX];
+  uc_pinTX = g_ADigitalPinMap[_pinTX];
 }
 
 void Uart::begin(unsigned long baudrate)

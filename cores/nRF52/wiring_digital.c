@@ -26,6 +26,12 @@ extern "C" {
 
 void pinMode( uint32_t ulPin, uint32_t ulMode )
 {
+  if (ulPin >= PINS_COUNT) {
+    return;
+  }
+
+  ulPin = g_ADigitalPinMap[ulPin];
+
   // Set pin mode according to chapter '22.6.3 I/O Pin Configuration'
   switch ( ulMode )
   {
@@ -57,6 +63,12 @@ void pinMode( uint32_t ulPin, uint32_t ulMode )
 
 void digitalWrite( uint32_t ulPin, uint32_t ulVal )
 {
+  if (ulPin >= PINS_COUNT) {
+    return;
+  }
+
+  ulPin = g_ADigitalPinMap[ulPin];
+
   switch ( ulVal )
   {
     case LOW:
@@ -73,6 +85,12 @@ void digitalWrite( uint32_t ulPin, uint32_t ulVal )
 
 int digitalRead( uint32_t ulPin )
 {
+  if (ulPin >= PINS_COUNT) {
+    return 0;
+  }
+
+  ulPin = g_ADigitalPinMap[ulPin];
+
   return nrf_gpio_pin_read(ulPin) ? HIGH : LOW ;
 }
 

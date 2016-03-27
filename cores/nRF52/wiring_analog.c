@@ -102,13 +102,27 @@ uint32_t analogRead( uint32_t ulPin )
   uint32_t resolution;
   nrf_saadc_value_t value;
 
+  if (ulPin >= PINS_COUNT) {
+    return 0;
+  }
+
+  ulPin = g_ADigitalPinMap[ulPin];
+
   switch ( ulPin ) {
+    case 2:
+      pin = NRF_SAADC_INPUT_AIN0;
+      break;
+
     case 3:
       pin = NRF_SAADC_INPUT_AIN1;
       break;
 
     case 4:
       pin = NRF_SAADC_INPUT_AIN2;
+      break;
+
+    case 5:
+      pin = NRF_SAADC_INPUT_AIN3;
       break;
 
     case 28:
@@ -187,6 +201,12 @@ uint32_t analogRead( uint32_t ulPin )
 // to digital output.
 void analogWrite( uint32_t ulPin, uint32_t ulValue )
 {
+  if (ulPin >= PINS_COUNT) {
+    return;
+  }
+
+  ulPin = g_ADigitalPinMap[ulPin];
+
   for (int i = 0; i < PWM_COUNT; i++) {
     if (pwmChannelPins[i] == NRF_PWM_PIN_NOT_CONNECTED || pwmChannelPins[i] == ulPin) {
       pwmChannelPins[i] = ulPin;

@@ -33,8 +33,8 @@ TwoWire::TwoWire(NRF_TWIM_Type * p_twim, NRF_TWIS_Type * p_twis, IRQn_Type IRQn,
   this->_p_twim = p_twim;
   this->_p_twis = p_twis;
   this->_IRQn = IRQn;
-  this->_uc_pinSDA=pinSDA;
-  this->_uc_pinSCL=pinSCL;
+  this->_uc_pinSDA = g_ADigitalPinMap[pinSDA];
+  this->_uc_pinSCL = g_ADigitalPinMap[pinSCL];
   transmissionBegun = false;
 }
 
@@ -342,7 +342,7 @@ void TwoWire::onService(void)
   }
 }
 
-TwoWire Wire(NRF_TWIM0, NRF_TWIS0, SPIM0_SPIS0_TWIM0_TWIS0_SPI0_TWI0_IRQn, 26, 27);
+TwoWire Wire(NRF_TWIM0, NRF_TWIS0, SPIM0_SPIS0_TWIM0_TWIS0_SPI0_TWI0_IRQn, PIN_WIRE_SDA, PIN_WIRE_SCL);
 
 extern "C"
 {
