@@ -22,7 +22,9 @@
 #define NRF_TWIS_H__
 
 #include "nrf.h"
+#ifndef ARDUINO
 #include "nrf_drv_config.h"
+#endif
 #include <stdint.h>
 #include <stddef.h>
 #include <stdbool.h>
