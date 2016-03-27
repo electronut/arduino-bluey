@@ -19,7 +19,7 @@ nRF52DK.name=nRF52 DK
 nRF52DK.vid.0=0x1366
 nRF52DK.pid.0=0x1015
 
-nRF52DK.upload.tool=NordicSemiconductor:openocd
+nRF52DK.upload.tool=nRF5:openocd
 nRF52DK.upload.protocol=
 nRF52DK.upload.interface=jlink
 nRF52DK.upload.target=nrf51
