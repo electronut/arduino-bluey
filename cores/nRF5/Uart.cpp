@@ -35,9 +35,6 @@ void Uart::begin(unsigned long baudrate)
 
 void Uart::begin(unsigned long baudrate, uint16_t /*config*/)
 {
-  pinMode(uc_pinTX, OUTPUT);
-  pinMode(uc_pinRX, INPUT);
-
   nrf_uart_txrx_pins_set(nrfUart, uc_pinTX, uc_pinRX);
   nrf_uart_configure(nrfUart, NRF_UART_PARITY_EXCLUDED, NRF_UART_HWFC_DISABLED);
 
