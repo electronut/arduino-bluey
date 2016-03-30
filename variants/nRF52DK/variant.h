@@ -61,10 +61,10 @@ extern "C"
 #define digitalPinToInterrupt(P)   ( P )
 
 // LEDs
-#define PIN_LED1                (17)
-#define PIN_LED2                (18)
-#define PIN_LED3                (19)
-#define PIN_LED4                (20)
+#define PIN_LED1                (6)
+#define PIN_LED2                (7)
+#define PIN_LED3                (8)
+#define PIN_LED4                (9)
 #define LED_BUILTIN             PIN_LED1
 
 // Buttons
