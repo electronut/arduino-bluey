@@ -27,11 +27,19 @@ Program [Nordic Semiconductor](https://www.nordicsemi.com) nR5 based boards with
  3. Create the following folder: ```hardware/nRF5``` and change directories to it
  4. Clone this repo: ```git clone https://github.com/sandeepmistry/arduino-nRF5.git nRF5```
 
-## OS Specific Setup
+### OS Specific Setup
 
-###  Windows
+#### OS X
 
-#### Driver Setup for Segger J-Link
+No additional setup required.
+
+#### Linux
+
+No additional setup required.
+
+####  Windows
+
+##### Driver Setup for Segger J-Link
 
  1. Download [Zadig](http://zadig.akeo.ie)
  2. Plugin Segger J-Link or DK board
