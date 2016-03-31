@@ -50,6 +50,12 @@ void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode)
     enabled = 1;
   }
 
+  if (pin >= PINS_COUNT) {
+    return;
+  }
+
+  pin = g_ADigitalPinMap[pin];
+
   nrf_gpiote_polarity_t polarity;
 
   switch (mode) {
@@ -88,6 +94,12 @@ void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode)
  */
 void detachInterrupt(uint32_t pin)
 {
+  if (pin >= PINS_COUNT) {
+    return;
+  }
+
+  pin = g_ADigitalPinMap[pin];
+
   for (int ch = 0; ch < NUMBER_OF_GPIO_TE; ch++) {
     if ((uint32_t)channelMap[ch] == pin) {
       channelMap[ch] = -1;
