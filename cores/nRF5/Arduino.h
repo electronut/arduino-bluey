@@ -92,4 +92,24 @@ void loop( void ) ;
 
 #define bit(b) (1UL << (b))
 
+#define digitalPinToPort(P)        ( &(NRF_GPIO]) )
+#define digitalPinToBitMask(P)     ( 1 << g_ADigitalPinMap[P] )
+//#define analogInPinToBit(P)        ( )
+#define portOutputRegister(port)   ( &(port->OUTSET) )
+#define portInputRegister(port)    ( &(port->IN) )
+#define portModeRegister(port)     ( &(port->DIRSET) )
+#define digitalPinHasPWM(P)        ( true )
+
+/*
+ * digitalPinToTimer(..) is AVR-specific and is not defined for nRF52
+ * architecture. If you need to check if a pin supports PWM you must
+ * use digitalPinHasPWM(..).
+ *
+ * https://github.com/arduino/Arduino/issues/1833
+ */
+// #define digitalPinToTimer(P)
+
+// Interrupts
+#define digitalPinToInterrupt(P)   ( P )
+
 #endif // Arduino_h

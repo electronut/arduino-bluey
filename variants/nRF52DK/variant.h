@@ -40,26 +40,6 @@ extern "C"
 #define NUM_ANALOG_INPUTS    (6u)
 #define NUM_ANALOG_OUTPUTS   (0u)
 
-#define digitalPinToPort(P)        ( &(NRF_GPIO]) )
-#define digitalPinToBitMask(P)     ( 1 << g_ADigitalPinMap[P] )
-//#define analogInPinToBit(P)        ( )
-#define portOutputRegister(port)   ( &(port->OUTSET) )
-#define portInputRegister(port)    ( &(port->IN) )
-#define portModeRegister(port)     ( &(port->DIRSET) )
-#define digitalPinHasPWM(P)        ( true )
-
-/*
- * digitalPinToTimer(..) is AVR-specific and is not defined for nRF52
- * architecture. If you need to check if a pin supports PWM you must
- * use digitalPinHasPWM(..).
- *
- * https://github.com/arduino/Arduino/issues/1833
- */
-// #define digitalPinToTimer(P)
-
-// Interrupts
-#define digitalPinToInterrupt(P)   ( P )
-
 // LEDs
 #define PIN_LED1                (6)
 #define PIN_LED2                (7)
@@ -111,7 +91,7 @@ static const uint8_t AREF = PIN_AREF;
 #define PIN_SPI_MOSI         (11)
 #define PIN_SPI_SCK          (13)
 
-static const uint8_t SS   = 11 ;
+static const uint8_t SS   = 10 ;
 static const uint8_t MOSI = PIN_SPI_MOSI ;
 static const uint8_t MISO = PIN_SPI_MISO ;
 static const uint8_t SCK  = PIN_SPI_SCK ;
