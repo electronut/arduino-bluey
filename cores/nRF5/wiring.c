@@ -16,7 +16,8 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "nrf.h"
+#include "nrf_clock.h"
+#include "nrf_rtc.h"
 
 #include "Arduino.h"
 
@@ -24,22 +25,19 @@
 extern "C" {
 #endif
 
-/*
- * Arduino Zero board initialization
- *
- * Good to know:
- *   - At reset, ResetHandler did the system clock configuration. Core is running at 48MHz.
- *   - Watchdog is disabled by default, unless someone plays with NVM User page
- *   - During reset, all PORT lines are configured as inputs with input buffers, output buffers and pull disabled.
- */
 void init( void )
 {
-  // Set Systick to 1ms interval, common to all Cortex-M variants
-  if ( SysTick_Config( SystemCoreClock / 1000 ) )
-  {
-    // Capture error
-    while ( 1 ) ;
-  }
+  NVIC_SetPriority(RTC1_IRQn, 15);
+  NVIC_ClearPendingIRQ(RTC1_IRQn);
+  NVIC_EnableIRQ(RTC1_IRQn);
+
+  nrf_clock_lf_src_set(CLOCK_LFCLKSRC_SRC_RC);
+  nrf_clock_task_trigger(NRF_CLOCK_TASK_LFCLKSTART);
+
+  nrf_rtc_prescaler_set(NRF_RTC1, 0);
+  nrf_rtc_event_enable(NRF_RTC1, NRF_RTC_EVENT_OVERFLOW);
+  nrf_rtc_int_enable(NRF_RTC1, NRF_RTC_EVENT_OVERFLOW);
+  nrf_rtc_task_trigger(NRF_RTC1, NRF_RTC_TASK_START);
 }
 
 #ifdef __cplusplus

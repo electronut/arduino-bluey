@@ -29,7 +29,9 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include "nrf.h"
+#ifndef ARDUINO
 #include "nrf_assert.h"
+#endif
 
 /**
  * @brief Macro for getting the number of compare channels available
@@ -268,7 +270,9 @@ __STATIC_INLINE uint32_t nrf_rtc_counter_get(NRF_RTC_Type * p_rtc)
 
 __STATIC_INLINE void nrf_rtc_prescaler_set(NRF_RTC_Type * p_rtc, uint32_t val)
 {
+#ifndef ARDUINO
     ASSERT(val <= (RTC_PRESCALER_PRESCALER_Msk >> RTC_PRESCALER_PRESCALER_Pos));
+#endif
     p_rtc->PRESCALER = val;
 }
 __STATIC_INLINE uint32_t rtc_prescaler_get(NRF_RTC_Type * p_rtc)
