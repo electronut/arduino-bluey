@@ -25,9 +25,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include "nrf.h"
-#ifndef ARDUINO
 #include "nrf_assert.h"
-#endif
 
 #define NRF_SAADC_CHANNEL_COUNT 8
 
@@ -320,9 +318,7 @@ __STATIC_INLINE volatile uint32_t * nrf_saadc_event_address_get(nrf_saadc_event_
  */
 __STATIC_INLINE volatile uint32_t * nrf_saadc_event_limit_address_get(uint8_t channel, nrf_saadc_limit_t limit_type)
 {
-#ifndef ARDUINO
     ASSERT(channel < NRF_SAADC_CHANNEL_COUNT);
-#endif
     if (limit_type == NRF_SAADC_LIMIT_HIGH)
     {
         return &NRF_SAADC->EVENTS_CH[channel].LIMITH;
@@ -344,13 +340,13 @@ __STATIC_INLINE nrf_saadc_event_t nrf_saadc_event_limit_get(uint8_t channel, nrf
 {
     if (limit_type == NRF_SAADC_LIMIT_HIGH)
     {
-        return (nrf_saadc_event_t)( (uint32_t) NRF_SAADC_EVENT_CH0_LIMITH +
+        return (nrf_saadc_event_t)( (uint32_t) NRF_SAADC_EVENT_CH0_LIMITH + 
                         (uint32_t) (NRF_SAADC_EVENT_CH1_LIMITH - NRF_SAADC_EVENT_CH0_LIMITH)
                         * (uint32_t) channel );
     }
     else
     {
-        return (nrf_saadc_event_t)( (uint32_t) NRF_SAADC_EVENT_CH0_LIMITL +
+        return (nrf_saadc_event_t)( (uint32_t) NRF_SAADC_EVENT_CH0_LIMITL + 
                         (uint32_t) (NRF_SAADC_EVENT_CH1_LIMITL - NRF_SAADC_EVENT_CH0_LIMITL)
                         * (uint32_t) channel );
     }
@@ -426,7 +422,7 @@ __STATIC_INLINE void nrf_saadc_int_disable(uint32_t saadc_int_mask)
 
 /**
  * @brief Function for generating masks for SAADC channel limit interrupts.
- *
+ * 
  * @param[in] channel    SAADC channel number.
  * @param[in] limit_type Limit type.
  *
@@ -434,9 +430,7 @@ __STATIC_INLINE void nrf_saadc_int_disable(uint32_t saadc_int_mask)
  */
 __STATIC_INLINE uint32_t nrf_saadc_limit_int_get(uint8_t channel, nrf_saadc_limit_t limit_type)
 {
-#ifndef ARDUINO
     ASSERT(channel < NRF_SAADC_CHANNEL_COUNT);
-#endif
     uint32_t mask = (limit_type == NRF_SAADC_LIMIT_LOW) ? NRF_SAADC_INT_CH0LIMITL : NRF_SAADC_INT_CH0LIMITH;
     return mask << (channel * 2);
 }
@@ -516,7 +510,7 @@ __STATIC_INLINE uint16_t nrf_saadc_amount_get(void)
 
 /**
  * @brief Function for setting the SAADC sample resolution.
- *
+ * 
  * @param[in] resolution Bit resolution.
  */
 __STATIC_INLINE void nrf_saadc_resolution_set(nrf_saadc_resolution_t resolution)
