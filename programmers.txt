@@ -1,0 +1,17 @@
+jlink.name=J-Link
+jlink.communication=USB
+jlink.protocol=
+jlink.program.protocol=
+jlink.program.tool=openocd
+jlink.program.interface=jlink
+jlink.program.target=nrf51
+jlink.program.setup_command=transport select swd; set WORKAREASIZE 0;
+
+stlink.name=ST-Link V2
+stlink.communication=USB
+stlink.protocol=
+stlink.program.protocol=
+stlink.program.tool=openocd
+stlink.program.interface=stlink-v2
+stlink.program.target=nrf51
+stlink.program.setup_command=transport select hla_swd; set WORKAREASIZE 0x4000;

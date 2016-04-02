@@ -45,8 +45,6 @@ nRF52DK.build.ldscript=nrf52_xxaa.ld
 BluzDK.name=Bluz DK
 
 BluzDK.upload.tool=nRF5:openocd
-BluzDK.upload.protocol=
-BluzDK.upload.interface=jlink
 BluzDK.upload.target=nrf51
 BluzDK.upload.address=0x0
 BluzDK.upload.maximum_size=262144
