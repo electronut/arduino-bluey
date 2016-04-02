@@ -38,7 +38,7 @@ nRF52DK.build.variant=nRF52DK
 nRF52DK.build.variant_system_lib=
 nRF52DK.build.extra_flags=-DNRF52
 nRF52DK.build.float_flags=-mfloat-abi=hard -mfpu=fpv4-sp-d16
-nRF52DK.build.ldscript=linker_scripts/gcc/nRF52DK.ld
+nRF52DK.build.ldscript=nrf52_xxaa.ld
 
 
 
@@ -63,4 +63,4 @@ BluzDK.build.variant=BluzDK
 BluzDK.build.variant_system_lib=
 BluzDK.build.extra_flags=-DNRF51
 BluzDK.build.float_flags=
-BluzDK.build.ldscript=linker_scripts/gcc/BluzDK.ld
+BluzDK.build.ldscript=nrf51_xxac.ld
