@@ -16,6 +16,8 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#ifdef NRF52
+
 #include "nrf_saadc.h"
 #include "nrf_pwm.h"
 
@@ -232,4 +234,6 @@ void analogWrite( uint32_t ulPin, uint32_t ulValue )
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
