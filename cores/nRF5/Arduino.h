@@ -112,4 +112,8 @@ void loop( void ) ;
 // Interrupts
 #define digitalPinToInterrupt(P)   ( P )
 
+#ifdef __cplusplus
+#include "Uart.h"
+#endif // __cplusplus
+
 #endif // Arduino_h

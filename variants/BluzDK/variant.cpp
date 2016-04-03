@@ -60,13 +60,3 @@ const uint32_t g_ADigitalPinMap[] = {
   18,
   17
 };
-
-Uart Serial( NRF_UART0, UART0_IRQn, PIN_SERIAL_RX, PIN_SERIAL_TX );
-
-extern "C"
-{
-  void UART0_IRQHandler()
-  {
-    Serial.IrqHandler();
-  }
-}

@@ -26,10 +26,6 @@
 #include "WVariant.h"
 
 #ifdef __cplusplus
-#include "Uart.h"
-#endif // __cplusplus
-
-#ifdef __cplusplus
 extern "C"
 {
 #endif // __cplusplus
@@ -111,34 +107,5 @@ static const uint8_t SCK  = PIN_SPI_SCK ;
 /*----------------------------------------------------------------------------
  *        Arduino objects - C++ only
  *----------------------------------------------------------------------------*/
-
-#ifdef __cplusplus
-
-/*  =========================
- *  ===== SERCOM DEFINITION
- *  =========================
-*/
-
-extern Uart Serial;
-
-#endif
-
-// These serial port names are intended to allow libraries and architecture-neutral
-// sketches to automatically default to the correct port name for a particular type
-// of use.  For example, a GPS module would normally connect to SERIAL_PORT_HARDWARE_OPEN,
-// the first hardware serial port whose RX/TX pins are not dedicated to another use.
-//
-// SERIAL_PORT_MONITOR        Port which normally prints to the Arduino Serial Monitor
-//
-// SERIAL_PORT_USBVIRTUAL     Port which is USB virtual serial
-//
-// SERIAL_PORT_LINUXBRIDGE    Port which connects to a Linux system via Bridge library
-//
-// SERIAL_PORT_HARDWARE       Hardware serial port, physical RX & TX pins.
-//
-// SERIAL_PORT_HARDWARE_OPEN  Hardware serial ports which are open for use.  Their RX & TX
-//                            pins are NOT connected to anything by default.
-#define SERIAL_PORT_MONITOR   Serial
-#define SERIAL_PORT_HARDWARE  Serial
 
 #endif
