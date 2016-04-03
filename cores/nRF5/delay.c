@@ -29,14 +29,14 @@ static volatile uint32_t overflows = 0;
 
 uint32_t millis( void )
 {
-  uint64_t ticks = (uint64_t)(overflows << (uint64_t)32) | (uint64_t)nrf_rtc_counter_get(NRF_RTC1);
+  uint64_t ticks = (uint64_t)((uint64_t)overflows << (uint64_t)32) | (uint64_t)nrf_rtc_counter_get(NRF_RTC1);
 
   return (ticks * 1000) / RTC_INPUT_FREQ;
 }
 
 uint32_t micros( void )
 {
-  uint64_t ticks = (uint64_t)(overflows << (uint64_t)32) | (uint64_t)nrf_rtc_counter_get(NRF_RTC1);
+  uint64_t ticks = (uint64_t)((uint64_t)overflows << (uint64_t)32) | (uint64_t)nrf_rtc_counter_get(NRF_RTC1);
 
   return (ticks * 1000000) / RTC_INPUT_FREQ;
 }
