@@ -92,7 +92,7 @@ void loop( void ) ;
 
 #define bit(b) (1UL << (b))
 
-#define digitalPinToPort(P)        ( &(NRF_GPIO]) )
+#define digitalPinToPort(P)        ( &(NRF_GPIO) )
 #define digitalPinToBitMask(P)     ( 1 << g_ADigitalPinMap[P] )
 //#define analogInPinToBit(P)        ( )
 #define portOutputRegister(port)   ( &(port->OUTSET) )
