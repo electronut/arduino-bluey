@@ -94,7 +94,7 @@ recipe.size.regex=\.text\s+([0-9]+).*
 # OpenOCD sketch upload
 #
 
-tools.openocd.path={runtime.tools.openocd-0.10.0-201601101000-dev.path}/0.10.0-201601101000-dev/
+tools.openocd.path={runtime.tools.openocd-0.10.0-dev-nrf5.path}
 tools.openocd.cmd=bin/openocd
 tools.openocd.cmd.windows=bin/openocd.exe
 
