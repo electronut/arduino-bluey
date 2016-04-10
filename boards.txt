@@ -14,6 +14,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+menu.softdevice=Softdevice
+
 nRF52DK.name=nRF52 DK
 
 nRF52DK.vid.0=0x1366
@@ -22,8 +24,7 @@ nRF52DK.pid.0=0x1015
 nRF52DK.upload.tool=sandeepmistry:openocd
 nRF52DK.upload.protocol=
 nRF52DK.upload.interface=jlink
-nRF52DK.upload.target=nrf51
-nRF52DK.upload.address=0x0
+nRF52DK.upload.target=nrf52
 nRF52DK.upload.maximum_size=524288
 nRF52DK.upload.setup_command=transport select swd;
 nRF52DK.upload.use_1200bps_touch=false
@@ -40,18 +41,21 @@ nRF52DK.build.extra_flags=-DNRF52
 nRF52DK.build.float_flags=-mfloat-abi=hard -mfpu=fpv4-sp-d16
 nRF52DK.build.ldscript=nrf52_xxaa.ld
 
+nRF52DK.menu.softdevice.none=None
+nRF52DK.menu.softdevice.none.softdevice=none
+
+nRF52DK.menu.softdevice.s132=S132
+nRF52DK.menu.softdevice.s132.softdevice=s132
+nRF52DK.menu.softdevice.s132.upload.maximum_size=409600
+nRF52DK.menu.softdevice.s132.build.extra_flags=-DNRF52 -DS132 -DNRF51_S132
+nRF52DK.menu.softdevice.s132.build.ldscript=armgcc_s132_nrf52832_xxaa.ld
 
 
 BluzDK.name=Bluz DK
 
 BluzDK.upload.tool=sandeepmistry:openocd
 BluzDK.upload.target=nrf51
-BluzDK.upload.address=0x0
 BluzDK.upload.maximum_size=262144
-BluzDK.upload.setup_command=transport select swd; set WORKAREASIZE 0;
-BluzDK.upload.use_1200bps_touch=false
-BluzDK.upload.wait_for_upload_port=false
-BluzDK.upload.native_usb=false
 
 BluzDK.build.mcu=cortex-m0
 BluzDK.build.f_cpu=16000000
@@ -62,3 +66,12 @@ BluzDK.build.variant_system_lib=
 BluzDK.build.extra_flags=-DNRF51
 BluzDK.build.float_flags=
 BluzDK.build.ldscript=nrf51_xxac.ld
+
+BluzDK.menu.softdevice.none=None
+BluzDK.menu.softdevice.none.softdevice=none
+
+BluzDK.menu.softdevice.s130=S130
+BluzDK.menu.softdevice.s130.softdevice=s130
+BluzDK.menu.softdevice.s130.upload.maximum_size=151552
+BluzDK.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF51_S130
+BluzDK.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_xxaa.ld
