@@ -1,14 +1,33 @@
-/* Copyright (c) 2012 Nordic Semiconductor. All Rights Reserved.
+/*
+ * Copyright (c) Nordic Semiconductor ASA
+ * All rights reserved.
  *
- * The information contained herein is confidential property of Nordic 
- * Semiconductor ASA.Terms and conditions of usage are described in detail 
- * in NORDIC SEMICONDUCTOR STANDARD SOFTWARE LICENSE AGREEMENT. 
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
  *
- * Licensees are granted free, non-transferable use of the information. NO
- * WARRANTY of ANY KIND is provided. This heading must NOT be removed from
- * the file.
- *              
- * $LastChangedRevision: 17685 $
+ *   1. Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ *
+ *   2. Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ *   3. Neither the name of Nordic Semiconductor ASA nor the names of other
+ *   contributors to this software may be used to endorse or promote products
+ *   derived from this software without specific prior written permission.
+ *
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
  */
 
 /**
@@ -39,7 +58,7 @@
  * @brief Erase a page in flash. This is required before writing to any
  * address in the page.
  *
- * @param address Start address of the page. 
+ * @param address Start address of the page.
  */
 void nrf_nvmc_page_erase(uint32_t address);
 
@@ -57,7 +76,7 @@ void nrf_nvmc_write_byte(uint32_t address , uint8_t value);
 
 
 /**
- * @brief Write a 32-bit word to flash. 
+ * @brief Write a 32-bit word to flash.
  * @param address Address to write to.
  * @param value   Value to write.
  */
@@ -76,7 +95,7 @@ void nrf_nvmc_write_bytes(uint32_t  address, const uint8_t * src, uint32_t num_b
 
 /**
  * @brief Write consecutive words to flash.
- * 
+ *
  * @param address   Address to write to.
  * @param src       Pointer to data to copy from.
  * @param num_words Number of bytes in src to write.
