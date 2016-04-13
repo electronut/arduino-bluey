@@ -75,4 +75,4 @@ BluzDK.menu.softdevice.s130=S130
 BluzDK.menu.softdevice.s130.softdevice=s130
 BluzDK.menu.softdevice.s130.upload.maximum_size=151552
 BluzDK.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF51_S130
-BluzDK.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_xxaa.ld
+BluzDK.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_xxac.ld
