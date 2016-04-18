@@ -1,14 +1,34 @@
-/* Copyright (c) 2015 Nordic Semiconductor. All Rights Reserved.
-*
-* The information contained herein is property of Nordic Semiconductor ASA.
-* Terms and conditions of usage are described in detail in NORDIC
-* SEMICONDUCTOR STANDARD SOFTWARE LICENSE AGREEMENT.
-*
-* Licensees are granted free, non-transferable use of the information. NO
-* WARRANTY of ANY KIND is provided. This heading must NOT be removed from
-* the file.
-*
-*/
+/*
+ * Copyright (c) Nordic Semiconductor ASA
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ *   1. Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ *
+ *   2. Redistributions in binary form must reproduce the above copyright notice, this
+ *   list of conditions and the following disclaimer in the documentation and/or
+ *   other materials provided with the distribution.
+ *
+ *   3. Neither the name of Nordic Semiconductor ASA nor the names of other
+ *   contributors to this software may be used to endorse or promote products
+ *   derived from this software without specific prior written permission.
+ *
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
 #ifndef NRF_GPIO_H__
 #define NRF_GPIO_H__
 
@@ -219,7 +239,7 @@ __STATIC_INLINE void nrf_gpio_cfg_sense_set(uint32_t pin_number, nrf_gpio_pin_se
 /**
  * @brief Function for setting the direction for a GPIO pin.
  *
- * @param pin_number specifies the pin number (0-31) for which to
+ * @param pin_number specifies the pin number [0:31] for which to
  * set the direction.
  *
  * @param direction specifies the direction
@@ -232,17 +252,19 @@ __STATIC_INLINE void nrf_gpio_pin_dir_set(uint32_t pin_number, nrf_gpio_pin_dir_
  * Note that the pin must be configured as an output for this
  * function to have any effect.
  *
- * @param pin_number Specifies the pin number (0-31) to set.
+ * @param pin_number specifies the pin number [0:31] to
+ * set.
  */
 __STATIC_INLINE void nrf_gpio_pin_set(uint32_t pin_number);
 
 /**
  * @brief Function for setting GPIO pins.
  *
- * Note that the pins must be configured as outputs for this
+ * Note that pins must be configured as an output for this
  * function to have any effect.
  *
  * @param pin_mask Specifies the pins to set.
+ * set.
  */
 __STATIC_INLINE void nrf_gpio_pins_set(uint32_t pin_mask);
 
@@ -252,17 +274,19 @@ __STATIC_INLINE void nrf_gpio_pins_set(uint32_t pin_mask);
  * Note that the pin must be configured as an output for this
  * function to have any effect.
  *
- * @param pin_number Specifies the pin number (0-31) to clear.
+ * @param pin_number specifies the pin number [0:31] to
+ * clear.
  */
 __STATIC_INLINE void nrf_gpio_pin_clear(uint32_t pin_number);
 
 /**
  * @brief Function for clearing GPIO pins.
  *
- * Note that the pins must be configured as outputs for this
+ * Note that pins must be configured as an output for this
  * function to have any effect.
  *
  * @param pin_mask Specifies the pins to clear.
+ * set.
  */
 __STATIC_INLINE void nrf_gpio_pins_clear(uint32_t pin_mask);
 
@@ -272,19 +296,10 @@ __STATIC_INLINE void nrf_gpio_pins_clear(uint32_t pin_mask);
  * Note that the pin must be configured as an output for this
  * function to have any effect.
  *
- * @param pin_number Specifies the pin number (0-31) to toggle.
+ * @param pin_number specifies the pin number [0:31] to
+ * toggle.
  */
 __STATIC_INLINE void nrf_gpio_pin_toggle(uint32_t pin_number);
-
-/**
- * @brief Function for toggling GPIO pins.
- *
- * Note that the pins must be configured as outputs for this
- * function to have any effect.
- *
- * @param pin_mask Specifies the pins to toggle.
- */
-__STATIC_INLINE void nrf_gpio_pins_toggle(uint32_t pin_mask);
 
 /**
  * @brief Function for writing a value to a GPIO pin.
@@ -292,7 +307,7 @@ __STATIC_INLINE void nrf_gpio_pins_toggle(uint32_t pin_mask);
  * Note that the pin must be configured as an output for this
  * function to have any effect.
  *
- * @param pin_number specifies the pin number (0-31) to
+ * @param pin_number specifies the pin number [0:31] to
  * write.
  *
  * @param value specifies the value to be written to the pin.
@@ -307,7 +322,7 @@ __STATIC_INLINE void nrf_gpio_pin_write(uint32_t pin_number, uint32_t value);
  * Note that the pin must have input connected for the value
  * returned from this function to be valid.
  *
- * @param pin_number specifies the pin number (0-31) to
+ * @param pin_number specifies the pin number [0:31] to
  * read.
  *
  * @return
@@ -330,7 +345,7 @@ __STATIC_INLINE uint32_t nrf_gpio_pins_read(void);
 /**
  * @brief Function for reading the sense configuration of a GPIO pin.
  *
- * @param pin_number specifies the pin number (0-31) to
+ * @param pin_number specifies the pin number [0:31] to
  * read.
  *
  * @retval Sense configuration
@@ -563,14 +578,19 @@ __STATIC_INLINE void nrf_gpio_pins_clear(uint32_t pin_mask)
 
 __STATIC_INLINE void nrf_gpio_pin_toggle(uint32_t pin_number)
 {
-    nrf_gpio_pins_toggle(1UL << pin_number);
-}
+    const uint32_t pin_bit   = 1UL << pin_number;
+    const uint32_t pin_state = ((NRF_GPIO->OUT >> pin_number) & 1UL);
 
-__STATIC_INLINE void nrf_gpio_pins_toggle(uint32_t pin_mask)
-{
-    uint32_t pins_state = NRF_GPIO->OUT;
-    NRF_GPIO->OUTSET = (~pins_state & pin_mask);
-    NRF_GPIO->OUTCLR = ( pins_state & pin_mask);
+    if (pin_state == 0)
+    {
+        // Current state low, set high.
+        NRF_GPIO->OUTSET = pin_bit;
+    }
+    else
+    {
+        // Current state high, set low.
+        NRF_GPIO->OUTCLR = pin_bit;
+    }
 }
 
 __STATIC_INLINE void nrf_gpio_pin_write(uint32_t pin_number, uint32_t value)
