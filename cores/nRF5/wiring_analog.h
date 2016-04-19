@@ -28,12 +28,24 @@ extern "C" {
 /*
  * \brief SAMD products have only one reference for ADC
  */
+#ifdef NRF52
 typedef enum _eAnalogReference
 {
   AR_DEFAULT,
   AR_INTERNAL,
   AR_VDD4
 } eAnalogReference ;
+#else
+typedef enum _eAnalogReference
+{
+  AR_DEFAULT,
+  AR_VBG,
+  AR_SUPPLY_ONE_HALF,
+  AR_SUPPLY_ONE_THIRD,
+  AR_EXT0,
+  AR_EXT1
+} eAnalogReference ;
+#endif
 
 
 /*

@@ -19,6 +19,7 @@
 
 #ifdef NRF51
 
+#include "nrf_adc.h"
 #include "nrf_timer.h"
 #include "nrf_gpio.h"
 
@@ -47,6 +48,8 @@ static struct PWMContext pwmContext[PWM_COUNT] = {
 };
 
 static int timerEnabled = 0;
+
+static nrf_adc_config_reference_t adcReference = NRF_ADC_CONFIG_REF_VBG;
 
 static uint32_t readResolution = 10;
 static uint32_t writeResolution = 8;
@@ -86,6 +89,97 @@ static inline uint32_t mapResolution( uint32_t value, uint32_t from, uint32_t to
  */
 void analogReference( eAnalogReference ulMode )
 {
+    switch ( ulMode ) {
+    case AR_DEFAULT:
+    case AR_VBG:
+    default:
+      adcReference = NRF_ADC_CONFIG_REF_VBG;
+      break;
+
+    case AR_SUPPLY_ONE_HALF:
+      adcReference = NRF_ADC_CONFIG_REF_SUPPLY_ONE_HALF;
+      break;
+
+    case AR_SUPPLY_ONE_THIRD:
+      adcReference = NRF_ADC_CONFIG_REF_SUPPLY_ONE_THIRD;
+      break;
+
+    case AR_EXT0:
+      adcReference = NRF_ADC_CONFIG_REF_EXT_REF0;
+      break;
+
+    case AR_EXT1:
+      adcReference = NRF_ADC_CONFIG_REF_EXT_REF1;
+      break;
+  }
+}
+
+uint32_t analogRead( uint32_t ulPin )
+{
+  nrf_adc_config_input_t pin = NRF_ADC_CONFIG_INPUT_DISABLED;
+  nrf_adc_config_t config;
+  nrf_adc_config_resolution_t adcResolution;
+  uint32_t resolution;
+  uint32_t value;
+
+  if (ulPin >= PINS_COUNT) {
+    return 0;
+  }
+
+  ulPin = g_ADigitalPinMap[ulPin];
+
+  switch ( ulPin ) {
+    case 1:
+      pin = NRF_ADC_CONFIG_INPUT_2;
+      break;
+
+    case 2:
+      pin = NRF_ADC_CONFIG_INPUT_3;
+      break;
+
+    case 3:
+      pin = NRF_ADC_CONFIG_INPUT_4;
+      break;
+
+    case 4:
+      pin = NRF_ADC_CONFIG_INPUT_5;
+      break;
+
+    case 5:
+      pin = NRF_ADC_CONFIG_INPUT_6;
+      break;
+
+    case 6:
+      pin = NRF_ADC_CONFIG_INPUT_7;
+      break;
+
+    default:
+      return 0;
+  }
+
+  if (readResolution <= 8) {
+    resolution = 8;
+    adcResolution = NRF_ADC_CONFIG_RES_8BIT;
+  } else if (readResolution <= 9) {
+    resolution = 9;
+    adcResolution = NRF_ADC_CONFIG_RES_9BIT;
+  } else {
+    resolution = 10;
+    adcResolution = NRF_ADC_CONFIG_RES_10BIT;
+  }
+
+  config.resolution = adcResolution;
+  config.scaling = NRF_ADC_CONFIG_SCALING_INPUT_TWO_THIRDS;
+  config.reference = adcReference;
+
+  nrf_adc_enable();
+
+  nrf_adc_configure(&config);
+  value = nrf_adc_convert_single(pin);
+
+  nrf_adc_disable();
+
+  return mapResolution(value, resolution, readResolution);
 }
 
 // Right now, PWM output only works on the pins with
