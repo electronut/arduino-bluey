@@ -195,6 +195,8 @@ uint32_t analogRead( uint32_t ulPin )
     value = 0;
   }
 
+  nrf_saadc_disable();
+
   return mapResolution(value, resolution, readResolution);
 }
 
