@@ -70,3 +70,8 @@ No additional setup required.
 ## Credits
 
 This core is based on the [Arduino SAMD Core](https://github.com/arduino/ArduinoCore-samd) and licensed under the same [GPL License](LICENSE)
+
+The following tools are used:
+
+ * [GCC ARM Embedded](https://launchpad.net/gcc-arm-embedded) as the compiler
+ * A [forked](https://github.com/sandeepmistry/openocd-code-nrf5) version of [OpenOCD](http://openocd.org) to flash sketches
