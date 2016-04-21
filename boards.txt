@@ -32,6 +32,8 @@ nRF52DK.upload.use_1200bps_touch=false
 nRF52DK.upload.wait_for_upload_port=false
 nRF52DK.upload.native_usb=false
 
+nRF52DK.bootloader.tool=sandeepmistry:openocd
+
 nRF52DK.build.mcu=cortex-m4
 nRF52DK.build.f_cpu=16000000
 nRF52DK.build.board=NRF52_DK
@@ -47,6 +49,7 @@ nRF52DK.menu.softdevice.none.softdevice=none
 
 nRF52DK.menu.softdevice.s132=S132
 nRF52DK.menu.softdevice.s132.softdevice=s132
+nRF52DK.menu.softdevice.s132.softdeviceversion=2.0.0
 nRF52DK.menu.softdevice.s132.upload.maximum_size=409600
 nRF52DK.menu.softdevice.s132.build.extra_flags=-DNRF52 -DS132 -DNRF51_S132
 nRF52DK.menu.softdevice.s132.build.ldscript=armgcc_s132_nrf52832_xxaa.ld
@@ -57,6 +60,8 @@ BluzDK.name=Bluz DK
 BluzDK.upload.tool=sandeepmistry:openocd
 BluzDK.upload.target=nrf51
 BluzDK.upload.maximum_size=262144
+
+BluzDK.bootloader.tool=sandeepmistry:openocd
 
 BluzDK.build.mcu=cortex-m0
 BluzDK.build.f_cpu=16000000
@@ -73,12 +78,14 @@ BluzDK.menu.softdevice.none.softdevice=none
 
 BluzDK.menu.softdevice.s110=S110
 BluzDK.menu.softdevice.s110.softdevice=s110
+BluzDK.menu.softdevice.s110.softdeviceversion=8.0.0
 BluzDK.menu.softdevice.s110.upload.maximum_size=151552
 BluzDK.menu.softdevice.s110.build.extra_flags=-DNRF51 -DS110 -DNRF51_S110
 BluzDK.menu.softdevice.s110.build.ldscript=armgcc_s110_nrf51822_xxab.ld
 
 BluzDK.menu.softdevice.s130=S130
 BluzDK.menu.softdevice.s130.softdevice=s130
+BluzDK.menu.softdevice.s130.softdeviceversion=2.0.0
 BluzDK.menu.softdevice.s130.upload.maximum_size=151552
 BluzDK.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF51_S130
 BluzDK.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_xxac.ld
