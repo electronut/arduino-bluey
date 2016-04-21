@@ -271,11 +271,11 @@ void TwoWire::onService(void)
 {
 }
 
-TwoWire Wire(NRF_TWI0, SPI0_TWI0_IRQn, PIN_WIRE_SDA, PIN_WIRE_SCL);
+TwoWire Wire(NRF_TWI1, SPI1_TWI1_IRQn, PIN_WIRE_SDA, PIN_WIRE_SCL);
 
 extern "C"
 {
-  void SPI0_TWI0_IRQHandler(void)
+  void SPI1_TWI1_IRQHandler(void)
   {
     Wire.onService();
   }
