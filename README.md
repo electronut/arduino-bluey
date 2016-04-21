@@ -5,6 +5,7 @@ Program [Nordic Semiconductor](https://www.nordicsemi.com) nR5 based boards with
 ## Supported boards
 
  * [nRF52 DK](https://www.nordicsemi.com/eng/Products/Bluetooth-Smart-Bluetooth-low-energy/nRF52-DK)
+ * [Bluz DK](http://bluz.io)
 
 ## Installing
 
@@ -17,29 +18,19 @@ Program [Nordic Semiconductor](https://www.nordicsemi.com) nR5 based boards with
  5. Open the Boards Manager from the Tools -> Board menu and install "Nordic Semiconductor nRF5 Boards"
  6. Select your nRF5 board from the Tools -> Board menu
 
-### From git (for core development)
+#### OS Specific Setup
 
- 1. Follow steps from Board Manager section above
- 2. ```cd <SKETCHBOOK>/hardware```, where ```<SKETCHBOOK>``` is your Arduino Sketch folder:
-  * OS X: ```~/Documents```
-  * Linux: ```~/Sketchbook```
-  * Windows: ```~/Documents```
- 3. Create the following folder: ```hardware/nRF5``` and change directories to it
- 4. Clone this repo: ```git clone https://github.com/sandeepmistry/arduino-nRF5.git nRF5```
-
-### OS Specific Setup
-
-#### OS X
+##### OS X
 
 No additional setup required.
 
-#### Linux
+##### Linux
 
 No additional setup required.
 
-####  Windows
+#####  Windows
 
-##### Driver Setup for Segger J-Link
+###### Driver Setup for Segger J-Link
 
  1. Download [Zadig](http://zadig.akeo.ie)
  2. Plugin Segger J-Link or DK board
@@ -47,6 +38,17 @@ No additional setup required.
  4. Select ```Options -> List All Devices```
  5. Select ```J-Link (Interface 2)``` from the device dropdown
  6. Click ```Replace Driver```
+
+### From git (for core development)
+
+ 1. Follow steps from Board Manager section above
+ 2. ```cd <SKETCHBOOK>/hardware```, where ```<SKETCHBOOK>``` is your Arduino Sketch folder:
+  * OS X: ```~/Documents/Arduino```
+  * Linux: ```~/Arduino```
+  * Windows: ```~/Documents/Arduino```
+ 3. Create a folder named ```hardware```, if it does not exist, and change directories to it
+ 4. Clone this repo: ```git clone https://github.com/sandeepmistry/arduino-nRF5.git sandeepmistry/nRF5```
+ 5. Restart the Arduino IDE
 
 ## Credits
 
