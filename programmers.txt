@@ -13,3 +13,11 @@ stlink.program.protocol=
 stlink.program.tool=openocd
 stlink.program.interface=stlink-v2
 stlink.program.setup_command=transport select hla_swd; set WORKAREASIZE 0x4000;
+
+cmsisdap.name=CMSIS-DAP
+cmsisdap.communication=USB
+cmsisdap.protocol=
+cmsisdap.program.protocol=
+cmsisdap.program.tool=openocd
+cmsisdap.program.interface=cmsis-dap
+cmsisdap.program.setup_command=;
