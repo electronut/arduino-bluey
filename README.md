@@ -39,10 +39,27 @@ No additional setup required.
  5. Select ```J-Link (Interface 2)``` from the device dropdown
  6. Click ```Replace Driver```
 
+### Flashing a SoftDevice
+
+ 1. ```cd <SKETCHBOOK>```, where ```<SKETCHBOOK>``` is your Arduino Sketch folder:
+  * OS X: ```~/Documents/Arduino```
+  * Linux: ```~/Arduino```
+  * Windows: ```~/Documents/Arduino```
+ 2. Create the following directories: ```tools/nRF5FlashSoftDevice/tool/```
+ 3. Download [nRF5FlashSoftDevice.jar](https://github.com/sandeepmistry/arduino-nRF5/releases/download/tools/nRF5FlashSoftDevice.jar) to ```<SKETCHBOOK>/tools/nRF5FlashSoftDevice/tool/```
+ 4. Restart the Arduino IDE
+ 5. Select your nRF board from the Tools -> Board menu
+ 6. Select a SoftDevice from the Tools -> "SoftDevice: " menu
+ 7. Select a Programmer (J-Link, ST-Link V2, or CMSIS-DAP) from the Tools -> "Programmer: " menu
+ 8. Select Tools -> nRF5 Flash SoftDevice
+ 9. Read license agreement
+ 10. Click "Accept" to accept license and continue, or "Decline" to decline and abort
+ 11. If accepted, SoftDevice binary will be flashed to the board
+
 ### From git (for core development)
 
  1. Follow steps from Board Manager section above
- 2. ```cd <SKETCHBOOK>/hardware```, where ```<SKETCHBOOK>``` is your Arduino Sketch folder:
+ 2. ```cd <SKETCHBOOK>```, where ```<SKETCHBOOK>``` is your Arduino Sketch folder:
   * OS X: ```~/Documents/Arduino```
   * Linux: ```~/Arduino```
   * Windows: ```~/Documents/Arduino```
