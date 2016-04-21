@@ -18,6 +18,8 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#ifdef NRF52
+
 extern "C" {
 #include <string.h>
 }
@@ -352,3 +354,5 @@ extern "C"
     Wire.onService();
   }
 }
+
+#endif

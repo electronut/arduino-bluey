@@ -21,9 +21,13 @@
 #ifndef TwoWire_h
 #define TwoWire_h
 
-#include "nrf_twi.h"
+#ifdef NRF52
 #include "nrf_twim.h"
 #include "nrf_twis.h"
+#else
+#include "nrf.h"
+#include "nrf_twi.h"
+#endif
 
 #include "Stream.h"
 #include "variant.h"
@@ -38,9 +42,15 @@
 class TwoWire : public Stream
 {
   public:
+#ifdef NRF52
     TwoWire(NRF_TWIM_Type * p_twim, NRF_TWIS_Type * p_twis, IRQn_Type IRQn, uint8_t pinSDA, uint8_t pinSCL);
+#else
+    TwoWire(NRF_TWI_Type * p_twi, IRQn_Type IRQn, uint8_t pinSDA, uint8_t pinSCL);
+#endif
     void begin();
+#ifdef NRF52
     void begin(uint8_t);
+#endif
     void end();
     void setClock(uint32_t);
 
@@ -58,16 +68,22 @@ class TwoWire : public Stream
     virtual int read(void);
     virtual int peek(void);
     virtual void flush(void);
+#ifdef NRF52
     void onReceive(void(*)(int));
     void onRequest(void(*)(void));
+#endif
 
     using Print::write;
 
     void onService(void);
 
   private:
+#ifdef NRF52
     NRF_TWIM_Type * _p_twim;
     NRF_TWIS_Type * _p_twis;
+#else
+    NRF_TWI_Type * _p_twi;
+#endif
 
     IRQn_Type _IRQn;
 
