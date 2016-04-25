@@ -46,9 +46,9 @@ const uint32_t g_ADigitalPinMap[] = {
   30,
   31,
 
-  // SCL, SDA
-  27,
+  // SDA, SCL
   26,
+  27,
 
   // RX, TX
   8,
