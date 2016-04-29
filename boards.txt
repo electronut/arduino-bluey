@@ -16,6 +16,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 menu.softdevice=Softdevice
+menu.version=Version
 
 nRF52DK.name=nRF52 DK
 
@@ -89,3 +90,45 @@ BluzDK.menu.softdevice.s130.softdeviceversion=2.0.0
 BluzDK.menu.softdevice.s130.upload.maximum_size=151552
 BluzDK.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF51_S130
 BluzDK.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_xxac.ld
+
+
+BLENano.name=RedBearLab BLE Nano
+
+BLENano.upload.tool=sandeepmistry:openocd
+BLENano.upload.interface=cmsisdap
+BLENano.upload.target=nrf51
+BLENano.upload.maximum_size=262144
+
+BLENano.bootloader.tool=sandeepmistry:openocd
+
+BLENano.build.mcu=cortex-m0
+BLENano.build.f_cpu=16000000
+BLENano.build.board=BLE_NANO
+BLENano.build.core=nRF5
+BLENano.build.variant=BLENano
+BLENano.build.variant_system_lib=
+BLENano.build.extra_flags=-DNRF51
+BLENano.build.float_flags=
+BLENano.build.ldscript=nrf51_{build.chip}.ld
+
+BLENano.menu.version.1_0=1.0
+BLENano.menu.version.1_0.build.chip=xxaa
+BLENano.menu.version.1_5=1.5
+BLENano.menu.version.1_5.build.chip=xxac
+
+BLENano.menu.softdevice.none=None
+BLENano.menu.softdevice.none.softdevice=none
+
+BLENano.menu.softdevice.s110=S110
+BLENano.menu.softdevice.s110.softdevice=s110
+BLENano.menu.softdevice.s110.softdeviceversion=8.0.0
+BLENano.menu.softdevice.s110.upload.maximum_size=151552
+BLENano.menu.softdevice.s110.build.extra_flags=-DNRF51 -DS110 -DNRF51_S110
+BLENano.menu.softdevice.s110.build.ldscript=armgcc_s110_nrf51822_{build.chip}.ld
+
+BLENano.menu.softdevice.s130=S130
+BLENano.menu.softdevice.s130.softdevice=s130
+BLENano.menu.softdevice.s130.softdeviceversion=2.0.0
+BLENano.menu.softdevice.s130.upload.maximum_size=151552
+BLENano.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF51_S130
+BLENano.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_{build.chip}.ld
