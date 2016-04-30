@@ -24,8 +24,6 @@ extern "C" {
 #include <string.h>
 }
 
-#include "nrf_gpio.h"
-
 #include <Arduino.h>
 #include <wiring_private.h>
 
@@ -45,12 +43,22 @@ void TwoWire::begin(void) {
   //Master Mode
   master = true;
 
-  nrf_gpio_cfg(_uc_pinSCL, NRF_GPIO_PIN_DIR_INPUT, NRF_GPIO_PIN_INPUT_CONNECT, NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_S0D1, NRF_GPIO_PIN_NOSENSE);
-  nrf_gpio_cfg(_uc_pinSDA, NRF_GPIO_PIN_DIR_INPUT, NRF_GPIO_PIN_INPUT_CONNECT, NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_S0D1, NRF_GPIO_PIN_NOSENSE);
+    NRF_GPIO->PIN_CNF[_uc_pinSCL] = ((uint32_t)GPIO_PIN_CNF_DIR_Input      << GPIO_PIN_CNF_DIR_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_INPUT_Connect    << GPIO_PIN_CNF_INPUT_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_PULL_Pullup      << GPIO_PIN_CNF_PULL_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled   << GPIO_PIN_CNF_SENSE_Pos);
 
-  nrf_twim_frequency_set(_p_twim, NRF_TWIM_FREQ_100K);
-  nrf_twim_enable(_p_twim);
-  nrf_twim_pins_set(_p_twim, _uc_pinSCL, _uc_pinSDA);
+  NRF_GPIO->PIN_CNF[_uc_pinSDA] = ((uint32_t)GPIO_PIN_CNF_DIR_Input        << GPIO_PIN_CNF_DIR_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_INPUT_Connect    << GPIO_PIN_CNF_INPUT_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_PULL_Pullup      << GPIO_PIN_CNF_PULL_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled   << GPIO_PIN_CNF_SENSE_Pos);
+
+  _p_twim->FREQUENCY = TWIM_FREQUENCY_FREQUENCY_K100;
+  _p_twim->ENABLE = (TWIM_ENABLE_ENABLE_Enabled << TWIM_ENABLE_ENABLE_Pos);
+  _p_twim->PSEL.SCL = _uc_pinSCL;
+  _p_twim->PSEL.SDA = _uc_pinSDA;
 
   NVIC_ClearPendingIRQ(_IRQn);
   NVIC_SetPriority(_IRQn, 2);
@@ -61,56 +69,66 @@ void TwoWire::begin(uint8_t address) {
   //Slave mode
   master = false;
 
-  nrf_gpio_cfg(_uc_pinSCL, NRF_GPIO_PIN_DIR_INPUT, NRF_GPIO_PIN_INPUT_DISCONNECT, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_S0D1, NRF_GPIO_PIN_NOSENSE);
-  nrf_gpio_cfg(_uc_pinSDA, NRF_GPIO_PIN_DIR_INPUT, NRF_GPIO_PIN_INPUT_DISCONNECT, NRF_GPIO_PIN_NOPULL, NRF_GPIO_PIN_S0D1, NRF_GPIO_PIN_NOSENSE);
+  NRF_GPIO->PIN_CNF[_uc_pinSCL] = ((uint32_t)GPIO_PIN_CNF_DIR_Input        << GPIO_PIN_CNF_DIR_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_INPUT_Disconnect << GPIO_PIN_CNF_INPUT_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_PULL_Disabled    << GPIO_PIN_CNF_PULL_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled   << GPIO_PIN_CNF_SENSE_Pos);
 
-  nrf_twis_address_set(_p_twis, 0, address);
-  nrf_twis_config_address_set(_p_twis, NRF_TWIS_CONFIG_ADDRESS0_MASK);
-  nrf_twis_pins_set(_p_twis, _uc_pinSCL, _uc_pinSDA);
+  NRF_GPIO->PIN_CNF[_uc_pinSDA] = ((uint32_t)GPIO_PIN_CNF_DIR_Input        << GPIO_PIN_CNF_DIR_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_INPUT_Disconnect << GPIO_PIN_CNF_INPUT_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_PULL_Disabled    << GPIO_PIN_CNF_PULL_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled   << GPIO_PIN_CNF_SENSE_Pos);
 
-  nrf_twis_orc_set(_p_twis, 0xff);
+  _p_twis->ADDRESS[0] = address;
+  _p_twis->CONFIG = TWIS_CONFIG_ADDRESS0_Msk;
+  _p_twis->PSEL.SCL = _uc_pinSCL;
+  _p_twis->PSEL.SDA = _uc_pinSDA;
 
-  nrf_twis_int_enable(_p_twis, NRF_TWIS_INT_STOPPED_MASK | NRF_TWIS_INT_ERROR_MASK | NRF_TWIS_INT_WRITE_MASK | NRF_TWIS_INT_READ_MASK);
+  _p_twis->ORC = 0xff;
+
+  _p_twis->INTENSET = TWIS_INTEN_STOPPED_Msk | TWIS_INTEN_ERROR_Msk | TWIS_INTEN_WRITE_Msk | TWIS_INTEN_READ_Msk;
 
   NVIC_ClearPendingIRQ(_IRQn);
   NVIC_SetPriority(_IRQn, 2);
   NVIC_EnableIRQ(_IRQn);
 
-  nrf_twis_enable(_p_twis);
+  _p_twis->ENABLE = (TWIS_ENABLE_ENABLE_Enabled << TWIS_ENABLE_ENABLE_Pos);
 }
 
 void TwoWire::setClock(uint32_t baudrate) {
   if (master) {
-    nrf_twim_disable(_p_twim);
+    _p_twim->ENABLE = (TWIM_ENABLE_ENABLE_Disabled << TWIM_ENABLE_ENABLE_Pos);
 
-    nrf_twim_frequency_t frequency;
+    uint32_t frequency;
 
     if (baudrate <= 100000)
     {
-      frequency = NRF_TWIM_FREQ_100K;
+      frequency = TWIM_FREQUENCY_FREQUENCY_K100;
     }
     else if (baudrate <= 250000)
     {
-      frequency = NRF_TWIM_FREQ_250K;
+      frequency = TWIM_FREQUENCY_FREQUENCY_K250;
     }
     else
     {
-      frequency = NRF_TWIM_FREQ_400K;
+      frequency = TWIM_FREQUENCY_FREQUENCY_K400;
     }
 
-    nrf_twim_frequency_set(_p_twim, frequency);
-    nrf_twim_enable(_p_twim);
+    _p_twim->FREQUENCY = frequency;
+    _p_twim->ENABLE = (TWIM_ENABLE_ENABLE_Enabled << TWIM_ENABLE_ENABLE_Pos);
   }
 }
 
 void TwoWire::end() {
   if (master)
   {
-    nrf_twim_disable(_p_twim);
+    _p_twim->ENABLE = (TWIM_ENABLE_ENABLE_Disabled << TWIM_ENABLE_ENABLE_Pos);
   }
   else
   {
-    nrf_twis_disable(_p_twis);
+    _p_twis->ENABLE = (TWIS_ENABLE_ENABLE_Disabled << TWIS_ENABLE_ENABLE_Pos);
   }
 }
 
@@ -124,37 +142,38 @@ uint8_t TwoWire::requestFrom(uint8_t address, size_t quantity, bool stopBit)
   size_t byteRead = 0;
   rxBuffer.clear();
 
-  nrf_twim_address_set(_p_twim, address);
+  _p_twim->ADDRESS = address;
 
-  nrf_twim_task_trigger(_p_twim, NRF_TWIM_TASK_RESUME);
-  nrf_twim_rx_buffer_set(_p_twim, rxBuffer._aucBuffer, quantity);
-  nrf_twim_task_trigger(_p_twim, NRF_TWIM_TASK_STARTRX);
+  _p_twim->TASKS_RESUME = 0x1UL;
+  _p_twim->RXD.PTR = (uint32_t)rxBuffer._aucBuffer;
+  _p_twim->RXD.MAXCNT = quantity;
+  _p_twim->TASKS_STARTRX = 0x1UL;
 
-  while(!nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_RXSTARTED) && !nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_ERROR));
-  nrf_twim_event_clear(_p_twim, NRF_TWIM_EVENT_RXSTARTED);
+  while(!_p_twim->EVENTS_RXSTARTED && !_p_twim->EVENTS_ERROR);
+  _p_twim->EVENTS_RXSTARTED = 0x0UL;
 
-  while(!nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_LASTRX) && !nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_ERROR));
-  nrf_twim_event_clear(_p_twim, NRF_TWIM_EVENT_LASTRX);
+  while(!_p_twim->EVENTS_LASTRX && !_p_twim->EVENTS_ERROR);
+  _p_twim->EVENTS_LASTRX = 0x0UL;
 
-  if (stopBit || nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_ERROR))
+  if (stopBit || _p_twim->EVENTS_ERROR)
   {
-    nrf_twim_task_trigger(_p_twim, NRF_TWIM_TASK_STOP);
-    while(!nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_STOPPED));
-    nrf_twim_event_clear(_p_twim, NRF_TWIM_EVENT_STOPPED);
+    _p_twim->TASKS_STOP = 0x1UL;
+    while(!_p_twim->EVENTS_STOPPED);
+    _p_twim->EVENTS_STOPPED = 0x0UL;
   }
   else
   {
-    nrf_twim_task_trigger(_p_twim, NRF_TWIM_TASK_SUSPEND);
-    while(!nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_SUSPENDED));
-    nrf_twim_event_clear(_p_twim, NRF_TWIM_EVENT_SUSPENDED);
+    _p_twim->TASKS_SUSPEND = 0x1UL;
+    while(!_p_twim->EVENTS_SUSPENDED);
+    _p_twim->EVENTS_SUSPENDED = 0x0UL;
   }
 
-  if (nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_ERROR))
+  if (_p_twim->EVENTS_ERROR)
   {
-    nrf_twim_event_clear(_p_twim, NRF_TWIM_EVENT_ERROR);
+    _p_twim->EVENTS_ERROR = 0x0UL;
   }
 
-  byteRead = rxBuffer._iHead = nrf_twim_rxd_amount_get(_p_twim);
+  byteRead = rxBuffer._iHead = _p_twim->RXD.AMOUNT;
 
   return byteRead;
 }
@@ -183,45 +202,47 @@ uint8_t TwoWire::endTransmission(bool stopBit)
   transmissionBegun = false ;
 
   // Start I2C transmission
-  nrf_twim_address_set(_p_twim, txAddress);
+  _p_twim->ADDRESS = txAddress;
 
-  nrf_twim_task_trigger(_p_twim, NRF_TWIM_TASK_RESUME);
-  nrf_twim_task_trigger(_p_twim, NRF_TWIM_TASK_STARTTX);
+  _p_twim->TASKS_RESUME = 0x1UL;
 
-  nrf_twim_tx_buffer_set(_p_twim, txBuffer._aucBuffer, txBuffer.available());
+  _p_twim->TXD.PTR = (uint32_t)txBuffer._aucBuffer;
+  _p_twim->TXD.MAXCNT = txBuffer.available();
 
-  nrf_twim_task_trigger(_p_twim, NRF_TWIM_TASK_STARTTX);
+  _p_twim->TASKS_STARTTX = 0x1UL;
 
-  while(!nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_TXSTARTED) && !nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_ERROR));
-  nrf_twim_event_clear(_p_twim, NRF_TWIM_EVENT_TXSTARTED);
+  while(!_p_twim->EVENTS_TXSTARTED && !_p_twim->EVENTS_ERROR);
+  _p_twim->EVENTS_TXSTARTED = 0x0UL;
 
-  while(!nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_LASTTX) && !nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_ERROR));
-  nrf_twim_event_clear(_p_twim, NRF_TWIM_EVENT_LASTTX);
+  while(!_p_twim->EVENTS_LASTTX && !_p_twim->EVENTS_ERROR);
+  _p_twim->EVENTS_LASTTX = 0x0UL;
 
-  if (stopBit || nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_ERROR))
+  if (stopBit || _p_twim->EVENTS_ERROR)
   {
-    nrf_twim_task_trigger(_p_twim, NRF_TWIM_TASK_STOP);
-    while(!nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_STOPPED));
-    nrf_twim_event_clear(_p_twim, NRF_TWIM_EVENT_STOPPED);
+    _p_twim->TASKS_STOP = 0x1UL;
+    while(!_p_twim->EVENTS_STOPPED);
+    _p_twim->EVENTS_STOPPED = 0x0UL;
   }
   else
   {
-    nrf_twim_task_trigger(_p_twim, NRF_TWIM_TASK_SUSPEND);
-    while(!nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_SUSPENDED));
-    nrf_twim_event_clear(_p_twim, NRF_TWIM_EVENT_SUSPENDED);
+    _p_twim->TASKS_SUSPEND = 0x1UL;
+    while(!_p_twim->EVENTS_SUSPENDED);
+    _p_twim->EVENTS_SUSPENDED = 0x0UL;
   }
 
-  if (nrf_twim_event_check(_p_twim, NRF_TWIM_EVENT_ERROR))
+  if (_p_twim->EVENTS_ERROR)
   {
-    nrf_twim_event_clear(_p_twim, NRF_TWIM_EVENT_ERROR);
+    _p_twim->EVENTS_ERROR = 0x0UL;
 
-    uint32_t error = nrf_twim_errorsrc_get_and_clear(_p_twim);
+    uint32_t error = _p_twim->ERRORSRC;
 
-    if (error == NRF_TWIM_ERROR_ADDRESS_NACK)
+    _p_twim->ERRORSRC = error;
+
+    if (error == TWIM_ERRORSRC_ANACK_Msk)
     {
       return 2;
     }
-    else if (error == NRF_TWIM_ERROR_DATA_NACK)
+    else if (error == TWIM_ERRORSRC_DNACK_Msk)
     {
       return 3;
     }
@@ -299,15 +320,22 @@ void TwoWire::onRequest(void(*function)(void))
 
 void TwoWire::onService(void)
 {
-  if (nrf_twis_event_get_and_clear(_p_twis, NRF_TWIS_EVENT_WRITE))
+  if (_p_twis->EVENTS_WRITE)
   {
+    _p_twis->EVENTS_WRITE = 0x0UL;
+
     receiving = true;
 
-    nrf_twis_rx_prepare(_p_twis, rxBuffer._aucBuffer, sizeof(rxBuffer._aucBuffer));
+    _p_twis->RXD.PTR = (uint32_t)rxBuffer._aucBuffer;
+    _p_twis->RXD.MAXCNT = sizeof(rxBuffer._aucBuffer);
+
+    _p_twis->TASKS_PREPARERX = 0x1UL;
   }
 
-  if (nrf_twis_event_get_and_clear(_p_twis, NRF_TWIS_EVENT_READ))
+  if (_p_twis->EVENTS_READ)
   {
+    _p_twis->EVENTS_READ = 0x0UL;
+
     receiving = false;
     transmissionBegun = true;
 
@@ -320,14 +348,19 @@ void TwoWire::onService(void)
 
     transmissionBegun = false;
 
-    nrf_twis_tx_prepare(_p_twis, txBuffer._aucBuffer, txBuffer.available());
+    _p_twis->TXD.PTR = (uint32_t)txBuffer._aucBuffer;
+    _p_twis->TXD.MAXCNT = txBuffer.available();
+
+    _p_twis->TASKS_PREPARETX = 0x1UL;
   }
 
-  if (nrf_twis_event_get_and_clear(_p_twis, NRF_TWIS_EVENT_STOPPED))
+  if (_p_twis->EVENTS_STOPPED)
   {
+    _p_twis->EVENTS_STOPPED = 0x0UL;
+
     if (receiving)
     {
-      int rxAmount = nrf_twis_rx_amount_get(_p_twis);
+      int rxAmount = _p_twis->RXD.AMOUNT;
 
       rxBuffer._iHead = rxAmount;
 
@@ -338,10 +371,14 @@ void TwoWire::onService(void)
     }
   }
 
-  if (nrf_twis_event_get_and_clear(_p_twis, NRF_TWIS_EVENT_ERROR))
+  if (_p_twis->EVENTS_ERROR)
   {
-    nrf_twis_error_source_get_and_clear(_p_twis);
-    nrf_twis_task_trigger(_p_twis, NRF_TWIS_TASK_STOP);
+    _p_twis->EVENTS_ERROR = 0x0UL;
+
+    uint32_t error = _p_twis->ERRORSRC;
+    _p_twis->ERRORSRC = error;
+
+    _p_twis->TASKS_STOP = 0x1UL;
   }
 }
 

@@ -17,12 +17,18 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include <nrf_gpiote.h>
+#include <nrf.h>
 
 #include "Arduino.h"
 #include "wiring_private.h"
 
 #include <string.h>
+
+#ifdef NRF52
+#define NUMBER_OF_GPIO_TE 8
+#else
+#define NUMBER_OF_GPIO_TE 4
+#endif
 
 static voidFuncPtr callbacksInt[NUMBER_OF_GPIO_TE];
 static int8_t channelMap[NUMBER_OF_GPIO_TE];
@@ -57,19 +63,19 @@ void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode)
 
   pin = g_ADigitalPinMap[pin];
 
-  nrf_gpiote_polarity_t polarity;
+  uint32_t polarity;
 
   switch (mode) {
     case CHANGE:
-      polarity = NRF_GPIOTE_POLARITY_TOGGLE;
+      polarity = GPIOTE_CONFIG_POLARITY_Toggle;
       break;
 
     case FALLING:
-      polarity = NRF_GPIOTE_POLARITY_HITOLO;
+      polarity = GPIOTE_CONFIG_POLARITY_HiToLo;
       break;
 
     case RISING:
-      polarity = NRF_GPIOTE_POLARITY_LOTOHI;
+      polarity = GPIOTE_CONFIG_POLARITY_LoToHi;
       break;
 
     default:
@@ -81,9 +87,13 @@ void attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode)
       channelMap[ch] = pin;
       callbacksInt[ch] = callback;
 
-      nrf_gpiote_event_configure(ch, pin, polarity);
-      nrf_gpiote_event_enable(ch);
-      nrf_gpiote_int_enable(1 << ch);
+      NRF_GPIOTE->CONFIG[ch] &= ~(GPIOTE_CONFIG_PSEL_Msk | GPIOTE_CONFIG_POLARITY_Msk);
+      NRF_GPIOTE->CONFIG[ch] |= ((pin << GPIOTE_CONFIG_PSEL_Pos) & GPIOTE_CONFIG_PSEL_Msk) |
+                              ((polarity << GPIOTE_CONFIG_POLARITY_Pos) & GPIOTE_CONFIG_POLARITY_Msk);
+
+      NRF_GPIOTE->CONFIG[ch] |= GPIOTE_CONFIG_MODE_Event;
+
+      NRF_GPIOTE->INTENSET = (1 << ch);
 
       break;
     }
@@ -106,8 +116,9 @@ void detachInterrupt(uint32_t pin)
       channelMap[ch] = -1;
       callbacksInt[ch] = NULL;
 
-      nrf_gpiote_event_disable(ch);
-      nrf_gpiote_int_disable(1 << ch);
+      NRF_GPIOTE->CONFIG[ch] &= ~GPIOTE_CONFIG_MODE_Event;
+
+      NRF_GPIOTE->INTENCLR = (1 << ch);
 
       break;
     }
@@ -116,17 +127,21 @@ void detachInterrupt(uint32_t pin)
 
 void GPIOTE_IRQHandler()
 {
-  nrf_gpiote_events_t event = NRF_GPIOTE_EVENTS_IN_0;
+  uint32_t event = offsetof(NRF_GPIOTE_Type, EVENTS_IN[0]);
 
   for (int ch = 0; ch < NUMBER_OF_GPIO_TE; ch++) {
-    if (nrf_gpiote_event_is_set(event) && nrf_gpiote_int_is_enabled(1 << ch)) {
+    if ((*(uint32_t *)((uint32_t)NRF_GPIOTE + event) == 0x1UL) && (NRF_GPIOTE->INTENSET & (1 << ch))) {
       if (channelMap[ch] != -1 && callbacksInt[ch]) {
         callbacksInt[ch]();
       }
 
-      nrf_gpiote_event_clear(event);
+    *(uint32_t *)((uint32_t)NRF_GPIOTE + event) = 0;
+#if __CORTEX_M == 0x04
+    volatile uint32_t dummy = *((volatile uint32_t *)((uint32_t)NRF_GPIOTE + event));
+    (void)dummy;
+#endif
     }
 
-    event = (nrf_gpiote_events_t)((uint32_t)event + 4);
+    event = (uint32_t)((uint32_t)event + 4);
   }
 }

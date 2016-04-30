@@ -21,13 +21,7 @@
 #ifndef TwoWire_h
 #define TwoWire_h
 
-#ifdef NRF52
-#include "nrf_twim.h"
-#include "nrf_twis.h"
-#else
 #include "nrf.h"
-#include "nrf_twi.h"
-#endif
 
 #include "Stream.h"
 #include "variant.h"

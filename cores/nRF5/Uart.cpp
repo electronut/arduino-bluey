@@ -36,56 +36,94 @@ void Uart::begin(unsigned long baudrate)
 
 void Uart::begin(unsigned long baudrate, uint16_t /*config*/)
 {
-  nrf_uart_txrx_pins_set(nrfUart, uc_pinTX, uc_pinRX);
-  nrf_uart_configure(nrfUart, NRF_UART_PARITY_EXCLUDED, NRF_UART_HWFC_DISABLED);
+  nrfUart->PSELTXD = uc_pinTX;
+  nrfUart->PSELRXD = uc_pinRX;
 
-  nrf_uart_baudrate_t nrfBaudRate;
+  nrfUart->CONFIG = (UART_CONFIG_PARITY_Excluded << UART_CONFIG_PARITY_Pos) | UART_CONFIG_HWFC_Disabled;
 
+  uint32_t nrfBaudRate;
+
+#ifdef NRF52
   if (baudrate <= 1200) {
-    nrfBaudRate = NRF_UART_BAUDRATE_1200;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud1200;
   } else if (baudrate <= 2400) {
-    nrfBaudRate = NRF_UART_BAUDRATE_2400;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud2400;
   } else if (baudrate <= 4800) {
-    nrfBaudRate = NRF_UART_BAUDRATE_4800;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud4800;
   } else if (baudrate <= 9600) {
-    nrfBaudRate = NRF_UART_BAUDRATE_9600;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud9600;
   } else if (baudrate <= 14400) {
-    nrfBaudRate = NRF_UART_BAUDRATE_14400;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud14400;
   } else if (baudrate <= 19200) {
-    nrfBaudRate = NRF_UART_BAUDRATE_19200;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud19200;
   } else if (baudrate <= 28800) {
-    nrfBaudRate = NRF_UART_BAUDRATE_28800;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud28800;
   } else if (baudrate <= 38400) {
-    nrfBaudRate = NRF_UART_BAUDRATE_38400;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud38400;
   } else if (baudrate <= 57600) {
-    nrfBaudRate = NRF_UART_BAUDRATE_57600;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud57600;
   } else if (baudrate <= 76800) {
-    nrfBaudRate = NRF_UART_BAUDRATE_76800;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud76800;
   } else if (baudrate <= 115200) {
-    nrfBaudRate = NRF_UART_BAUDRATE_115200;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud115200;
   } else if (baudrate <= 230400) {
-    nrfBaudRate = NRF_UART_BAUDRATE_230400;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud230400;
   } else if (baudrate <= 250000) {
-    nrfBaudRate = NRF_UART_BAUDRATE_250000;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud250000;
   } else if (baudrate <= 460800) {
-    nrfBaudRate = NRF_UART_BAUDRATE_460800;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud460800;
   } else if (baudrate <= 921600) {
-    nrfBaudRate = NRF_UART_BAUDRATE_921600;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud921600;
   } else {
-    nrfBaudRate = NRF_UART_BAUDRATE_1000000;
+    nrfBaudRate = UARTE_BAUDRATE_BAUDRATE_Baud1M;
   }
+#else
+  if (baudrate <= 1200) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud1200;
+  } else if (baudrate <= 2400) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud2400;
+  } else if (baudrate <= 4800) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud4800;
+  } else if (baudrate <= 9600) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud9600;
+  } else if (baudrate <= 14400) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud14400;
+  } else if (baudrate <= 19200) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud19200;
+  } else if (baudrate <= 28800) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud28800;
+  } else if (baudrate <= 38400) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud38400;
+  } else if (baudrate <= 57600) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud57600;
+  } else if (baudrate <= 76800) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud76800;
+  } else if (baudrate <= 115200) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud115200;
+  } else if (baudrate <= 230400) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud230400;
+  } else if (baudrate <= 250000) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud250000;
+  } else if (baudrate <= 460800) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud460800;
+  } else if (baudrate <= 921600) {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud921600;
+  } else {
+    nrfBaudRate = UART_BAUDRATE_BAUDRATE_Baud1M;
+  }
+#endif
 
-  nrf_uart_baudrate_set(nrfUart, nrfBaudRate);
+  nrfUart->BAUDRATE = nrfBaudRate;
 
-  nrf_uart_enable(nrfUart);
+  nrfUart->ENABLE = UART_ENABLE_ENABLE_Enabled;
 
-  nrf_uart_event_clear(nrfUart, NRF_UART_EVENT_RXDRDY);
-  nrf_uart_event_clear(nrfUart, NRF_UART_EVENT_TXDRDY);
+  nrfUart->EVENTS_RXDRDY = 0x0UL;
+  nrfUart->EVENTS_TXDRDY = 0x0UL;
 
-  nrf_uart_task_trigger(nrfUart, NRF_UART_TASK_STARTRX);
-  nrf_uart_task_trigger(nrfUart, NRF_UART_TASK_STARTTX);
+  nrfUart->TASKS_STARTRX = 0x1UL;
+  nrfUart->TASKS_STARTTX = 0x1UL;
 
-  nrf_uart_int_enable(nrfUart, NRF_UART_INT_MASK_RXDRDY);
+  nrfUart->INTENSET = UART_INTENSET_RXDRDY_Msk;
 
   NVIC_ClearPendingIRQ(IRQn);
   NVIC_SetPriority(IRQn, 3);
@@ -96,14 +134,15 @@ void Uart::end()
 {
   NVIC_DisableIRQ(IRQn);
 
-  nrf_uart_int_disable(nrfUart, NRF_UART_INT_MASK_RXDRDY);
+  nrfUart->INTENCLR = UART_INTENCLR_RXDRDY_Msk;
 
-  nrf_uart_task_trigger(nrfUart, NRF_UART_TASK_STOPRX);
-  nrf_uart_task_trigger(nrfUart, NRF_UART_TASK_STOPTX);
+  nrfUart->TASKS_STOPRX = 0x1UL;
+  nrfUart->TASKS_STOPTX = 0x1UL;
 
-  nrf_uart_disable(nrfUart);
+  nrfUart->ENABLE = UART_ENABLE_ENABLE_Disabled;
 
-  nrf_uart_txrx_pins_disconnect(nrfUart);
+  nrfUart->PSELTXD = 0xFFFFFFFF;
+  nrfUart->PSELRXD = 0xFFFFFFFF;
 
   rxBuffer.clear();
 }
@@ -114,11 +153,11 @@ void Uart::flush()
 
 void Uart::IrqHandler()
 {
-  if (nrf_uart_event_check(nrfUart, NRF_UART_EVENT_RXDRDY))
+  if (nrfUart->EVENTS_RXDRDY)
   {
-    rxBuffer.store_char(nrf_uart_rxd_get(nrfUart));
+    rxBuffer.store_char(nrfUart->RXD);
 
-    nrf_uart_event_clear(nrfUart, NRF_UART_EVENT_RXDRDY);
+    nrfUart->EVENTS_RXDRDY = 0x0UL;
   }
 }
 
@@ -139,11 +178,11 @@ int Uart::read()
 
 size_t Uart::write(const uint8_t data)
 {
-  nrf_uart_txd_set(nrfUart, data);
+  nrfUart->TXD = data;
 
-  while(!nrf_uart_event_check(nrfUart, NRF_UART_EVENT_TXDRDY));
+  while(!nrfUart->EVENTS_TXDRDY);
 
-  nrf_uart_event_clear(nrfUart, NRF_UART_EVENT_TXDRDY);
+  nrfUart->EVENTS_TXDRDY = 0x0UL;
 
   return 1;
 }

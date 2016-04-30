@@ -40,15 +40,17 @@ SPIClass::SPIClass(NRF_SPI_Type *p_spi, uint8_t uc_pinMISO, uint8_t uc_pinSCK, u
   _uc_pinSCK = g_ADigitalPinMap[uc_pinSCK];
   _uc_pinMosi = g_ADigitalPinMap[uc_pinMOSI];
 
-  _dataMode = NRF_SPI_MODE_0;
-  _bitOrder = NRF_SPI_BIT_ORDER_MSB_FIRST;
+  _dataMode = SPI_MODE0;
+  _bitOrder = SPI_CONFIG_ORDER_MsbFirst;
 }
 
 void SPIClass::begin()
 {
   init();
 
-  nrf_spi_pins_set(_p_spi, _uc_pinSCK, _uc_pinMosi, _uc_pinMiso);
+  _p_spi->PSELSCK  = _uc_pinSCK;
+  _p_spi->PSELMOSI = _uc_pinMosi;
+  _p_spi->PSELMISO = _uc_pinMiso;
 
   config(DEFAULT_SPI_SETTINGS);
 }
@@ -65,17 +67,43 @@ void SPIClass::init()
 
 void SPIClass::config(SPISettings settings)
 {
-  nrf_spi_disable(_p_spi);
+  _p_spi->ENABLE = (SPI_ENABLE_ENABLE_Disabled << SPI_ENABLE_ENABLE_Pos);
 
-  nrf_spi_configure(_p_spi, settings.dataMode, settings.bitOrder);
-  nrf_spi_frequency_set(_p_spi, settings.clockFreq);
+  uint32_t config = settings.bitOrder;
 
-  nrf_spi_enable(_p_spi);
+  switch (settings.dataMode) {
+    default:
+    case SPI_MODE0:
+      config |= (SPI_CONFIG_CPOL_ActiveHigh << SPI_CONFIG_CPOL_Pos);
+      config |= (SPI_CONFIG_CPHA_Leading    << SPI_CONFIG_CPHA_Pos);
+      break;
+
+    case SPI_MODE1:
+      config |= (SPI_CONFIG_CPOL_ActiveHigh << SPI_CONFIG_CPOL_Pos);
+      config |= (SPI_CONFIG_CPHA_Trailing   << SPI_CONFIG_CPHA_Pos);
+      break;
+
+    case SPI_MODE2:
+      config |= (SPI_CONFIG_CPOL_ActiveLow  << SPI_CONFIG_CPOL_Pos);
+      config |= (SPI_CONFIG_CPHA_Leading    << SPI_CONFIG_CPHA_Pos);
+      break;
+
+    case SPI_MODE3:
+      config |= (SPI_CONFIG_CPOL_ActiveLow  << SPI_CONFIG_CPOL_Pos);
+      config |= (SPI_CONFIG_CPHA_Trailing   << SPI_CONFIG_CPHA_Pos);
+      break;
+  }
+
+  _p_spi->CONFIG = config;
+  _p_spi->FREQUENCY = settings.clockFreq;
+
+  _p_spi->ENABLE = (SPI_ENABLE_ENABLE_Enabled << SPI_ENABLE_ENABLE_Pos);
 }
 
 void SPIClass::end()
 {
-  nrf_spi_disable(_p_spi);
+  _p_spi->ENABLE = (SPI_ENABLE_ENABLE_Disabled << SPI_ENABLE_ENABLE_Pos);
+
   initialized = false;
 }
 
@@ -94,70 +122,100 @@ void SPIClass::endTransaction(void)
 
 void SPIClass::setBitOrder(BitOrder order)
 {
-  if (order == LSBFIRST) {
-    nrf_spi_configure(_p_spi, _dataMode, NRF_SPI_BIT_ORDER_LSB_FIRST);
-  } else {
-    nrf_spi_configure(_p_spi, _dataMode, NRF_SPI_BIT_ORDER_MSB_FIRST);
+  this->_bitOrder = (order == MSBFIRST ? SPI_CONFIG_ORDER_MsbFirst : SPI_CONFIG_ORDER_LsbFirst);
+
+  uint32_t config = this->_bitOrder;
+
+  switch (this->_dataMode) {
+    default:
+    case SPI_MODE0:
+      config |= (SPI_CONFIG_CPOL_ActiveHigh << SPI_CONFIG_CPOL_Pos);
+      config |= (SPI_CONFIG_CPHA_Leading    << SPI_CONFIG_CPHA_Pos);
+      break;
+
+    case SPI_MODE1:
+      config |= (SPI_CONFIG_CPOL_ActiveHigh << SPI_CONFIG_CPOL_Pos);
+      config |= (SPI_CONFIG_CPHA_Trailing   << SPI_CONFIG_CPHA_Pos);
+      break;
+
+    case SPI_MODE2:
+      config |= (SPI_CONFIG_CPOL_ActiveLow  << SPI_CONFIG_CPOL_Pos);
+      config |= (SPI_CONFIG_CPHA_Leading    << SPI_CONFIG_CPHA_Pos);
+      break;
+
+    case SPI_MODE3:
+      config |= (SPI_CONFIG_CPOL_ActiveLow  << SPI_CONFIG_CPOL_Pos);
+      config |= (SPI_CONFIG_CPHA_Trailing   << SPI_CONFIG_CPHA_Pos);
+      break;
   }
+
+  _p_spi->CONFIG = config;
 }
 
 void SPIClass::setDataMode(uint8_t mode)
 {
-  switch (mode)
-  {
+  this->_dataMode = mode;
+
+  uint32_t config = this->_bitOrder;
+
+  switch (this->_dataMode) {
+    default:
     case SPI_MODE0:
-      nrf_spi_configure(_p_spi, NRF_SPI_MODE_0, _bitOrder);
+      config |= (SPI_CONFIG_CPOL_ActiveHigh << SPI_CONFIG_CPOL_Pos);
+      config |= (SPI_CONFIG_CPHA_Leading    << SPI_CONFIG_CPHA_Pos);
       break;
 
     case SPI_MODE1:
-      nrf_spi_configure(_p_spi, NRF_SPI_MODE_1, _bitOrder);
+      config |= (SPI_CONFIG_CPOL_ActiveHigh << SPI_CONFIG_CPOL_Pos);
+      config |= (SPI_CONFIG_CPHA_Trailing   << SPI_CONFIG_CPHA_Pos);
       break;
 
     case SPI_MODE2:
-      nrf_spi_configure(_p_spi, NRF_SPI_MODE_2, _bitOrder);
+      config |= (SPI_CONFIG_CPOL_ActiveLow  << SPI_CONFIG_CPOL_Pos);
+      config |= (SPI_CONFIG_CPHA_Leading    << SPI_CONFIG_CPHA_Pos);
       break;
 
     case SPI_MODE3:
-      nrf_spi_configure(_p_spi, NRF_SPI_MODE_3, _bitOrder);
-      break;
-
-    default:
+      config |= (SPI_CONFIG_CPOL_ActiveLow  << SPI_CONFIG_CPOL_Pos);
+      config |= (SPI_CONFIG_CPHA_Trailing   << SPI_CONFIG_CPHA_Pos);
       break;
   }
+
+  _p_spi->CONFIG = config;
 }
 
 void SPIClass::setClockDivider(uint8_t div)
 {
-  nrf_spi_frequency_t clockFreq;
+  uint32_t clockFreq;
 
   if (div >= SPI_CLOCK_DIV128) {
-    clockFreq = NRF_SPI_FREQ_125K;
+    clockFreq = SPI_FREQUENCY_FREQUENCY_K125;
   } else if (div >= SPI_CLOCK_DIV64) {
-    clockFreq = NRF_SPI_FREQ_250K;
+    clockFreq = SPI_FREQUENCY_FREQUENCY_K250;
   } else if (div >= SPI_CLOCK_DIV32) {
-    clockFreq = NRF_SPI_FREQ_500K;
+    clockFreq = SPI_FREQUENCY_FREQUENCY_K500;
   } else if (div >= SPI_CLOCK_DIV16) {
-    clockFreq = (nrf_spi_frequency_t)SPI_FREQUENCY_FREQUENCY_M1;
+    clockFreq = SPI_FREQUENCY_FREQUENCY_M1;
   } else if (div >= SPI_CLOCK_DIV8) {
-    clockFreq = (nrf_spi_frequency_t)SPI_FREQUENCY_FREQUENCY_M2;
+    clockFreq = SPI_FREQUENCY_FREQUENCY_M2;
   } else if (div >= SPI_CLOCK_DIV4) {
-    clockFreq = (nrf_spi_frequency_t)SPI_FREQUENCY_FREQUENCY_M4;
+    clockFreq = SPI_FREQUENCY_FREQUENCY_M4;
   } else {
-    clockFreq = (nrf_spi_frequency_t)SPI_FREQUENCY_FREQUENCY_M8;
+    clockFreq = SPI_FREQUENCY_FREQUENCY_M8;
   }
 
-  nrf_spi_frequency_set(_p_spi, clockFreq);
+  _p_spi->FREQUENCY = clockFreq;
 }
 
 byte SPIClass::transfer(uint8_t data)
 {
-  nrf_spi_txd_set(_p_spi, data);
+  _p_spi->TXD = data;
 
-  while(!nrf_spi_event_check(_p_spi, NRF_SPI_EVENT_READY));
+  while(!_p_spi->EVENTS_READY);
 
-  data = nrf_spi_rxd_get(_p_spi);
+  data = _p_spi->RXD;
 
-  nrf_spi_event_clear(_p_spi, NRF_SPI_EVENT_READY);
+  _p_spi->EVENTS_READY = 0x0UL;
 
   return data;
 }
@@ -167,7 +225,7 @@ uint16_t SPIClass::transfer16(uint16_t data) {
 
   t.val = data;
 
-  if (_bitOrder == NRF_SPI_BIT_ORDER_LSB_FIRST) {
+  if (_bitOrder == SPI_CONFIG_ORDER_LsbFirst) {
     t.lsb = transfer(t.lsb);
     t.msb = transfer(t.msb);
   } else {

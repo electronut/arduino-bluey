@@ -24,7 +24,6 @@ extern "C" {
 #include <string.h>
 }
 
-#include "nrf_gpio.h"
 
 #include <Arduino.h>
 #include <wiring_private.h>
@@ -44,12 +43,22 @@ void TwoWire::begin(void) {
   //Master Mode
   master = true;
 
-  nrf_gpio_cfg(_uc_pinSCL, NRF_GPIO_PIN_DIR_INPUT, NRF_GPIO_PIN_INPUT_CONNECT, NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_S0D1, NRF_GPIO_PIN_NOSENSE);
-  nrf_gpio_cfg(_uc_pinSDA, NRF_GPIO_PIN_DIR_INPUT, NRF_GPIO_PIN_INPUT_CONNECT, NRF_GPIO_PIN_PULLUP, NRF_GPIO_PIN_S0D1, NRF_GPIO_PIN_NOSENSE);
+  NRF_GPIO->PIN_CNF[_uc_pinSCL] = ((uint32_t)GPIO_PIN_CNF_DIR_Input        << GPIO_PIN_CNF_DIR_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_INPUT_Connect    << GPIO_PIN_CNF_INPUT_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_PULL_Pullup      << GPIO_PIN_CNF_PULL_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled   << GPIO_PIN_CNF_SENSE_Pos);
 
-  nrf_twi_frequency_set(_p_twi, NRF_TWI_FREQ_100K);
-  nrf_twi_enable(_p_twi);
-  nrf_twi_pins_set(_p_twi, _uc_pinSCL, _uc_pinSDA);
+  NRF_GPIO->PIN_CNF[_uc_pinSDA] = ((uint32_t)GPIO_PIN_CNF_DIR_Input        << GPIO_PIN_CNF_DIR_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_INPUT_Connect    << GPIO_PIN_CNF_INPUT_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_PULL_Pullup      << GPIO_PIN_CNF_PULL_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
+                                | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled   << GPIO_PIN_CNF_SENSE_Pos);
+
+  _p_twi->FREQUENCY = TWI_FREQUENCY_FREQUENCY_K100;
+  _p_twi->ENABLE = (TWI_ENABLE_ENABLE_Enabled << TWI_ENABLE_ENABLE_Pos);
+  _p_twi->PSELSCL = _uc_pinSCL;
+  _p_twi->PSELSDA = _uc_pinSDA;
 
   NVIC_ClearPendingIRQ(_IRQn);
   NVIC_SetPriority(_IRQn, 2);
@@ -57,29 +66,29 @@ void TwoWire::begin(void) {
 }
 
 void TwoWire::setClock(uint32_t baudrate) {
-  nrf_twi_disable(_p_twi);
+  _p_twi->ENABLE = (TWI_ENABLE_ENABLE_Disabled << TWI_ENABLE_ENABLE_Pos);
 
-  nrf_twi_frequency_t frequency;
+  uint32_t frequency;
 
   if (baudrate <= 100000)
   {
-    frequency = NRF_TWI_FREQ_100K;
+    frequency = TWI_FREQUENCY_FREQUENCY_K100;
   }
   else if (baudrate <= 250000)
   {
-    frequency = NRF_TWI_FREQ_250K;
+    frequency = TWI_FREQUENCY_FREQUENCY_K250;
   }
   else
   {
-    frequency = NRF_TWI_FREQ_400K;
+    frequency = TWI_FREQUENCY_FREQUENCY_K400;
   }
 
-  nrf_twi_frequency_set(_p_twi, frequency);
-  nrf_twi_enable(_p_twi);
+  _p_twi->FREQUENCY = frequency;
+  _p_twi->ENABLE = (TWI_ENABLE_ENABLE_Enabled << TWI_ENABLE_ENABLE_Pos);
 }
 
 void TwoWire::end() {
-  nrf_twi_disable(_p_twi);
+  _p_twi->ENABLE = (TWI_ENABLE_ENABLE_Disabled << TWI_ENABLE_ENABLE_Pos);
 }
 
 uint8_t TwoWire::requestFrom(uint8_t address, size_t quantity, bool stopBit)
@@ -92,43 +101,43 @@ uint8_t TwoWire::requestFrom(uint8_t address, size_t quantity, bool stopBit)
   size_t byteRead = 0;
   rxBuffer.clear();
 
-  nrf_twi_address_set(_p_twi, address);
+  _p_twi->ADDRESS = address;
 
-  nrf_twi_task_trigger(_p_twi, NRF_TWI_TASK_RESUME);
-  nrf_twi_task_trigger(_p_twi, NRF_TWI_TASK_STARTRX);
+  _p_twi->TASKS_RESUME = 0x1UL;
+  _p_twi->TASKS_STARTRX = 0x1UL;
 
   for (size_t i = 0; i < quantity; i++)
   {
-    while(!nrf_twi_event_check(_p_twi, NRF_TWI_EVENT_RXDREADY) && !nrf_twi_event_check(_p_twi, NRF_TWI_EVENT_ERROR));
+    while(!_p_twi->EVENTS_RXDREADY && !_p_twi->EVENTS_ERROR);
 
-    if (nrf_twi_event_check(_p_twi, NRF_TWI_EVENT_ERROR))
+    if (_p_twi->EVENTS_ERROR)
     {
       break;
     }
 
-    nrf_twi_event_clear(_p_twi, NRF_TWI_EVENT_RXDREADY);
+    _p_twi->EVENTS_RXDREADY = 0x0UL;
 
-    rxBuffer.store_char(nrf_twi_rxd_get(_p_twi));
+    rxBuffer.store_char(_p_twi->RXD);
 
-    nrf_twi_task_trigger(_p_twi, NRF_TWI_TASK_RESUME);
+    _p_twi->TASKS_RESUME = 0x1UL;
   }
 
-  if (stopBit || nrf_twi_event_check(_p_twi, NRF_TWI_EVENT_ERROR))
+  if (stopBit || _p_twi->EVENTS_ERROR)
   {
-    nrf_twi_task_trigger(_p_twi, NRF_TWI_TASK_STOP);
-    while(!nrf_twi_event_check(_p_twi, NRF_TWI_EVENT_STOPPED));
-    nrf_twi_event_clear(_p_twi, NRF_TWI_EVENT_STOPPED);
+    _p_twi->TASKS_STOP = 0x1UL;
+    while(!_p_twi->EVENTS_STOPPED);
+    _p_twi->EVENTS_STOPPED = 0x0UL;
   }
   else
   {
-    nrf_twi_task_trigger(_p_twi, NRF_TWI_TASK_SUSPEND);
-    while(!nrf_twi_event_check(_p_twi, NRF_TWI_EVENT_SUSPENDED));
-    nrf_twi_event_clear(_p_twi, NRF_TWI_EVENT_SUSPENDED);
+    _p_twi->TASKS_SUSPEND = 0x1UL;
+    while(!_p_twi->EVENTS_SUSPENDED);
+    _p_twi->EVENTS_SUSPENDED = 0x0UL;
   }
 
-  if (nrf_twi_event_check(_p_twi, NRF_TWI_EVENT_ERROR))
+  if (_p_twi->EVENTS_ERROR)
   {
-    nrf_twi_event_clear(_p_twi, NRF_TWI_EVENT_ERROR);
+    _p_twi->EVENTS_ERROR = 0x0UL;
   }
 
   return byteRead;
@@ -158,50 +167,51 @@ uint8_t TwoWire::endTransmission(bool stopBit)
   transmissionBegun = false ;
 
   // Start I2C transmission
-  nrf_twi_address_set(_p_twi, txAddress);
+  _p_twi->ADDRESS = txAddress;
 
-  nrf_twi_task_trigger(_p_twi, NRF_TWI_TASK_RESUME);
-  nrf_twi_task_trigger(_p_twi, NRF_TWI_TASK_STARTTX);
-
+  _p_twi->TASKS_RESUME = 0x1UL;
+  _p_twi->TASKS_STARTTX = 0x1UL;
 
   while (txBuffer.available())
   {
-    nrf_twi_txd_set(_p_twi, txBuffer.read_char());
+    _p_twi->TXD = txBuffer.read_char();
 
-    while(!nrf_twi_event_check(_p_twi, NRF_TWI_EVENT_TXDSENT) && !nrf_twi_event_check(_p_twi, NRF_TWI_EVENT_ERROR));
+    while(!_p_twi->EVENTS_TXDSENT && !_p_twi->EVENTS_ERROR);
 
-    if (nrf_twi_event_check(_p_twi, NRF_TWI_EVENT_ERROR))
+    if (_p_twi->EVENTS_ERROR)
     {
       break;
     }
 
-    nrf_twi_event_clear(_p_twi, NRF_TWI_EVENT_TXDSENT);
+    _p_twi->EVENTS_TXDSENT = 0x0UL;
   }
 
-  if (stopBit || nrf_twi_event_check(_p_twi, NRF_TWI_EVENT_ERROR))
+  if (stopBit || _p_twi->EVENTS_ERROR)
   {
-    nrf_twi_task_trigger(_p_twi, NRF_TWI_TASK_STOP);
-    while(!nrf_twi_event_check(_p_twi, NRF_TWI_EVENT_STOPPED));
-    nrf_twi_event_clear(_p_twi, NRF_TWI_EVENT_STOPPED);
+    _p_twi->TASKS_STOP = 0x1UL;
+    while(!_p_twi->EVENTS_STOPPED);
+    _p_twi->EVENTS_STOPPED = 0x0UL;
   }
   else
   {
-    nrf_twi_task_trigger(_p_twi, NRF_TWI_TASK_SUSPEND);
-    while(!nrf_twi_event_check(_p_twi, NRF_TWI_EVENT_SUSPENDED));
-    nrf_twi_event_clear(_p_twi, NRF_TWI_EVENT_SUSPENDED);
+    _p_twi->TASKS_SUSPEND = 0x1UL;
+    while(!_p_twi->EVENTS_SUSPENDED);
+    _p_twi->EVENTS_SUSPENDED = 0x0UL;
   }
 
-  if (nrf_twi_event_check(_p_twi, NRF_TWI_EVENT_ERROR))
+  if (_p_twi->EVENTS_ERROR)
   {
-    nrf_twi_event_clear(_p_twi, NRF_TWI_EVENT_ERROR);
+    _p_twi->EVENTS_ERROR = 0x0UL;
 
-    uint32_t error = nrf_twi_errorsrc_get_and_clear(_p_twi);
+    uint32_t error = _p_twi->ERRORSRC;
 
-    if (error == NRF_TWI_ERROR_ADDRESS_NACK)
+    _p_twi->ERRORSRC = error;
+
+    if (error == TWI_ERRORSRC_ANACK_Msk)
     {
       return 2;
     }
-    else if (error == NRF_TWI_ERROR_DATA_NACK)
+    else if (error == TWI_ERRORSRC_DNACK_Msk)
     {
       return 3;
     }

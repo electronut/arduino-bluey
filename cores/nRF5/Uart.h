@@ -19,8 +19,9 @@
 
 #pragma once
 
+#include <nrf.h>
+
 #include "HardwareSerial.h"
-#include "nrf_uart.h"
 #include "RingBuffer.h"
 
 #include <cstddef>

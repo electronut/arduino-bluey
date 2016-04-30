@@ -19,8 +19,7 @@
 
 #ifdef NRF52
 
-#include "nrf_saadc.h"
-#include "nrf_pwm.h"
+#include "nrf.h"
 
 #include "Arduino.h"
 #include "wiring_private.h"
@@ -38,12 +37,12 @@ static NRF_PWM_Type* pwms[PWM_COUNT] = {
 };
 
 static uint32_t pwmChannelPins[PWM_COUNT] = {
-  NRF_PWM_PIN_NOT_CONNECTED,
-  NRF_PWM_PIN_NOT_CONNECTED,
-  NRF_PWM_PIN_NOT_CONNECTED
+  0xFFFFFFFF,
+  0xFFFFFFFF,
+  0xFFFFFFFF
 };
 
-static nrf_saadc_reference_t saadcReference = NRF_SAADC_REFERENCE_INTERNAL;
+static uint32_t saadcReference = SAADC_CH_CONFIG_REFSEL_Internal;
 static uint16_t pwmChannelSequence[PWM_COUNT];
 
 static int readResolution = 10;
@@ -88,22 +87,21 @@ void analogReference( eAnalogReference ulMode )
     case AR_DEFAULT:
     case AR_INTERNAL:
     default:
-      saadcReference = NRF_SAADC_REFERENCE_INTERNAL;
+      saadcReference = SAADC_CH_CONFIG_REFSEL_Internal;
       break;
 
     case AR_VDD4:
-      saadcReference = NRF_SAADC_REFERENCE_VDD4;
+      saadcReference = SAADC_CH_CONFIG_REFSEL_VDD1_4;
       break;
   }
 }
 
 uint32_t analogRead( uint32_t ulPin )
 {
-  nrf_saadc_input_t pin = NRF_SAADC_INPUT_DISABLED;
-  nrf_saadc_channel_config_t config;
-  nrf_saadc_resolution_t saadcResolution;
+  uint32_t pin = SAADC_CH_PSELP_PSELP_NC;
+  uint32_t saadcResolution;
   uint32_t resolution;
-  nrf_saadc_value_t value;
+  int16_t value;
 
   if (ulPin >= PINS_COUNT) {
     return 0;
@@ -113,89 +111,90 @@ uint32_t analogRead( uint32_t ulPin )
 
   switch ( ulPin ) {
     case 2:
-      pin = NRF_SAADC_INPUT_AIN0;
+      pin = SAADC_CH_PSELP_PSELP_AnalogInput0;
       break;
 
     case 3:
-      pin = NRF_SAADC_INPUT_AIN1;
+      pin = SAADC_CH_PSELP_PSELP_AnalogInput1;
       break;
 
     case 4:
-      pin = NRF_SAADC_INPUT_AIN2;
+      pin = SAADC_CH_PSELP_PSELP_AnalogInput2;
       break;
 
     case 5:
-      pin = NRF_SAADC_INPUT_AIN3;
+      pin = SAADC_CH_PSELP_PSELP_AnalogInput3;
       break;
 
     case 28:
-      pin = NRF_SAADC_INPUT_AIN4;
+      pin = SAADC_CH_PSELP_PSELP_AnalogInput4;
       break;
 
     case 29:
-      pin = NRF_SAADC_INPUT_AIN5;
+      pin = SAADC_CH_PSELP_PSELP_AnalogInput5;
       break;
 
     case 30:
-      pin = NRF_SAADC_INPUT_AIN6;
+      pin = SAADC_CH_PSELP_PSELP_AnalogInput6;
       break;
 
     case 31:
-      pin = NRF_SAADC_INPUT_AIN7;
+      pin = SAADC_CH_PSELP_PSELP_AnalogInput7;
       break;
 
     default:
       return 0;
   }
 
-  config.acq_time = NRF_SAADC_ACQTIME_3US;
-  config.gain = NRF_SAADC_GAIN1;
-  config.mode = NRF_SAADC_MODE_SINGLE_ENDED;
-  config.pin_p = pin;
-  config.pin_n = pin; // Single ended -> should be ground to zero
-  config.reference = saadcReference;
-  config.resistor_p = NRF_SAADC_RESISTOR_DISABLED;
-  config.resistor_n = NRF_SAADC_RESISTOR_DISABLED;
-
   if (readResolution <= 8) {
     resolution = 8;
-    saadcResolution = NRF_SAADC_RESOLUTION_8BIT;
+    saadcResolution = SAADC_RESOLUTION_VAL_8bit;
   } else if (readResolution <= 10) {
     resolution = 10;
-    saadcResolution = NRF_SAADC_RESOLUTION_10BIT;
+    saadcResolution = SAADC_RESOLUTION_VAL_10bit;
   } else if (readResolution <= 12) {
     resolution = 12;
-    saadcResolution = NRF_SAADC_RESOLUTION_12BIT;
+    saadcResolution = SAADC_RESOLUTION_VAL_12bit;
   } else {
     resolution = 14;
-    saadcResolution = NRF_SAADC_RESOLUTION_14BIT;
+    saadcResolution = SAADC_RESOLUTION_VAL_14bit;
   }
 
-  nrf_saadc_resolution_set(saadcResolution);
+  NRF_SAADC->RESOLUTION = saadcResolution;
 
-  nrf_saadc_enable();
-  nrf_saadc_channel_init(pin, &config);
-  nrf_saadc_buffer_init(&value, 1); // One sample
+  NRF_SAADC->ENABLE = (SAADC_ENABLE_ENABLE_Enabled << SAADC_ENABLE_ENABLE_Pos);
+  NRF_SAADC->CH[pin].CONFIG = ((SAADC_CH_CONFIG_RESP_Bypass   << SAADC_CH_CONFIG_RESP_Pos)   & SAADC_CH_CONFIG_RESP_Msk)
+                            | ((SAADC_CH_CONFIG_RESP_Bypass   << SAADC_CH_CONFIG_RESN_Pos)   & SAADC_CH_CONFIG_RESN_Msk)
+                            | ((SAADC_CH_CONFIG_GAIN_Gain1    << SAADC_CH_CONFIG_GAIN_Pos)   & SAADC_CH_CONFIG_GAIN_Msk)
+                            | ((saadcReference                << SAADC_CH_CONFIG_REFSEL_Pos) & SAADC_CH_CONFIG_REFSEL_Msk)
+                            | ((SAADC_CH_CONFIG_TACQ_3us      << SAADC_CH_CONFIG_TACQ_Pos)   & SAADC_CH_CONFIG_TACQ_Msk)
+                            | ((SAADC_CH_CONFIG_MODE_SE       << SAADC_CH_CONFIG_MODE_Pos)   & SAADC_CH_CONFIG_MODE_Msk);
+  NRF_SAADC->CH[pin].PSELN = pin;
+  NRF_SAADC->CH[pin].PSELP = pin;
 
-  nrf_saadc_task_trigger(NRF_SAADC_TASK_START);
+  NRF_SAADC->RESULT.PTR = (uint32_t)&value;
+  NRF_SAADC->RESULT.MAXCNT = 1; // One sample
 
-  while (!nrf_saadc_event_check(NRF_SAADC_EVENT_STARTED));
-  nrf_saadc_event_clear(NRF_SAADC_EVENT_STARTED);
+  NRF_SAADC->TASKS_START = 0x01UL;
 
-  nrf_saadc_task_trigger(NRF_SAADC_TASK_SAMPLE);
+  while (!NRF_SAADC->EVENTS_STARTED);
+  NRF_SAADC->EVENTS_STARTED = 0x00UL;
 
-  while (!nrf_saadc_event_check(NRF_SAADC_EVENT_END));
-  nrf_saadc_event_clear(NRF_SAADC_EVENT_END);
+  NRF_SAADC->TASKS_SAMPLE = 0x01UL;
 
-  nrf_saadc_task_trigger(NRF_SAADC_TASK_STOP);
-  while (!nrf_saadc_event_check(NRF_SAADC_EVENT_STOPPED));
-  nrf_saadc_event_clear(NRF_SAADC_EVENT_STOPPED);
+  while (!NRF_SAADC->EVENTS_END);
+  NRF_SAADC->EVENTS_END = 0x00UL;
+
+  NRF_SAADC->TASKS_STOP = 0x01UL;
+
+  while (!NRF_SAADC->EVENTS_STOPPED);
+  NRF_SAADC->EVENTS_STOPPED = 0x00UL;
 
   if (value < 0) {
     value = 0;
   }
 
-  nrf_saadc_disable();
+  NRF_SAADC->ENABLE = (SAADC_ENABLE_ENABLE_Disabled << SAADC_ENABLE_ENABLE_Pos);
 
   return mapResolution(value, resolution, readResolution);
 }
@@ -213,22 +212,27 @@ void analogWrite( uint32_t ulPin, uint32_t ulValue )
   ulPin = g_ADigitalPinMap[ulPin];
 
   for (int i = 0; i < PWM_COUNT; i++) {
-    if (pwmChannelPins[i] == NRF_PWM_PIN_NOT_CONNECTED || pwmChannelPins[i] == ulPin) {
+    if (pwmChannelPins[i] == 0xFFFFFFFF || pwmChannelPins[i] == ulPin) {
       pwmChannelPins[i] = ulPin;
       pwmChannelSequence[i] = ulValue;
 
       NRF_PWM_Type* pwm = pwms[i];
 
-      nrf_pwm_pins_set(pwm, pwmChannelPins);
-      nrf_pwm_enable(pwm);
-      nrf_pwm_configure(pwm, NRF_PWM_CLK_16MHz, NRF_PWM_MODE_UP, (1 << writeResolution) - 1);
-      nrf_pwm_loop_set(pwm, 0);
-      nrf_pwm_decoder_set(pwm, NRF_PWM_LOAD_COMMON, NRF_PWM_STEP_AUTO);
-      nrf_pwm_seq_ptr_set(pwm, 0, &pwmChannelSequence[i]);
-      nrf_pwm_seq_cnt_set(pwm, 0, 1);
-      nrf_pwm_seq_refresh_set(pwm, 0, 1);
-      nrf_pwm_seq_end_delay_set(pwm, 0, 0);
-      nrf_pwm_task_trigger(pwm, NRF_PWM_TASK_SEQSTART0);
+      pwm->PSEL.OUT[0] = ulPin;
+      pwm->PSEL.OUT[1] = ulPin;
+      pwm->PSEL.OUT[2] = ulPin;
+      pwm->PSEL.OUT[3] = ulPin;
+      pwm->ENABLE = (PWM_ENABLE_ENABLE_Enabled << PWM_ENABLE_ENABLE_Pos);
+      pwm->PRESCALER = PWM_PRESCALER_PRESCALER_DIV_1;
+      pwm->MODE = PWM_MODE_UPDOWN_Up;
+      pwm->COUNTERTOP = (1 << writeResolution) - 1;
+      pwm->LOOP = 0;
+      pwm->DECODER = ((uint32_t)PWM_DECODER_LOAD_Common << PWM_DECODER_LOAD_Pos) | ((uint32_t)PWM_DECODER_MODE_RefreshCount << PWM_DECODER_MODE_Pos);
+      pwm->SEQ[0].PTR = (uint32_t)&pwmChannelSequence[i];
+      pwm->SEQ[0].CNT = 1;
+      pwm->SEQ[0].REFRESH  = 1;
+      pwm->SEQ[0].ENDDELAY = 0;
+      pwm->TASKS_SEQSTART[0] = 0x1UL;
 
       break;
     }

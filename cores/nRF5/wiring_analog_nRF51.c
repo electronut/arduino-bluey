@@ -19,9 +19,7 @@
 
 #ifdef NRF51
 
-#include "nrf_adc.h"
-#include "nrf_timer.h"
-#include "nrf_gpio.h"
+#include "nrf.h"
 
 #include "Arduino.h"
 #include "wiring_private.h"
@@ -36,20 +34,20 @@ extern "C" {
 struct PWMContext {
   uint32_t pin;
   uint32_t value;
-  nrf_timer_cc_channel_t channel;
-  nrf_timer_int_mask_t mask;
-  nrf_timer_event_t event;
+  uint32_t channel;
+  uint32_t mask;
+  uint32_t event;
 };
 
 static struct PWMContext pwmContext[PWM_COUNT] = {
-  { PIN_FREE, 0, NRF_TIMER_CC_CHANNEL1, NRF_TIMER_INT_COMPARE1_MASK, NRF_TIMER_EVENT_COMPARE1 },
-  { PIN_FREE, 0, NRF_TIMER_CC_CHANNEL2, NRF_TIMER_INT_COMPARE2_MASK, NRF_TIMER_EVENT_COMPARE2 },
-  { PIN_FREE, 0, NRF_TIMER_CC_CHANNEL3, NRF_TIMER_INT_COMPARE3_MASK, NRF_TIMER_EVENT_COMPARE3 }
+  { PIN_FREE, 0, 1, TIMER_INTENSET_COMPARE1_Msk, 1 },
+  { PIN_FREE, 0, 2, TIMER_INTENSET_COMPARE2_Msk, 2 },
+  { PIN_FREE, 0, 3, TIMER_INTENSET_COMPARE3_Msk, 3 }
 };
 
 static int timerEnabled = 0;
 
-static nrf_adc_config_reference_t adcReference = NRF_ADC_CONFIG_REF_VBG;
+static uint32_t adcReference = ADC_CONFIG_REFSEL_VBG;
 
 static uint32_t readResolution = 10;
 static uint32_t writeResolution = 8;
@@ -93,34 +91,33 @@ void analogReference( eAnalogReference ulMode )
     case AR_DEFAULT:
     case AR_VBG:
     default:
-      adcReference = NRF_ADC_CONFIG_REF_VBG;
+      adcReference = ADC_CONFIG_REFSEL_VBG;
       break;
 
     case AR_SUPPLY_ONE_HALF:
-      adcReference = NRF_ADC_CONFIG_REF_SUPPLY_ONE_HALF;
+      adcReference = ADC_CONFIG_REFSEL_SupplyOneHalfPrescaling;
       break;
 
     case AR_SUPPLY_ONE_THIRD:
-      adcReference = NRF_ADC_CONFIG_REF_SUPPLY_ONE_THIRD;
+      adcReference = ADC_CONFIG_REFSEL_SupplyOneThirdPrescaling;
       break;
 
     case AR_EXT0:
-      adcReference = NRF_ADC_CONFIG_REF_EXT_REF0;
+      adcReference = ADC_CONFIG_REFSEL_External | (ADC_CONFIG_EXTREFSEL_AnalogReference0 << ADC_CONFIG_EXTREFSEL_Pos);
       break;
 
     case AR_EXT1:
-      adcReference = NRF_ADC_CONFIG_REF_EXT_REF1;
+      adcReference = (ADC_CONFIG_REFSEL_External | ADC_CONFIG_EXTREFSEL_AnalogReference1 << ADC_CONFIG_EXTREFSEL_Pos);
       break;
   }
 }
 
 uint32_t analogRead( uint32_t ulPin )
 {
-  nrf_adc_config_input_t pin = NRF_ADC_CONFIG_INPUT_DISABLED;
-  nrf_adc_config_t config;
-  nrf_adc_config_resolution_t adcResolution;
+  uint32_t pin = ADC_CONFIG_PSEL_Disabled;
+  uint32_t adcResolution;
   uint32_t resolution;
-  uint32_t value;
+  int16_t value;
 
   if (ulPin >= PINS_COUNT) {
     return 0;
@@ -130,27 +127,27 @@ uint32_t analogRead( uint32_t ulPin )
 
   switch ( ulPin ) {
     case 1:
-      pin = NRF_ADC_CONFIG_INPUT_2;
+      pin = ADC_CONFIG_PSEL_AnalogInput2;
       break;
 
     case 2:
-      pin = NRF_ADC_CONFIG_INPUT_3;
+      pin = ADC_CONFIG_PSEL_AnalogInput3;
       break;
 
     case 3:
-      pin = NRF_ADC_CONFIG_INPUT_4;
+      pin = ADC_CONFIG_PSEL_AnalogInput4;
       break;
 
     case 4:
-      pin = NRF_ADC_CONFIG_INPUT_5;
+      pin = ADC_CONFIG_PSEL_AnalogInput5;
       break;
 
     case 5:
-      pin = NRF_ADC_CONFIG_INPUT_6;
+      pin = ADC_CONFIG_PSEL_AnalogInput6;
       break;
 
     case 6:
-      pin = NRF_ADC_CONFIG_INPUT_7;
+      pin = ADC_CONFIG_PSEL_AnalogInput7;
       break;
 
     default:
@@ -159,25 +156,42 @@ uint32_t analogRead( uint32_t ulPin )
 
   if (readResolution <= 8) {
     resolution = 8;
-    adcResolution = NRF_ADC_CONFIG_RES_8BIT;
+    adcResolution = ADC_CONFIG_RES_8bit;
   } else if (readResolution <= 9) {
     resolution = 9;
-    adcResolution = NRF_ADC_CONFIG_RES_9BIT;
+    adcResolution = ADC_CONFIG_RES_9bit;
   } else {
     resolution = 10;
-    adcResolution = NRF_ADC_CONFIG_RES_10BIT;
+    adcResolution = ADC_CONFIG_RES_10bit;
   }
 
-  config.resolution = adcResolution;
-  config.scaling = NRF_ADC_CONFIG_SCALING_INPUT_TWO_THIRDS;
-  config.reference = adcReference;
+  NRF_ADC->ENABLE = 1;
 
-  nrf_adc_enable();
+  uint32_t config_reg = 0;
 
-  nrf_adc_configure(&config);
-  value = nrf_adc_convert_single(pin);
+  config_reg |= ((uint32_t)adcResolution << ADC_CONFIG_RES_Pos) & ADC_CONFIG_RES_Msk;
+  config_reg |= ((uint32_t)ADC_CONFIG_RES_10bit << ADC_CONFIG_INPSEL_Pos) & ADC_CONFIG_INPSEL_Msk;
+  config_reg |= ((uint32_t)adcReference << ADC_CONFIG_REFSEL_Pos) & ADC_CONFIG_REFSEL_Msk;
 
-  nrf_adc_disable();
+  if (adcReference & ADC_CONFIG_EXTREFSEL_Msk)
+  {
+      config_reg |= adcReference & ADC_CONFIG_EXTREFSEL_Msk;
+  }
+
+  NRF_ADC->CONFIG = ((uint32_t)pin << ADC_CONFIG_PSEL_Pos) | (NRF_ADC->CONFIG & ~ADC_CONFIG_PSEL_Msk);
+
+  NRF_ADC->CONFIG = config_reg | (NRF_ADC->CONFIG & ADC_CONFIG_PSEL_Msk);
+
+  NRF_ADC->TASKS_START = 1;
+
+  while(!NRF_ADC->EVENTS_END);
+  NRF_ADC->EVENTS_END = 0;
+
+  value = (int32_t)NRF_ADC->RESULT;
+
+  NRF_ADC->TASKS_STOP = 1;
+
+  NRF_ADC->ENABLE = 0;
 
   return mapResolution(value, resolution, readResolution);
 }
@@ -199,14 +213,17 @@ void analogWrite( uint32_t ulPin, uint32_t ulValue )
     NVIC_ClearPendingIRQ(TIMER1_IRQn);
     NVIC_EnableIRQ(TIMER1_IRQn);
 
-    nrf_timer_mode_set(NRF_TIMER1, NRF_TIMER_MODE_TIMER);
-    nrf_timer_bit_width_set(NRF_TIMER1, NRF_TIMER_BIT_WIDTH_8);
+    NRF_TIMER1->MODE = (NRF_TIMER1->MODE & ~TIMER_MODE_MODE_Msk) | ((TIMER_MODE_MODE_Timer << TIMER_MODE_MODE_Pos) & TIMER_MODE_MODE_Msk);
 
-    nrf_timer_frequency_set(NRF_TIMER1, NRF_TIMER_FREQ_125kHz);
-    nrf_timer_cc_write(NRF_TIMER1, NRF_TIMER_CC_CHANNEL0, 0);
-    nrf_timer_int_enable(NRF_TIMER1, NRF_TIMER_INT_COMPARE0_MASK);
+    NRF_TIMER1->BITMODE = (NRF_TIMER1->BITMODE & ~TIMER_BITMODE_BITMODE_Msk) | ((TIMER_BITMODE_BITMODE_08Bit << TIMER_BITMODE_BITMODE_Pos) & TIMER_BITMODE_BITMODE_Msk);
 
-    nrf_timer_task_trigger(NRF_TIMER1, NRF_TIMER_TASK_START);
+    NRF_TIMER1->PRESCALER = (NRF_TIMER1->PRESCALER & ~TIMER_PRESCALER_PRESCALER_Msk) | ((7 << TIMER_PRESCALER_PRESCALER_Pos) & TIMER_PRESCALER_PRESCALER_Msk);
+
+    NRF_TIMER1->CC[0] = 0;
+
+    NRF_TIMER1->INTENSET = TIMER_INTENSET_COMPARE0_Msk;
+
+    NRF_TIMER1->TASKS_START = 0x1UL;
 
     timerEnabled = true;
   }
@@ -215,14 +232,20 @@ void analogWrite( uint32_t ulPin, uint32_t ulValue )
     if (pwmContext[i].pin == PIN_FREE || pwmContext[i].pin == ulPin) {
       pwmContext[i].pin = ulPin;
 
-      nrf_gpio_cfg_output(ulPin);
+      NRF_GPIO->PIN_CNF[ulPin] = ((uint32_t)GPIO_PIN_CNF_DIR_Output       << GPIO_PIN_CNF_DIR_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_INPUT_Disconnect << GPIO_PIN_CNF_INPUT_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_PULL_Disabled    << GPIO_PIN_CNF_PULL_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled   << GPIO_PIN_CNF_SENSE_Pos);
 
       ulValue = mapResolution(ulValue, writeResolution, 8);
 
       pwmContext[i].value = ulValue;
 
-      nrf_timer_cc_write(NRF_TIMER1, pwmContext[i].channel, ulValue);
-      nrf_timer_int_enable(NRF_TIMER1, pwmContext[i].mask);
+      NRF_TIMER1->CC[pwmContext[i].channel] = ulValue;
+
+      NRF_TIMER1->INTENSET = pwmContext[i].mask;
+
       break;
     }
   }
@@ -230,23 +253,23 @@ void analogWrite( uint32_t ulPin, uint32_t ulValue )
 
 void TIMER1_IRQHandler(void)
 {
-  if (nrf_timer_event_check(NRF_TIMER1, NRF_TIMER_EVENT_COMPARE0)) {
+  if (NRF_TIMER1->EVENTS_COMPARE[0]) {
     for (int i = 0; i < PWM_COUNT; i++) {
       if (pwmContext[i].pin != PIN_FREE && pwmContext[i].value != 0) {
-        nrf_gpio_pin_write(pwmContext[i].pin, 1);
+        NRF_GPIO->OUTSET = (1UL << pwmContext[i].pin);
       }
     }
 
-    nrf_timer_event_clear(NRF_TIMER1, NRF_TIMER_EVENT_COMPARE0);
+    NRF_TIMER1->EVENTS_COMPARE[0] = 0x0UL;
   }
 
   for (int i = 0; i < PWM_COUNT; i++) {
-    if (nrf_timer_event_check(NRF_TIMER1, pwmContext[i].event)) {
+    if (NRF_TIMER1->EVENTS_COMPARE[pwmContext[i].event]) {
       if (pwmContext[i].pin != PIN_FREE && pwmContext[i].value != 255) {
-        nrf_gpio_pin_write(pwmContext[i].pin, 0);
+        NRF_GPIO->OUTCLR = (1UL << pwmContext[i].pin);
       }
 
-      nrf_timer_event_clear(NRF_TIMER1, pwmContext[i].event);
+      NRF_TIMER1->EVENTS_COMPARE[pwmContext[i].event] = 0x0UL;
     }
   }
 }

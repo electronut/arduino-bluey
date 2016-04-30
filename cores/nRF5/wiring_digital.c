@@ -17,7 +17,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "nrf_gpio.h"
+#include "nrf.h"
 
 #include "Arduino.h"
 
@@ -38,22 +38,38 @@ void pinMode( uint32_t ulPin, uint32_t ulMode )
   {
     case INPUT:
       // Set pin to input mode
-      nrf_gpio_cfg_input(ulPin, NRF_GPIO_PIN_NOPULL);
+      NRF_GPIO->PIN_CNF[ulPin] = ((uint32_t)GPIO_PIN_CNF_DIR_Input        << GPIO_PIN_CNF_DIR_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_INPUT_Connect    << GPIO_PIN_CNF_INPUT_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_PULL_Disabled    << GPIO_PIN_CNF_PULL_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled   << GPIO_PIN_CNF_SENSE_Pos);
     break ;
 
     case INPUT_PULLUP:
       // Set pin to input mode with pull-up resistor enabled
-      nrf_gpio_cfg_input(ulPin, NRF_GPIO_PIN_PULLUP);
+      NRF_GPIO->PIN_CNF[ulPin] = ((uint32_t)GPIO_PIN_CNF_DIR_Input        << GPIO_PIN_CNF_DIR_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_INPUT_Connect    << GPIO_PIN_CNF_INPUT_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_PULL_Pullup      << GPIO_PIN_CNF_PULL_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled   << GPIO_PIN_CNF_SENSE_Pos);
     break ;
 
     case INPUT_PULLDOWN:
       // Set pin to input mode with pull-down resistor enabled
-      nrf_gpio_cfg_input(ulPin, NRF_GPIO_PIN_PULLDOWN);
+      NRF_GPIO->PIN_CNF[ulPin] = ((uint32_t)GPIO_PIN_CNF_DIR_Input        << GPIO_PIN_CNF_DIR_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_INPUT_Connect    << GPIO_PIN_CNF_INPUT_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_PULL_Pulldown    << GPIO_PIN_CNF_PULL_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled   << GPIO_PIN_CNF_SENSE_Pos);
     break ;
 
     case OUTPUT:
       // Set pin to output mode
-      nrf_gpio_cfg_output(ulPin);
+      NRF_GPIO->PIN_CNF[ulPin] = ((uint32_t)GPIO_PIN_CNF_DIR_Output       << GPIO_PIN_CNF_DIR_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_INPUT_Disconnect << GPIO_PIN_CNF_INPUT_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_PULL_Disabled    << GPIO_PIN_CNF_PULL_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0S1       << GPIO_PIN_CNF_DRIVE_Pos)
+                               | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled   << GPIO_PIN_CNF_SENSE_Pos);
     break ;
 
     default:
@@ -73,11 +89,11 @@ void digitalWrite( uint32_t ulPin, uint32_t ulVal )
   switch ( ulVal )
   {
     case LOW:
-      nrf_gpio_pin_write(ulPin, 0);
+      NRF_GPIO->OUTCLR = (1UL << ulPin);
     break ;
 
     default:
-      nrf_gpio_pin_write(ulPin, 1);
+      NRF_GPIO->OUTSET = (1UL << ulPin);
     break ;
   }
 
@@ -92,7 +108,7 @@ int digitalRead( uint32_t ulPin )
 
   ulPin = g_ADigitalPinMap[ulPin];
 
-  return nrf_gpio_pin_read(ulPin) ? HIGH : LOW ;
+  return ((NRF_GPIO->IN >> ulPin) & 1UL) ? HIGH : LOW ;
 }
 
 #ifdef __cplusplus

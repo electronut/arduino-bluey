@@ -21,8 +21,6 @@
 #ifndef _SPI_H_INCLUDED
 #define _SPI_H_INCLUDED
 
-#include "nrf_spi.h"
-
 #include <Arduino.h>
 
 // SPI_HAS_TRANSACTION means SPI has
@@ -58,41 +56,28 @@ class SPISettings {
 
   void init_AlwaysInline(uint32_t clock, BitOrder bitOrder, uint8_t dataMode) __attribute__((__always_inline__)) {
     if (clock <= 125000) {
-      this->clockFreq = NRF_SPI_FREQ_125K;
+      this->clockFreq = SPI_FREQUENCY_FREQUENCY_K125;
     } else if (clock <= 250000) {
-      this->clockFreq = NRF_SPI_FREQ_250K;
+      this->clockFreq = SPI_FREQUENCY_FREQUENCY_K250;
     } else if (clock <= 500000) {
-      this->clockFreq = NRF_SPI_FREQ_500K;
+      this->clockFreq = SPI_FREQUENCY_FREQUENCY_K500;
     } else if (clock <= 1000000) {
-      this->clockFreq = (nrf_spi_frequency_t)SPI_FREQUENCY_FREQUENCY_M1;
+      this->clockFreq = SPI_FREQUENCY_FREQUENCY_M1;
     } else if (clock <= 2000000) {
-      this->clockFreq = (nrf_spi_frequency_t)SPI_FREQUENCY_FREQUENCY_M2;
+      this->clockFreq = SPI_FREQUENCY_FREQUENCY_M2;
     } else if (clock <= 4000000) {
-      this->clockFreq = (nrf_spi_frequency_t)SPI_FREQUENCY_FREQUENCY_M4;
+      this->clockFreq = SPI_FREQUENCY_FREQUENCY_M4;
     } else {
-      this->clockFreq = (nrf_spi_frequency_t)SPI_FREQUENCY_FREQUENCY_M8;
+      this->clockFreq = SPI_FREQUENCY_FREQUENCY_M8;
     }
 
-    this->bitOrder = (bitOrder == MSBFIRST ? NRF_SPI_BIT_ORDER_MSB_FIRST : NRF_SPI_BIT_ORDER_LSB_FIRST);
-
-    switch (dataMode)
-    {
-      case SPI_MODE0:
-        this->dataMode = NRF_SPI_MODE_0; break;
-      case SPI_MODE1:
-        this->dataMode = NRF_SPI_MODE_1; break;
-      case SPI_MODE2:
-        this->dataMode = NRF_SPI_MODE_2; break;
-      case SPI_MODE3:
-        this->dataMode = NRF_SPI_MODE_3; break;
-      default:
-        this->dataMode = NRF_SPI_MODE_0; break;
-    }
+    this->bitOrder = (bitOrder == MSBFIRST ? SPI_CONFIG_ORDER_MsbFirst : SPI_CONFIG_ORDER_LsbFirst);
+    this->dataMode = dataMode;
   }
 
-  nrf_spi_frequency_t clockFreq;
-  nrf_spi_mode_t dataMode;
-  nrf_spi_bit_order_t bitOrder;
+  uint32_t clockFreq;
+  uint8_t dataMode;
+  uint32_t bitOrder;
 
   friend class SPIClass;
 };
@@ -131,8 +116,8 @@ class SPIClass {
   uint8_t _uc_pinMosi;
   uint8_t _uc_pinSCK;
 
-  nrf_spi_mode_t _dataMode;
-  nrf_spi_bit_order_t _bitOrder;
+  uint8_t _dataMode;
+  uint32_t _bitOrder;
 
   bool initialized;
   uint8_t interruptMode;

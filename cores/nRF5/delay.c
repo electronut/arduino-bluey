@@ -16,7 +16,7 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#include "nrf_rtc.h"
+#include "nrf.h"
 
 #include "delay.h"
 #include "Arduino.h"
@@ -29,16 +29,16 @@ static volatile uint32_t overflows = 0;
 
 uint32_t millis( void )
 {
-  uint64_t ticks = (uint64_t)((uint64_t)overflows << (uint64_t)32) | (uint64_t)nrf_rtc_counter_get(NRF_RTC1);
+  uint64_t ticks = (uint64_t)((uint64_t)overflows << (uint64_t)32) | (uint64_t)(NRF_RTC1->COUNTER);
 
-  return (ticks * 1000) / RTC_INPUT_FREQ;
+  return (ticks * 1000) / 32768;
 }
 
 uint32_t micros( void )
 {
-  uint64_t ticks = (uint64_t)((uint64_t)overflows << (uint64_t)32) | (uint64_t)nrf_rtc_counter_get(NRF_RTC1);
+  uint64_t ticks = (uint64_t)((uint64_t)overflows << (uint64_t)32) | (uint64_t)(NRF_RTC1->COUNTER);
 
-  return (ticks * 1000000) / RTC_INPUT_FREQ;
+  return (ticks * 1000000) / 32768;
 }
 
 void delay( uint32_t ms )
@@ -58,7 +58,12 @@ void delay( uint32_t ms )
 
 void RTC1_IRQHandler(void)
 {
-  nrf_rtc_event_clear(NRF_RTC1, NRF_RTC_EVENT_OVERFLOW);
+  NRF_RTC1->EVENTS_OVRFLW = 0;
+
+#if __CORTEX_M == 0x04
+    volatile uint32_t dummy = NRF_RTC1->EVENTS_OVRFLW;
+    (void)dummy;
+#endif
 
   overflows = (overflows + 1) & 0xff;
 }
