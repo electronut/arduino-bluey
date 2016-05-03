@@ -37,6 +37,7 @@ int main( void )
   for (;;)
   {
     loop();
+    if (serialEventRun) serialEventRun();
   }
 
   return 0;
