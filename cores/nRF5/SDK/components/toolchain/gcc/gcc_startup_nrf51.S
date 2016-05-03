@@ -1,3 +1,4 @@
+#ifdef NRF51
 /* Copyright (c) 2013 ARM LIMITED
 
    All rights reserved.
@@ -288,3 +289,4 @@ Default_Handler:
     IRQ  SWI5_IRQHandler
 
   .end
+#endif
