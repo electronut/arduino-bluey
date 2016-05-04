@@ -51,7 +51,7 @@ nRF52DK.menu.softdevice.none.softdevice=none
 
 nRF52DK.menu.softdevice.s132=S132
 nRF52DK.menu.softdevice.s132.softdevice=s132
-nRF52DK.menu.softdevice.s132.softdeviceversion=2.0.0
+nRF52DK.menu.softdevice.s132.softdeviceversion=2.0.1
 nRF52DK.menu.softdevice.s132.upload.maximum_size=409600
 nRF52DK.menu.softdevice.s132.build.extra_flags=-DNRF52 -DS132 -DNRF51_S132
 nRF52DK.menu.softdevice.s132.build.ldscript=armgcc_s132_nrf52832_xxaa.ld
