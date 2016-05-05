@@ -5,6 +5,7 @@ Program [Nordic Semiconductor](https://www.nordicsemi.com) nR5 based boards with
 ## Supported boards
 
  * [nRF52 DK](https://www.nordicsemi.com/eng/Products/Bluetooth-Smart-Bluetooth-low-energy/nRF52-DK)
+   * First time use - To get started, you need to power on while depressing boot/reset button and copy over the latest [bootloader](https://www.nordicsemi.com/eng/nordic/Products/nRF52-DK/nRF5x-OB-JLink-IF/52275) before it responds to sketches uploaded.
  * [Bluz DK](http://bluz.io)
 
 ## Installing
