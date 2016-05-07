@@ -163,14 +163,19 @@ uint32_t analogRead( uint32_t ulPin )
   NRF_SAADC->RESOLUTION = saadcResolution;
 
   NRF_SAADC->ENABLE = (SAADC_ENABLE_ENABLE_Enabled << SAADC_ENABLE_ENABLE_Pos);
-  NRF_SAADC->CH[pin].CONFIG = ((SAADC_CH_CONFIG_RESP_Bypass   << SAADC_CH_CONFIG_RESP_Pos)   & SAADC_CH_CONFIG_RESP_Msk)
+  for (int i = 0; i < 8; i++) {
+    NRF_SAADC->CH[i].PSELN = SAADC_CH_PSELP_PSELP_NC;
+    NRF_SAADC->CH[i].PSELP = SAADC_CH_PSELP_PSELP_NC;
+  }
+  NRF_SAADC->CH[0].CONFIG = ((SAADC_CH_CONFIG_RESP_Bypass   << SAADC_CH_CONFIG_RESP_Pos)   & SAADC_CH_CONFIG_RESP_Msk)
                             | ((SAADC_CH_CONFIG_RESP_Bypass   << SAADC_CH_CONFIG_RESN_Pos)   & SAADC_CH_CONFIG_RESN_Msk)
                             | ((SAADC_CH_CONFIG_GAIN_Gain1    << SAADC_CH_CONFIG_GAIN_Pos)   & SAADC_CH_CONFIG_GAIN_Msk)
                             | ((saadcReference                << SAADC_CH_CONFIG_REFSEL_Pos) & SAADC_CH_CONFIG_REFSEL_Msk)
                             | ((SAADC_CH_CONFIG_TACQ_3us      << SAADC_CH_CONFIG_TACQ_Pos)   & SAADC_CH_CONFIG_TACQ_Msk)
                             | ((SAADC_CH_CONFIG_MODE_SE       << SAADC_CH_CONFIG_MODE_Pos)   & SAADC_CH_CONFIG_MODE_Msk);
-  NRF_SAADC->CH[pin].PSELN = pin;
-  NRF_SAADC->CH[pin].PSELP = pin;
+  NRF_SAADC->CH[0].PSELN = pin;
+  NRF_SAADC->CH[0].PSELP = pin;
+
 
   NRF_SAADC->RESULT.PTR = (uint32_t)&value;
   NRF_SAADC->RESULT.MAXCNT = 1; // One sample
