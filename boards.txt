@@ -135,6 +135,48 @@ BLENano.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF51_S130
 BLENano.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_{build.chip}.ld
 
 
+RedBearLab_nRF51822.name=RedBearLab nRF51822
+
+RedBearLab_nRF51822.upload.tool=sandeepmistry:openocd
+RedBearLab_nRF51822.upload.interface=cmsisdap
+RedBearLab_nRF51822.upload.target=nrf51
+RedBearLab_nRF51822.upload.maximum_size=262144
+
+RedBearLab_nRF51822.bootloader.tool=sandeepmistry:openocd
+
+RedBearLab_nRF51822.build.mcu=cortex-m0
+RedBearLab_nRF51822.build.f_cpu=16000000
+RedBearLab_nRF51822.build.board=REDBEARLAB_NRF51822
+RedBearLab_nRF51822.build.core=nRF5
+RedBearLab_nRF51822.build.variant=RedBearLab_nRF51822
+RedBearLab_nRF51822.build.variant_system_lib=
+RedBearLab_nRF51822.build.extra_flags=-DNRF51
+RedBearLab_nRF51822.build.float_flags=
+RedBearLab_nRF51822.build.ldscript=nrf51_{build.chip}.ld
+
+RedBearLab_nRF51822.menu.version.1_0=1.0
+RedBearLab_nRF51822.menu.version.1_0.build.chip=xxaa
+RedBearLab_nRF51822.menu.version.1_5=1.5
+RedBearLab_nRF51822.menu.version.1_5.build.chip=xxac
+
+RedBearLab_nRF51822.menu.softdevice.none=None
+RedBearLab_nRF51822.menu.softdevice.none.softdevice=none
+
+RedBearLab_nRF51822.menu.softdevice.s110=S110
+RedBearLab_nRF51822.menu.softdevice.s110.softdevice=s110
+RedBearLab_nRF51822.menu.softdevice.s110.softdeviceversion=8.0.0
+RedBearLab_nRF51822.menu.softdevice.s110.upload.maximum_size=151552
+RedBearLab_nRF51822.menu.softdevice.s110.build.extra_flags=-DNRF51 -DS110 -DNRF51_S110
+RedBearLab_nRF51822.menu.softdevice.s110.build.ldscript=armgcc_s110_nrf51822_{build.chip}.ld
+
+RedBearLab_nRF51822.menu.softdevice.s130=S130
+RedBearLab_nRF51822.menu.softdevice.s130.softdevice=s130
+RedBearLab_nRF51822.menu.softdevice.s130.softdeviceversion=2.0.0
+RedBearLab_nRF51822.menu.softdevice.s130.upload.maximum_size=151552
+RedBearLab_nRF51822.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF51_S130
+RedBearLab_nRF51822.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_{build.chip}.ld
+
+
 Generic_nRF51822.name=Generic nRF51822
 
 Generic_nRF51822.upload.tool=sandeepmistry:openocd
