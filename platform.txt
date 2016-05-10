@@ -53,7 +53,7 @@ build.extra_flags=
 
 nrf.sdk.path={runtime.platform.path}/cores/nRF5/SDK
 
-compiler.nrf.flags=-DNRF5 "-I{nrf.sdk.path}/components/toolchain/" "-I{nrf.sdk.path}/components/toolchain/CMSIS/Include" "-I{nrf.sdk.path}/components/toolchain/gcc/" "-I{nrf.sdk.path}/components/device/" "-I{nrf.sdk.path}/components/softdevice/{softdevice}/headers/"
+compiler.nrf.flags=-DNRF5 "-I{nrf.sdk.path}/components/toolchain/" "-I{nrf.sdk.path}/components/toolchain/CMSIS/Include" "-I{nrf.sdk.path}/components/toolchain/gcc/" "-I{nrf.sdk.path}/components/device/" "-I{nrf.sdk.path}/components/drivers_nrf/delay/" "-I{nrf.sdk.path}/components/softdevice/{softdevice}/headers/"
 
 # These can be overridden in platform.local.txt
 compiler.c.extra_flags={compiler.nrf.flags}
