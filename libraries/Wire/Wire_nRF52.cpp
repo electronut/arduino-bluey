@@ -326,6 +326,8 @@ void TwoWire::onService(void)
 
     receiving = true;
 
+    rxBuffer.clear();
+
     _p_twis->RXD.PTR = (uint32_t)rxBuffer._aucBuffer;
     _p_twis->RXD.MAXCNT = sizeof(rxBuffer._aucBuffer);
 
