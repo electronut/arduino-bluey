@@ -101,6 +101,10 @@ recipe.output.save_file_hex={build.project_name}.save.hex
 recipe.size.pattern="{compiler.path}{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
 recipe.size.regex=\.text\s+([0-9]+).*
 
+## Export Compiled Binary
+recipe.output.tmp_file={build.project_name}.hex
+recipe.output.save_file={build.project_name}.{build.variant}.hex
+
 #
 # OpenOCD sketch upload
 #

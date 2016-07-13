@@ -216,3 +216,45 @@ Generic_nRF51822.menu.softdevice.s130.softdeviceversion=2.0.0
 Generic_nRF51822.menu.softdevice.s130.upload.maximum_size=151552
 Generic_nRF51822.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF51_S130
 Generic_nRF51822.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_{build.chip}.ld
+
+Waveshare_BLE400.name=Waveshare BLE400
+
+Waveshare_BLE400.upload.tool=sandeepmistry:openocd
+Waveshare_BLE400.upload.target=nrf51
+Waveshare_BLE400.upload.maximum_size=262144
+
+Waveshare_BLE400.bootloader.tool=sandeepmistry:openocd
+
+Waveshare_BLE400.build.mcu=cortex-m0
+Waveshare_BLE400.build.f_cpu=16000000
+Waveshare_BLE400.build.board=WAVESHARE_BLE400
+Waveshare_BLE400.build.core=nRF5
+Waveshare_BLE400.build.variant=Waveshare_BLE400
+Waveshare_BLE400.build.variant_system_lib=
+Waveshare_BLE400.build.extra_flags=-DNRF51
+Waveshare_BLE400.build.float_flags=
+Waveshare_BLE400.build.ldscript=nrf51_{build.chip}.ld
+
+Waveshare_BLE400.menu.chip.xxaa=16 kB RAM, 256 kB flash (xxaa)
+Waveshare_BLE400.menu.chip.xxaa.build.chip=xxaa
+Waveshare_BLE400.menu.chip.xxac=32 kB RAM, 256 kB flash (xxac)
+Waveshare_BLE400.menu.chip.xxac.build.chip=xxac
+
+Waveshare_BLE400.menu.softdevice.none=None
+Waveshare_BLE400.menu.softdevice.none.softdevice=none
+
+Waveshare_BLE400.menu.softdevice.s110=S110
+Waveshare_BLE400.menu.softdevice.s110.softdevice=s110
+Waveshare_BLE400.menu.softdevice.s110.softdeviceversion=8.0.0
+Waveshare_BLE400.menu.softdevice.s110.upload.maximum_size=151552
+Waveshare_BLE400.menu.softdevice.s110.build.extra_flags=-DNRF51 -DS110 -DNRF51_S110
+Waveshare_BLE400.menu.softdevice.s110.build.ldscript=armgcc_s110_nrf51822_{build.chip}.ld
+
+Waveshare_BLE400.menu.softdevice.s130=S130
+Waveshare_BLE400.menu.softdevice.s130.softdevice=s130
+Waveshare_BLE400.menu.softdevice.s130.softdeviceversion=2.0.0
+Waveshare_BLE400.menu.softdevice.s130.upload.maximum_size=151552
+Waveshare_BLE400.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF51_S130
+Waveshare_BLE400.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_{build.chip}.ld
+
+
