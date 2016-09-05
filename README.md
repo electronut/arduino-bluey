@@ -9,6 +9,7 @@ Program [Nordic Semiconductor](https://www.nordicsemi.com) nR5 based boards with
  * [Bluz DK](http://bluz.io)
  * [RedBearLab BLE Nano](http://redbearlab.com/blenano/)
  * [RedBearLab nRF51822](http://redbearlab.com/redbearlab-nrf51822/)
+ * [BBC micro:bit](https://www.microbit.co.uk)
 
 ## Installing
 

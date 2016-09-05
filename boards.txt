@@ -184,6 +184,45 @@ RedBearLab_nRF51822.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF5
 RedBearLab_nRF51822.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_{build.chip}.ld
 
 
+BBCmicrobit.name=BBC micro:bit
+
+BBCmicrobit.vid.0=0x0d28
+BBCmicrobit.pid.0=0x0204
+
+BBCmicrobit.upload.tool=sandeepmistry:openocd
+BBCmicrobit.upload.target=nrf51
+BBCmicrobit.upload.maximum_size=262144
+
+BBCmicrobit.bootloader.tool=sandeepmistry:openocd
+
+BBCmicrobit.build.mcu=cortex-m0
+BBCmicrobit.build.f_cpu=16000000
+BBCmicrobit.build.board=BLUZ_DK
+BBCmicrobit.build.core=nRF5
+BBCmicrobit.build.variant=BBCmicrobit
+BBCmicrobit.build.variant_system_lib=
+BBCmicrobit.build.extra_flags=-DNRF51
+BBCmicrobit.build.float_flags=
+BBCmicrobit.build.ldscript=nrf51_xxaa.ld
+
+BBCmicrobit.menu.softdevice.none=None
+BBCmicrobit.menu.softdevice.none.softdevice=none
+
+BBCmicrobit.menu.softdevice.s110=S110
+BBCmicrobit.menu.softdevice.s110.softdevice=s110
+BBCmicrobit.menu.softdevice.s110.softdeviceversion=8.0.0
+BBCmicrobit.menu.softdevice.s110.upload.maximum_size=151552
+BBCmicrobit.menu.softdevice.s110.build.extra_flags=-DNRF51 -DS110 -DNRF51_S110
+BBCmicrobit.menu.softdevice.s110.build.ldscript=armgcc_s110_nrf51822_xxaa.ld
+
+BBCmicrobit.menu.softdevice.s130=S130
+BBCmicrobit.menu.softdevice.s130.softdevice=s130
+BBCmicrobit.menu.softdevice.s130.softdeviceversion=2.0.0
+BBCmicrobit.menu.softdevice.s130.upload.maximum_size=151552
+BBCmicrobit.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF51_S130
+BBCmicrobit.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_xxaa.ld
+
+
 Generic_nRF51822.name=Generic nRF51822
 
 Generic_nRF51822.upload.tool=sandeepmistry:openocd
