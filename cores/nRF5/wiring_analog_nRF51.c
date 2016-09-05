@@ -126,6 +126,14 @@ uint32_t analogRead( uint32_t ulPin )
   ulPin = g_ADigitalPinMap[ulPin];
 
   switch ( ulPin ) {
+    case 26:
+      pin = ADC_CONFIG_PSEL_AnalogInput0;
+      break;
+
+    case 27:
+      pin = ADC_CONFIG_PSEL_AnalogInput1;
+      break;
+
     case 1:
       pin = ADC_CONFIG_PSEL_AnalogInput2;
       break;
