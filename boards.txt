@@ -263,6 +263,13 @@ Generic_nRF51822.menu.softdevice.s130.upload.maximum_size=151552
 Generic_nRF51822.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF51_S130
 Generic_nRF51822.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_{build.chip}.ld
 
+Generic_nRF51822.menu.lfclk.lfxo=Crystal Oscillator
+Generic_nRF51822.menu.lfclk.lfxo.build.lfclk_flags=-DUSE_LFXO
+Generic_nRF51822.menu.lfclk.lfrc=RC Oscillator
+Generic_nRF51822.menu.lfclk.lfrc.build.lfclk_flags=-DUSE_LFRC
+Generic_nRF51822.menu.lfclk.lfsynt=Synthesized
+Generic_nRF51822.menu.lfclk.lfsynt.build.lfclk_flags=-DUSE_LFSYNT
+
 Waveshare_BLE400.name=Waveshare BLE400
 
 Waveshare_BLE400.upload.tool=sandeepmistry:openocd
