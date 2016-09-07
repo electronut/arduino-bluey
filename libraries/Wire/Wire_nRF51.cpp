@@ -281,6 +281,7 @@ void TwoWire::onService(void)
 {
 }
 
+#if WIRE_INTERFACES_COUNT > 0
 TwoWire Wire(NRF_TWI1, SPI1_TWI1_IRQn, PIN_WIRE_SDA, PIN_WIRE_SCL);
 
 extern "C"
@@ -290,5 +291,6 @@ extern "C"
     Wire.onService();
   }
 }
+#endif
 
 #endif

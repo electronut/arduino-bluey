@@ -386,6 +386,7 @@ void TwoWire::onService(void)
 
 TwoWire Wire(NRF_TWIM1, NRF_TWIS1, SPIM1_SPIS1_TWIM1_TWIS1_SPI1_TWI1_IRQn, PIN_WIRE_SDA, PIN_WIRE_SCL);
 
+#if WIRE_INTERFACES_COUNT > 0
 extern "C"
 {
   void SPIM1_SPIS1_TWIM1_TWIS1_SPI1_TWI1_IRQHandler(void)
@@ -393,5 +394,6 @@ extern "C"
     Wire.onService();
   }
 }
+#endif
 
 #endif

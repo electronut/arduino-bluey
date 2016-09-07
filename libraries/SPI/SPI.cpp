@@ -244,4 +244,6 @@ void SPIClass::detachInterrupt() {
   // Should be disableInterrupt()
 }
 
+#if SPI_INTERFACES_COUNT > 0
 SPIClass SPI (NRF_SPI0,  PIN_SPI_MISO,  PIN_SPI_SCK,  PIN_SPI_MOSI);
+#endif

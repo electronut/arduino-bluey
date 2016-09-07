@@ -103,6 +103,8 @@ class TwoWire : public Stream
     static const uint32_t TWI_CLOCK = 100000;
 };
 
+#if WIRE_INTERFACES_COUNT > 0
 extern TwoWire Wire;
+#endif
 
 #endif
