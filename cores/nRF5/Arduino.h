@@ -17,7 +17,6 @@ typedef uint16_t word;
 #include "avr/pgmspace.h"
 #include "avr/interrupt.h"
 
-#include "binary.h"
 #include "itoa.h"
 
 #ifdef __cplusplus
@@ -52,6 +51,7 @@ void loop( void ) ;
   #include "pulse.h"
 #endif
 #include "delay.h"
+#include "binary.h"
 #ifdef __cplusplus
   #include "Uart.h"
 #endif
