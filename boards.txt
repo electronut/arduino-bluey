@@ -205,6 +205,8 @@ BBCmicrobit.build.extra_flags=-DNRF51
 BBCmicrobit.build.float_flags=
 BBCmicrobit.build.ldscript=nrf51_xxaa.ld
 
+BBCmicrobit.build.lfclk_flags=-DUSE_LFRC
+
 BBCmicrobit.menu.softdevice.none=None
 BBCmicrobit.menu.softdevice.none.softdevice=none
 
