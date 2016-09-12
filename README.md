@@ -72,6 +72,16 @@ No additional setup required.
  4. Clone this repo: ```git clone https://github.com/sandeepmistry/arduino-nRF5.git sandeepmistry/nRF5```
  5. Restart the Arduino IDE
 
+## BLE
+
+This Arduino Core does **not** contain any Arduino style API's for BLE functionality. All the relevant Nordic SoftDevice (S110, S130, S132) header files are included build path when a SoftDevice is selected via the `Tools` menu.
+
+### Recommend BLE Libraries
+
+ * [BLEPeripheral](https://github.com/sandeepmistry/arduino-BLEPeripheral)
+   * v0.3.0 and greater, available via the Arduino IDE's library manager.
+   * Supports peripheral mode only.
+
 ## Credits
 
 This core is based on the [Arduino SAMD Core](https://github.com/arduino/ArduinoCore-samd) and licensed under the same [GPL License](LICENSE)
