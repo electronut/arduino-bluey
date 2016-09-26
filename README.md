@@ -1,6 +1,8 @@
 # Arduino Core for Nordic Semiconductor nRF5 based boards
 
-Program [Nordic Semiconductor](https://www.nordicsemi.com) nR5 based boards with the [Arduino](https://www.arduino.cc) IDE.
+Program your [Nordic Semiconductor](https://www.nordicsemi.com) nRF51 or nRF52 board using the [Arduino](https://www.arduino.cc) IDE.
+
+Does not require a custom bootloader on the device.
 
 ## Supported boards
 
