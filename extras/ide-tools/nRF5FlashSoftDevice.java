@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.File;
+import java.io.FileInputStream;
 
 import java.lang.Runnable;
 import java.lang.Thread;
@@ -25,6 +26,7 @@ import javax.swing.JTextArea;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipEntry;
 
@@ -34,13 +36,10 @@ import processing.app.tools.Tool;
 
 public class nRF5FlashSoftDevice implements Tool {
   private Map<String, String> urls = new HashMap<String, String>();
+  private Map<String, String> filenames = new HashMap<String, String>();
   private Editor editor;
 
   public void init(Editor editor) {
-    urls.put("s110", "http://www.nordicsemi.com/eng/content/download/80234/1351257/file/s110_nrf51_8.0.0.zip");
-    urls.put("s130", "http://www.nordicsemi.com/eng/content/download/95150/1606929/file/s130_nrf51_2.0.0.zip");
-    urls.put("s132", "http://www.nordicsemi.com/eng/content/download/95151/1606944/file/s132_nrf52_2.0.0.zip");
-
     this.editor = editor;
   }
 
@@ -52,6 +51,28 @@ public class nRF5FlashSoftDevice implements Tool {
     if (!PreferencesData.get("target_platform").equals("nRF5")) {
       editor.statusError(getMenuTitle() + " is only supported on 'Nordic Semiconductor nRF5 Boards' boards!");
       return;
+    }
+
+    Path softdeviceTxtPath = Paths.get(PreferencesData.get("runtime.platform.path"), "softdevices.txt");
+    Properties softdevices = new Properties();
+
+    try {
+      softdevices.load(new FileInputStream(softdeviceTxtPath.toString()));
+    } catch (Exception e) {
+      editor.statusError("Error while flashing SoftDevice.");
+      System.err.println(e);
+      return;
+    }
+
+    String[] names = softdevices.getProperty("names").split(",");
+
+    for (int i = 0; i < names.length; i++) {
+      String name = names[i];
+      String url = softdevices.getProperty(name + ".url");
+      String filename = softdevices.getProperty(name + ".filename");
+
+      urls.put(name, url);
+      filenames.put(name, filename);
     }
 
     String softDevice = PreferencesData.get("custom_softdevice");
@@ -75,10 +96,11 @@ public class nRF5FlashSoftDevice implements Tool {
     }
 
     Path softdevicePath = Paths.get(PreferencesData.get("runtime.platform.path"), "cores", "nRF5", "SDK", "components", "softdevice", softDevice, "hex");
+    Path softdeviceHexFile = Paths.get(softdevicePath.toString(), filenames.get(softDevice));
 
     Runnable runnable = () -> {
       try {
-        if (Files.list(softdevicePath).count() < 3) {
+        if (Files.notExists(softdeviceHexFile)) {
           System.out.println("Downloading '" +url + "' ...");
 
           InputStream is = new URL(url).openStream();
@@ -97,10 +119,10 @@ public class nRF5FlashSoftDevice implements Tool {
           ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(outputStream.toByteArray()));
           ZipEntry entry;
 
-          String licenseAgreementFilename = "";
+          String licenseAgreementFilename = null;
           StringBuilder licenseAgreementBuilder = new StringBuilder();
 
-          String softdeviceFilename = "";
+          String softdeviceFilename = null;
           StringBuilder softdeviceBuilder = new StringBuilder();
 
           while ((entry = zis.getNextEntry()) != null) {
@@ -119,24 +141,29 @@ public class nRF5FlashSoftDevice implements Tool {
             }
           }
 
-          JTextArea textArea = new JTextArea(licenseAgreementBuilder.toString());
-          textArea.setColumns(80);
-          textArea.setRows(50);
-          textArea.setLineWrap(true);
-          textArea.setWrapStyleWord(true);
-          textArea.setSize(textArea.getPreferredSize().width, 1);
+          if (licenseAgreementFilename != null) {
+            JTextArea textArea = new JTextArea(licenseAgreementBuilder.toString());
+            textArea.setColumns(80);
+            textArea.setRows(50);
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            textArea.setSize(textArea.getPreferredSize().width, 1);
 
-          JScrollPane scrollPane = new JScrollPane(textArea);
-          scrollPane.setPreferredSize( new Dimension(textArea.getPreferredSize().width, 500 ) );
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            scrollPane.setPreferredSize( new Dimension(textArea.getPreferredSize().width, 500 ) );
 
-          int result = JOptionPane.showOptionDialog(null, scrollPane, "NORDIC SEMICONDUCTOR ASA SOFTDEVICE LICENSE AGREEMENT", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Accept", "Decline"}, "Decline");
+            int result = JOptionPane.showOptionDialog(null, scrollPane, "NORDIC SEMICONDUCTOR ASA SOFTDEVICE LICENSE AGREEMENT", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Accept", "Decline"}, "Decline");
 
-          if (result != 0) {
-            return;
+            if (result != 0) {
+              return;
+            }
+
+            Files.write(Paths.get(softdevicePath.toString(), licenseAgreementFilename), String.valueOf(licenseAgreementBuilder).getBytes());
           }
 
-          Files.write(Paths.get(softdevicePath.toString(), licenseAgreementFilename  ), String.valueOf(licenseAgreementBuilder).getBytes());
-          Files.write(Paths.get(softdevicePath.toString(), softdeviceFilename), String.valueOf(softdeviceBuilder).getBytes());
+          if (softdeviceFilename != null) {
+            Files.write(Paths.get(softdevicePath.toString(), softdeviceFilename), String.valueOf(softdeviceBuilder).getBytes());
+          }
         }
 
         Uploader uploader = new SerialUploader();
