@@ -21,10 +21,11 @@ Does not require a custom bootloader on the device.
  * Nordic Semiconductor  [nRF51822 Development Kit](https://www.nordicsemi.com/eng/Products/Bluetooth-low-energy/nRF51822-Development-Kit) + [nRF51422 Development Kit](https://www.nordicsemi.com/eng/Products/ANT/nRF51422-Development-Kit)
   * PCA10000
   * PCA10001, PCA10002, PCA10003, PCA10004 via nRF6310(nRFgo)
+ * [Nordic Semiconductor NRF51 Dongle](http://www.nordicsemi.com/eng/Products/nRF51-Dongle)
  * [OSHChip](http://www.oshchip.org/)
  * [RedBearLab BLE Nano](http://redbearlab.com/blenano/)
  * [RedBearLab nRF51822](http://redbearlab.com/redbearlab-nrf51822/)
- * [Nordic NRF51 Dongle](http://www.nordicsemi.com/eng/Products/nRF51-Dongle)
+ * [Waveshare BLE400](http://www.waveshare.com/wiki/BLE400)
 
 ## Installing
 
