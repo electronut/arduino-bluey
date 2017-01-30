@@ -58,6 +58,8 @@ No additional setup required.
  4. Select ```Options -> List All Devices```
  5. Select ```J-Link (Interface 2)``` from the device dropdown
  6. Click ```Replace Driver```
+ 
+__NOTE__: To roll back to the original driver go to: Device Manager -> Open Device -> Update Driver
 
 ### Flashing a SoftDevice
 
