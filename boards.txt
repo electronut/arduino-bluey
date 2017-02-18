@@ -59,6 +59,43 @@ Generic_nRF52832.menu.lfclk.lfrc.build.lfclk_flags=-DUSE_LFRC
 Generic_nRF52832.menu.lfclk.lfsynt=Synthesized
 Generic_nRF52832.menu.lfclk.lfsynt.build.lfclk_flags=-DUSE_LFSYNT
 
+BLENano2.name=RedBear BLE Nano 2
+
+BLENano2.vid.0=0x0204
+BLENano2.pid.0=0x0d28
+
+BLENano2.upload.tool=sandeepmistry:openocd
+BLENano2.upload.protocol=
+BLENano2.upload.interface=cmsis-dap
+BLENano2.upload.target=nrf52
+BLENano2.upload.maximum_size=524288
+BLENano2.upload.setup_command=transport select swd;
+BLENano2.upload.use_1200bps_touch=false
+BLENano2.upload.wait_for_upload_port=false
+BLENano2.upload.native_usb=false
+
+BLENano2.bootloader.tool=sandeepmistry:openocd
+
+BLENano2.build.mcu=cortex-m4
+BLENano2.build.f_cpu=16000000
+BLENano2.build.board=RB_BLE_NANO_2
+BLENano2.build.core=nRF5
+BLENano2.build.variant=RedBear_BLENano2
+BLENano2.build.variant_system_lib=
+BLENano2.build.extra_flags=-DNRF52
+BLENano2.build.float_flags=-mfloat-abi=hard -mfpu=fpv4-sp-d16
+BLENano2.build.ldscript=nrf52_xxaa.ld
+
+BLENano2.menu.softdevice.none=None
+BLENano2.menu.softdevice.none.softdevice=none
+
+BLENano2.menu.softdevice.s132=S132
+BLENano2.menu.softdevice.s132.softdevice=s132
+BLENano2.menu.softdevice.s132.softdeviceversion=2.0.1
+BLENano2.menu.softdevice.s132.upload.maximum_size=409600
+BLENano2.menu.softdevice.s132.build.extra_flags=-DNRF52 -DS132 -DNRF51_S132
+BLENano2.menu.softdevice.s132.build.ldscript=armgcc_s132_nrf52832_xxaa.ld
+
 
 nRF52DK.name=Nordic Semiconductor nRF52 DK
 
