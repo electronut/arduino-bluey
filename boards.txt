@@ -59,6 +59,45 @@ Generic_nRF52832.menu.lfclk.lfrc.build.lfclk_flags=-DUSE_LFRC
 Generic_nRF52832.menu.lfclk.lfsynt=Synthesized
 Generic_nRF52832.menu.lfclk.lfsynt.build.lfclk_flags=-DUSE_LFSYNT
 
+
+Blend2.name=RedBear Blend 2
+
+Blend2.vid.0=0x0204
+Blend2.pid.0=0x0d28
+
+Blend2.upload.tool=sandeepmistry:openocd
+Blend2.upload.protocol=
+Blend2.upload.interface=cmsis-dap
+Blend2.upload.target=nrf52
+Blend2.upload.maximum_size=524288
+Blend2.upload.setup_command=transport select swd;
+Blend2.upload.use_1200bps_touch=false
+Blend2.upload.wait_for_upload_port=false
+Blend2.upload.native_usb=false
+
+Blend2.bootloader.tool=sandeepmistry:openocd
+
+Blend2.build.mcu=cortex-m4
+Blend2.build.f_cpu=16000000
+Blend2.build.board=RB_BLEND_2
+Blend2.build.core=nRF5
+Blend2.build.variant=RedBear_Blend2
+Blend2.build.variant_system_lib=
+Blend2.build.extra_flags=-DNRF52
+Blend2.build.float_flags=-mfloat-abi=hard -mfpu=fpv4-sp-d16
+Blend2.build.ldscript=nrf52_xxaa.ld
+
+Blend2.menu.softdevice.none=None
+Blend2.menu.softdevice.none.softdevice=none
+
+Blend2.menu.softdevice.s132=S132
+Blend2.menu.softdevice.s132.softdevice=s132
+Blend2.menu.softdevice.s132.softdeviceversion=2.0.1
+Blend2.menu.softdevice.s132.upload.maximum_size=409600
+Blend2.menu.softdevice.s132.build.extra_flags=-DNRF52 -DS132 -DNRF51_S132
+Blend2.menu.softdevice.s132.build.ldscript=armgcc_s132_nrf52832_xxaa.ld
+
+
 BLENano2.name=RedBear BLE Nano 2
 
 BLENano2.vid.0=0x0204
@@ -436,44 +475,6 @@ OSHChip.menu.softdevice.s130.softdeviceversion=2.0.1
 OSHChip.menu.softdevice.s130.upload.maximum_size=151552
 OSHChip.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF51_S130
 OSHChip.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_xxac.ld
-
-
-Blend2.name=RedBear Blend 2
-
-Blend2.vid.0=0x0204
-Blend2.pid.0=0x0d28
-
-Blend2.upload.tool=sandeepmistry:openocd
-Blend2.upload.protocol=
-Blend2.upload.interface=cmsis-dap
-Blend2.upload.target=nrf52
-Blend2.upload.maximum_size=524288
-Blend2.upload.setup_command=transport select swd;
-Blend2.upload.use_1200bps_touch=false
-Blend2.upload.wait_for_upload_port=false
-Blend2.upload.native_usb=false
-
-Blend2.bootloader.tool=sandeepmistry:openocd
-
-Blend2.build.mcu=cortex-m4
-Blend2.build.f_cpu=16000000
-Blend2.build.board=RB_BLEND_2
-Blend2.build.core=nRF5
-Blend2.build.variant=RedBear_Blend2
-Blend2.build.variant_system_lib=
-Blend2.build.extra_flags=-DNRF52
-Blend2.build.float_flags=-mfloat-abi=hard -mfpu=fpv4-sp-d16
-Blend2.build.ldscript=nrf52_xxaa.ld
-
-Blend2.menu.softdevice.none=None
-Blend2.menu.softdevice.none.softdevice=none
-
-Blend2.menu.softdevice.s132=S132
-Blend2.menu.softdevice.s132.softdevice=s132
-Blend2.menu.softdevice.s132.softdeviceversion=2.0.1
-Blend2.menu.softdevice.s132.upload.maximum_size=409600
-Blend2.menu.softdevice.s132.build.extra_flags=-DNRF52 -DS132 -DNRF51_S132
-Blend2.menu.softdevice.s132.build.ldscript=armgcc_s132_nrf52832_xxaa.ld
 
 
 BLENano.name=RedBearLab BLE Nano
