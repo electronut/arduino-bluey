@@ -87,6 +87,8 @@ Blend2.build.extra_flags=-DNRF52
 Blend2.build.float_flags=-mfloat-abi=hard -mfpu=fpv4-sp-d16
 Blend2.build.ldscript=nrf52_xxaa.ld
 
+Blend2.build.lfclk_flags=-DUSE_LFXO
+
 Blend2.menu.softdevice.none=None
 Blend2.menu.softdevice.none.softdevice=none
 
@@ -124,6 +126,8 @@ BLENano2.build.variant_system_lib=
 BLENano2.build.extra_flags=-DNRF52
 BLENano2.build.float_flags=-mfloat-abi=hard -mfpu=fpv4-sp-d16
 BLENano2.build.ldscript=nrf52_xxaa.ld
+
+BLENano2.build.lfclk_flags=-DUSE_LFXO
 
 BLENano2.menu.softdevice.none=None
 BLENano2.menu.softdevice.none.softdevice=none
@@ -163,6 +167,8 @@ nRF52DK.build.extra_flags=-DNRF52
 nRF52DK.build.float_flags=-mfloat-abi=hard -mfpu=fpv4-sp-d16
 nRF52DK.build.ldscript=nrf52_xxaa.ld
 
+nRF52DK.build.lfclk_flags=-DUSE_LFXO
+
 nRF52DK.menu.softdevice.none=None
 nRF52DK.menu.softdevice.none.softdevice=none
 
@@ -173,12 +179,6 @@ nRF52DK.menu.softdevice.s132.upload.maximum_size=409600
 nRF52DK.menu.softdevice.s132.build.extra_flags=-DNRF52 -DS132 -DNRF51_S132
 nRF52DK.menu.softdevice.s132.build.ldscript=armgcc_s132_nrf52832_xxaa.ld
 
-nRF52DK.menu.lfclk.lfxo=Crystal Oscillator
-nRF52DK.menu.lfclk.lfxo.build.lfclk_flags=-DUSE_LFXO
-nRF52DK.menu.lfclk.lfrc=RC Oscillator
-nRF52DK.menu.lfclk.lfrc.build.lfclk_flags=-DUSE_LFRC
-nRF52DK.menu.lfclk.lfsynt=Synthesized
-nRF52DK.menu.lfclk.lfsynt.build.lfclk_flags=-DUSE_LFSYNT
 
 STCT_nRF52_minidev.name=Taida Century nRF52 mini board
 
@@ -198,6 +198,8 @@ STCT_nRF52_minidev.build.extra_flags=-DNRF52
 STCT_nRF52_minidev.build.float_flags=-mfloat-abi=hard -mfpu=fpv4-sp-d16
 STCT_nRF52_minidev.build.ldscript=nrf52_xxaa.ld
 
+STCT_nRF52_minidev.build.lfclk_flags=-DUSE_LFXO
+
 STCT_nRF52_minidev.menu.softdevice.none=None
 STCT_nRF52_minidev.menu.softdevice.none.softdevice=none
 
@@ -207,13 +209,6 @@ STCT_nRF52_minidev.menu.softdevice.s132.softdeviceversion=2.0.1
 STCT_nRF52_minidev.menu.softdevice.s132.upload.maximum_size=409600
 STCT_nRF52_minidev.menu.softdevice.s132.build.extra_flags=-DNRF52 -DS132 -DNRF51_S132
 STCT_nRF52_minidev.menu.softdevice.s132.build.ldscript=armgcc_s132_nrf52832_xxaa.ld
-
-STCT_nRF52_minidev.menu.lfclk.lfxo=Crystal Oscillator
-STCT_nRF52_minidev.menu.lfclk.lfxo.build.lfclk_flags=-DUSE_LFXO
-STCT_nRF52_minidev.menu.lfclk.lfrc=RC Oscillator
-STCT_nRF52_minidev.menu.lfclk.lfrc.build.lfclk_flags=-DUSE_LFRC
-STCT_nRF52_minidev.menu.lfclk.lfsynt=Synthesized
-STCT_nRF52_minidev.menu.lfclk.lfsynt.build.lfclk_flags=-DUSE_LFSYNT
 
 
 # nRF51 variants
@@ -326,6 +321,8 @@ BluzDK.build.extra_flags=-DNRF51
 BluzDK.build.float_flags=
 BluzDK.build.ldscript=nrf51_xxac.ld
 
+BluzDK.build.lfclk_flags=-DUSE_LFXO
+
 BluzDK.menu.softdevice.none=None
 BluzDK.menu.softdevice.none.softdevice=none
 
@@ -361,6 +358,8 @@ PCA1000X.build.variant_system_lib=
 PCA1000X.build.extra_flags=-DNRF51 -D{board.variant}
 PCA1000X.build.float_flags=
 PCA1000X.build.ldscript=nrf51_xxaa.ld
+
+PCA1000X.build.lfclk_flags=-DUSE_LFXO
 
 PCA1000X.upload.tool=sandeepmistry:openocd
 PCA1000X.upload.protocol=
@@ -417,6 +416,7 @@ nRF51Dongle.build.variant_system_lib=
 nRF51Dongle.build.extra_flags=-DNRF51
 nRF51Dongle.build.float_flags=
 nRF51Dongle.build.ldscript=nrf51_{build.chip}.ld
+
 nRF51Dongle.build.lfclk_flags=-DUSE_LFXO
 
 nRF51Dongle.menu.version.1_1_0=1.1.0
@@ -496,6 +496,8 @@ BLENano.build.extra_flags=-DNRF51
 BLENano.build.float_flags=
 BLENano.build.ldscript=nrf51_{build.chip}.ld
 
+BLENano.build.lfclk_flags=-DUSE_LFXO
+
 BLENano.menu.version.1_0=1.0
 BLENano.menu.version.1_0.build.chip=xxaa
 BLENano.menu.version.1_5=1.5
@@ -538,6 +540,8 @@ RedBearLab_nRF51822.build.extra_flags=-DNRF51
 RedBearLab_nRF51822.build.float_flags=
 RedBearLab_nRF51822.build.ldscript=nrf51_{build.chip}.ld
 
+RedBearLab_nRF51822.build.lfclk_flags=-DUSE_LFXO
+
 RedBearLab_nRF51822.menu.version.1_0=1.0
 RedBearLab_nRF51822.menu.version.1_0.build.chip=xxaa
 RedBearLab_nRF51822.menu.version.1_5=1.5
@@ -579,6 +583,8 @@ Waveshare_BLE400.build.extra_flags=-DNRF51
 Waveshare_BLE400.build.float_flags=
 Waveshare_BLE400.build.ldscript=nrf51_{build.chip}.ld
 
+Waveshare_BLE400.build.lfclk_flags=-DUSE_LFXO
+
 Waveshare_BLE400.menu.chip.xxaa=16 kB RAM, 256 kB flash (xxaa)
 Waveshare_BLE400.menu.chip.xxaa.build.chip=xxaa
 Waveshare_BLE400.menu.chip.xxac=32 kB RAM, 256 kB flash (xxac)
@@ -601,6 +607,7 @@ Waveshare_BLE400.menu.softdevice.s130.upload.maximum_size=151552
 Waveshare_BLE400.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF51_S130
 Waveshare_BLE400.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_{build.chip}.ld
 
+
 ng_beacon.name=ng-beacon
 
 ng_beacon.upload.tool=sandeepmistry:openocd
@@ -618,6 +625,7 @@ ng_beacon.build.variant_system_lib=
 ng_beacon.build.extra_flags=-DNRF51
 ng_beacon.build.float_flags=
 ng_beacon.build.ldscript=nrf51_xxaa.ld
+
 ng_beacon.build.lfclk_flags=-DUSE_LFRC
 
 ng_beacon.menu.softdevice.none=None
