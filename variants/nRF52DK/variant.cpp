@@ -38,13 +38,15 @@ const uint32_t g_ADigitalPinMap[] = {
   24,
   25,
 
-  // A0 - A5
+  // A0 - A7
   3,
   4,
   28,
   29,
   30,
   31,
+  5, // AIN3 (P0.05)
+  2, // AIN0 (P0.02) / AREF
 
   // SDA, SCL
   26,
@@ -52,8 +54,5 @@ const uint32_t g_ADigitalPinMap[] = {
 
   // RX, TX
   8,
-  6,
-
-  // AREF
-  2
+  6
 };
