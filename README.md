@@ -55,16 +55,20 @@ No additional setup required.
 
 #####  Windows
 
+###### Driver Setup for mbed devices
+ Download [mbed Windows Serial driver](https://developer.mbed.org/handbook/Windows-serial-configuration#1-download-the-mbed-windows-serial-port)
+
 ###### Driver Setup for Segger J-Link
 
  1. Download [Zadig](http://zadig.akeo.ie)
  2. Plugin Segger J-Link or DK board
  3. Start ```Zadig```
  4. Select ```Options -> List All Devices```
- 5. Select ```J-Link (Interface 2)``` from the device dropdown
+ 5. Plug and unplug your device to find what changes, and select the ```Interface 2``` from the device dropdown
  6. Click ```Replace Driver```
 
-__NOTE__: To roll back to the original driver go to: Device Manager -> Open Device -> Update Driver
+__NOTE__: To roll back to the original driver go to: Device Manager -> Right click on device -> Check box for "Delete the driver software for this device" and click Uninstall
+
 
 ### Flashing a SoftDevice
 
