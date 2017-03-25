@@ -275,7 +275,7 @@ BBCmicrobit.bootloader.tool=sandeepmistry:openocd
 
 BBCmicrobit.build.mcu=cortex-m0
 BBCmicrobit.build.f_cpu=16000000
-BBCmicrobit.build.board=BLUZ_DK
+BBCmicrobit.build.board=BBC_MICROBIT
 BBCmicrobit.build.core=nRF5
 BBCmicrobit.build.variant=BBCmicrobit
 BBCmicrobit.build.variant_system_lib=
