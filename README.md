@@ -18,7 +18,7 @@ Does not require a custom bootloader on the device.
 
 ### nRF51
  * [Plain nRF51 MCU](https://www.nordicsemi.com/eng/Products/Bluetooth-low-energy/nRF51822)
- * [BBC micro:bit](https://www.microbit.co.uk/)
+ * [BBC micro:bit](https://microbit.org)
  * [Bluz DK](http://bluz.io)
  * Nordic Semiconductor  [nRF51822 Development Kit](https://www.nordicsemi.com/eng/Products/Bluetooth-low-energy/nRF51822-Development-Kit) + [nRF51422 Development Kit](https://www.nordicsemi.com/eng/Products/ANT/nRF51422-Development-Kit)
   * PCA10000
