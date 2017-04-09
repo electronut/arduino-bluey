@@ -26,7 +26,7 @@ extern "C" {
 #endif
 
 /*
- * \brief SAMD products have only one reference for ADC
+ * \brief nRF51 and nRF52 have different reference options.
  */
 #ifdef NRF52
 typedef enum _eAnalogReference
