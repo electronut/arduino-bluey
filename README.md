@@ -51,7 +51,10 @@ No additional setup required.
 
 ##### Linux
 
-No additional setup required.
+For 64-bit Linux users,  ```libc6:i386```, ```libstdc++6:i386```, ```libncurses5:i386```` and ```libudev1:i386``` need to be installed :
+  * ```sudo dpkg --add-architecture i386```
+  * ```sudo apt-get update```
+  * ```sudo apt-get install libc6:i386 libstdc++6:i386 libncurses5:i386 libudev1:i386```    
 
 #####  Windows
 
