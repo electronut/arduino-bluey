@@ -120,7 +120,7 @@ The Generic nRF51 and nRF52 board options have an additional menu item under `To
 
 ## Credits
 
-This core is based on the [Arduino SAMD Core](https://github.com/arduino/ArduinoCore-samd) and licensed under the same [GPL License](LICENSE)
+This core is based on the [Arduino SAMD Core](https://github.com/arduino/ArduinoCore-samd) and licensed under the same [LGPL License](LICENSE)
 
 The following tools are used:
 
