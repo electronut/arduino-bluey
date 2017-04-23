@@ -35,7 +35,7 @@ TwoWire::TwoWire(NRF_TWI_Type * p_twi, uint8_t pinSDA, uint8_t pinSCL)
   this->_p_twi = p_twi;
   this->_uc_pinSDA = g_ADigitalPinMap[pinSDA];
   this->_uc_pinSCL = g_ADigitalPinMap[pinSCL];
-  transmissionBegun = false;
+  this->transmissionBegun = false;
 }
 
 void TwoWire::begin(void) {
@@ -54,7 +54,7 @@ void TwoWire::begin(void) {
                                 | ((uint32_t)GPIO_PIN_CNF_DRIVE_S0D1       << GPIO_PIN_CNF_DRIVE_Pos)
                                 | ((uint32_t)GPIO_PIN_CNF_SENSE_Disabled   << GPIO_PIN_CNF_SENSE_Pos);
 
-  _p_twi->FREQUENCY = TWI_FREQUENCY_FREQUENCY_K100;
+  _p_twi->FREQUENCY = (TWI_FREQUENCY_FREQUENCY_K100 << TWI_FREQUENCY_FREQUENCY_Pos);
   _p_twi->ENABLE = (TWI_ENABLE_ENABLE_Enabled << TWI_ENABLE_ENABLE_Pos);
   _p_twi->PSELSCL = _uc_pinSCL;
   _p_twi->PSELSDA = _uc_pinSDA;
@@ -78,7 +78,7 @@ void TwoWire::setClock(uint32_t baudrate) {
     frequency = TWI_FREQUENCY_FREQUENCY_K400;
   }
 
-  _p_twi->FREQUENCY = frequency;
+  _p_twi->FREQUENCY = (frequency << TWI_FREQUENCY_FREQUENCY_Pos);
   _p_twi->ENABLE = (TWI_ENABLE_ENABLE_Enabled << TWI_ENABLE_ENABLE_Pos);
 }
 
@@ -88,22 +88,34 @@ void TwoWire::end() {
 
 uint8_t TwoWire::requestFrom(uint8_t address, size_t quantity, bool stopBit)
 {
-  if(quantity == 0)
+  if (quantity == 0)
   {
     return 0;
+  }
+  if (quantity > SERIAL_BUFFER_SIZE)
+  {
+    quantity = SERIAL_BUFFER_SIZE;
   }
 
   size_t byteRead = 0;
   rxBuffer.clear();
 
   _p_twi->ADDRESS = address;
-
+  _p_twi->SHORTS = 0x1UL;    // To trigger suspend task when a byte is received
   _p_twi->TASKS_RESUME = 0x1UL;
   _p_twi->TASKS_STARTRX = 0x1UL;
 
-  for (size_t i = 0; i < quantity; i++)
+  for (byteRead = 0; byteRead < quantity; byteRead++)
   {
-    while(!_p_twi->EVENTS_RXDREADY && !_p_twi->EVENTS_ERROR);
+    if (byteRead == quantity - 1)
+    {
+      // To trigger stop task when last byte is received, set before resume task.
+      _p_twi->SHORTS = 0x2UL;
+    }
+
+    _p_twi->TASKS_RESUME = 0x1UL;
+
+    while (!_p_twi->EVENTS_RXDREADY && !_p_twi->EVENTS_ERROR);
 
     if (_p_twi->EVENTS_ERROR)
     {
@@ -113,8 +125,6 @@ uint8_t TwoWire::requestFrom(uint8_t address, size_t quantity, bool stopBit)
     _p_twi->EVENTS_RXDREADY = 0x0UL;
 
     rxBuffer.store_char(_p_twi->RXD);
-
-    _p_twi->TASKS_RESUME = 0x1UL;
   }
 
   if (stopBit || _p_twi->EVENTS_ERROR)
@@ -159,11 +169,11 @@ void TwoWire::beginTransmission(uint8_t address) {
 //  4 : Other error
 uint8_t TwoWire::endTransmission(bool stopBit)
 {
-  transmissionBegun = false ;
+  transmissionBegun = false;
 
   // Start I2C transmission
   _p_twi->ADDRESS = txAddress;
-
+  _p_twi->SHORTS = 0x0UL;
   _p_twi->TASKS_RESUME = 0x1UL;
   _p_twi->TASKS_STARTTX = 0x1UL;
 

@@ -28,9 +28,7 @@
 
 #include "RingBuffer.h"
 
-#define BUFFER_LENGTH 32
-
- // WIRE_HAS_END means Wire has end()
+// WIRE_HAS_END means Wire has end()
 #define WIRE_HAS_END 1
 
 class TwoWire : public Stream
@@ -90,7 +88,7 @@ class TwoWire : public Stream
     // RX Buffer
     RingBuffer rxBuffer;
 
-    //TX buffer
+    // TX buffer
     RingBuffer txBuffer;
     uint8_t txAddress;
 
