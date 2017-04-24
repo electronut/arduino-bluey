@@ -47,7 +47,7 @@ static struct PWMContext pwmContext[PWM_COUNT] = {
 
 static int timerEnabled = 0;
 
-static uint32_t adcReference = ADC_CONFIG_REFSEL_VBG;
+static uint32_t adcReference = ADC_CONFIG_REFSEL_SupplyOneThirdPrescaling;
 static uint32_t adcPrescaling = ADC_CONFIG_INPSEL_AnalogInputOneThirdPrescaling;
 
 static uint32_t readResolution = 10;
@@ -89,10 +89,8 @@ static inline uint32_t mapResolution( uint32_t value, uint32_t from, uint32_t to
  */
 void analogReference( eAnalogReference ulMode )
 {
-    switch ( ulMode ) {
-    case AR_DEFAULT:
+  switch ( ulMode ) {
     case AR_VBG:
-    default:
       // 1.2 Reference, 1/3 prescaler = 0 V - 3.6 V range
       // Minimum VDD for full range in safe operation = 3.3V
       adcReference = ADC_CONFIG_REFSEL_VBG;
@@ -105,12 +103,6 @@ void analogReference( eAnalogReference ulMode )
       adcPrescaling = ADC_CONFIG_INPSEL_AnalogInputTwoThirdsPrescaling;
       break;
 
-    case AR_SUPPLY_ONE_THIRD:
-      // 1/3 VDD Reference, 1/3 prescaler = 0 V - VDD range
-      adcReference = ADC_CONFIG_REFSEL_SupplyOneThirdPrescaling;
-      adcPrescaling = ADC_CONFIG_INPSEL_AnalogInputOneThirdPrescaling;
-      break;
-
     case AR_EXT0:
       // ARF0 reference, 2/3 prescaler = 0 V - 1.5 ARF0
       adcReference = ADC_CONFIG_REFSEL_External | (ADC_CONFIG_EXTREFSEL_AnalogReference0 << ADC_CONFIG_EXTREFSEL_Pos);
@@ -121,6 +113,14 @@ void analogReference( eAnalogReference ulMode )
       // ARF1 reference, 2/3 prescaler = 0 V - 1.5 ARF1
       adcReference = (ADC_CONFIG_REFSEL_External | ADC_CONFIG_EXTREFSEL_AnalogReference1 << ADC_CONFIG_EXTREFSEL_Pos);
       adcPrescaling = ADC_CONFIG_INPSEL_AnalogInputTwoThirdsPrescaling;
+      break;
+
+    case AR_SUPPLY_ONE_THIRD:
+    case AR_DEFAULT:
+    default:
+      // 1/3 VDD Reference, 1/3 prescaler = 0 V - VDD range
+      adcReference = ADC_CONFIG_REFSEL_SupplyOneThirdPrescaling;
+      adcPrescaling = ADC_CONFIG_INPSEL_AnalogInputOneThirdPrescaling;
       break;
   }
 }
