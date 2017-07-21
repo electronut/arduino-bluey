@@ -75,14 +75,16 @@ This Arduino Core does **not** contain any Arduino style API's for BLE functiona
  * [BLEPeripheral](https://github.com/sandeepmistry/arduino-BLEPeripheral)
    * v0.3.0 and greater, available via the Arduino IDE's library manager.
    * Supports peripheral mode only.
-90
+
 ## Low Frequency Clock Source (LFCLKSRC)
 
 If the selected board has an external 32 kHz crystal connected, it will be used as the source for the low frequency clock. Otherwise the internal 32 kHz RC oscillator will be used. The low frequency clock is used by the `delay(ms)` and `millis()` Arduino API's.
 
-The Generic nRF51 and nRF52 board options have an additional menu item under `Tools -> Low Frequency Clock` that allows you to select the low frequency clock source.
+Bluey has an additional menu item under `Tools -> Low Frequency Clock` that allows you to select the low frequency clock source.
 
 ## Credits
+
+This is mostly Sandeep Mistry's work, forked from [here](https://github.com/sandeepmistry/arduino-nRF5/).
 
 This core is based on the [Arduino SAMD Core](https://github.com/arduino/ArduinoCore-samd) and licensed under the same [GPL License](LICENSE)
 
