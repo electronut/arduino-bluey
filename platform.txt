@@ -15,8 +15,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-name=Nordic Semiconductor nRF5 Boards
-version=0.3.0
+name=Electronut labs nRF5 boards
+version=0.1.0
 
 # Compile variables
 # -----------------
