@@ -12,15 +12,15 @@
         {
           "name": "Electronut labs nRF5 boards",
           "architecture": "nRF5", 
-          "version": "0.1.0", 
+          "version": "0.1.1", 
           "category": "Contributed", 
           "help":{
             "online":"https://github.com/electronut/ElectronutLabs-bluey/issues"
           },
-          "url":"https://github.com/ntavish/arduino-bluey/archive/v0.1.0.zip",
-          "archiveFileName":"v0.1.0.zip",
-          "checksum":"SHA-256:7560733bcff57277c45c0d585fe8948eb13adc1f0e2842e80b0ec2e1dc4bf421",
-          "size": "763133",
+          "url":"https://github.com/ntavish/arduino-bluey/archive/v0.1.1.zip",
+          "archiveFileName":"v0.1.1.zip",
+          "checksum":"SHA-256:79b80607dd3637c6ba4e1919a72784c3f3e1ede82684bded7fa1d0aed4a2926d",
+          "size": "906219",
           "boards":[ 
                 {"name": "Electronut Labs bluey"}
           ],
