@@ -9,9 +9,9 @@ Uploading without programmer requires bootloader programmed on the board. [Repo]
  1. [Download and install the Arduino IDE](https://www.arduino.cc/en/Main/Software) (At least v1.6.12)
  2. Start the Arduino IDE
  3. Go into Preferences
- 4. Add ```https://sandeepmistry.github.io/arduino-nRF5/package_nRF5_boards_index.json``` as an "Additional Board Manager URL"
- 5. Open the Boards Manager from the Tools -> Board menu and install "Nordic Semiconductor nRF5 Boards"
- 6. Select your nRF5 board from the Tools -> Board menu
+ 4. Add ```https://raw.githubusercontent.com/ntavish/arduino-bluey/master/docs/package_electronutlabs_boards_index.json``` as an "Additional Board Manager URL"
+ 5. Open the Boards Manager from the Tools -> Board menu and install "Electronut labs nRF5 Boards"
+ 6. Select 'Electronut labs bluey' from the Tools -> Board menu
 
 __NOTE:__ During installation it takes the Arduino IDE a few minutes to extract the tools after they have been downloaded, please be patient.
 
