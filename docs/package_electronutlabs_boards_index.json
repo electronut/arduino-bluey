@@ -1,7 +1,7 @@
 {
    "packages":[
     {
-      "name": "Electronut labs",
+      "name": "electronutlabs",
       "maintainer": "Electronut labs", 
       "websiteURL": "https://github.com/electronut/ElectronutLabs-bluey", 
       "email": "info@electronut.in", 
