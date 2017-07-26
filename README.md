@@ -1,6 +1,6 @@
 # Arduino Core for Electronut labs bluey
 
-Uploading without programmer requires bootloader programmed on the board. [Repo](https://github.com/ntavish/bluey_serial_dfu_bootloader/)
+Uploading without programmer requires bootloader programmed on the board. [Repo](https://github.com/electronut/bluey_serial_dfu_bootloader/)
 
 ## Installing
 
@@ -9,7 +9,7 @@ Uploading without programmer requires bootloader programmed on the board. [Repo]
  1. [Download and install the Arduino IDE](https://www.arduino.cc/en/Main/Software) (At least v1.6.12)
  2. Start the Arduino IDE
  3. Go into Preferences
- 4. Add ```https://raw.githubusercontent.com/ntavish/arduino-bluey/master/docs/package_electronutlabs_boards_index.json``` as an "Additional Board Manager URL"
+ 4. Add ```https://raw.githubusercontent.com/electronut/arduino-bluey/master/docs/package_electronutlabs_boards_index.json``` as an "Additional Board Manager URL"
  5. Open the Boards Manager from the Tools -> Board menu and install "Electronut labs nRF5 Boards"
  6. Select 'Electronut labs bluey' from the Tools -> Board menu
 
@@ -54,17 +54,6 @@ __NOTE__: To roll back to the original driver go to: Device Manager -> Open Devi
  9. Read license agreement
  10. Click "Accept" to accept license and continue, or "Decline" to decline and abort
  11. If accepted, SoftDevice binary will be flashed to the board
-
-### From git (for core development)
-
- 1. Follow steps from Board Manager section above
- 2. ```cd <SKETCHBOOK>```, where ```<SKETCHBOOK>``` is your Arduino Sketch folder:
-  * OS X: ```~/Documents/Arduino```
-  * Linux: ```~/Arduino```
-  * Windows: ```~/Documents/Arduino```
- 3. Create a folder named ```hardware```, if it does not exist, and change directories to it
- 4. Clone this repo: ```git clone https://github.com/sandeepmistry/arduino-nRF5.git sandeepmistry/nRF5```
- 5. Restart the Arduino IDE
 
 ## BLE
 
