@@ -36,6 +36,7 @@ TwoWire::TwoWire(NRF_TWI_Type * p_twi, uint8_t pinSDA, uint8_t pinSCL)
   this->_uc_pinSDA = g_ADigitalPinMap[pinSDA];
   this->_uc_pinSCL = g_ADigitalPinMap[pinSCL];
   this->transmissionBegun = false;
+  this->suspended = false;
 }
 
 void TwoWire::begin(void) {
@@ -102,15 +103,20 @@ uint8_t TwoWire::requestFrom(uint8_t address, size_t quantity, bool stopBit)
 
   _p_twi->ADDRESS = address;
   _p_twi->SHORTS = 0x1UL;    // To trigger suspend task when a byte is received
-  _p_twi->TASKS_RESUME = 0x1UL;
-  _p_twi->TASKS_STARTRX = 0x1UL;
+
+  if (!this->suspended) {
+    _p_twi->TASKS_RESUME = 0x1UL;
+    _p_twi->TASKS_STARTRX = 0x1UL;
+  }
 
   for (byteRead = 0; byteRead < quantity; byteRead++)
   {
     if (byteRead == quantity - 1)
     {
       // To trigger stop task when last byte is received, set before resume task.
-      _p_twi->SHORTS = 0x2UL;
+      if (stopBit) {
+        _p_twi->SHORTS = 0x2UL;
+      }
     }
 
     _p_twi->TASKS_RESUME = 0x1UL;
@@ -129,12 +135,14 @@ uint8_t TwoWire::requestFrom(uint8_t address, size_t quantity, bool stopBit)
 
   if (stopBit || _p_twi->EVENTS_ERROR)
   {
+    this->suspended = false;
     _p_twi->TASKS_STOP = 0x1UL;
     while(!_p_twi->EVENTS_STOPPED);
     _p_twi->EVENTS_STOPPED = 0x0UL;
   }
   else
   {
+    this->suspended = true;
     _p_twi->TASKS_SUSPEND = 0x1UL;
     while(!_p_twi->EVENTS_SUSPENDED);
     _p_twi->EVENTS_SUSPENDED = 0x0UL;

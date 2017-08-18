@@ -84,6 +84,7 @@ class TwoWire : public Stream
     bool master;
     bool receiving;
     bool transmissionBegun;
+    bool suspended;
 
     // RX Buffer
     RingBuffer rxBuffer;
