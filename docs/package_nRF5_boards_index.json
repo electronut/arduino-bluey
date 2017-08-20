@@ -123,8 +123,8 @@
           },
           "url": "https://github.com/sandeepmistry/arduino-nRF5/archive/0.4.0.tar.gz",
           "archiveFileName": "arduino-nRF52-0.4.0.tar.gz",
-          "checksum": "MD5:db266b898c5bfa4eec8992baf37ba535",
-          "size": "4239360",
+          "checksum": "MD5:E82DA39642AB48492A9FEDE8159871F5",
+          "size": "573440",
           "boards": [
             {"name": "BBC micro:bit"},
             {"name": "Bluz DK"},
