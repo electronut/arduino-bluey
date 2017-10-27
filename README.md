@@ -1,6 +1,12 @@
 # Arduino Core for Electronut labs bluey
 
-Uploading without programmer requires bootloader programmed on the board. [Repo](https://github.com/electronut/bluey_serial_dfu_bootloader/)
+Uploading without programmer requires bootloader programmed on the board. The repo [electronut/bluey_serial_dfu_bootloader](https://github.com/electronut/bluey_serial_dfu_bootloader/) 
+contains the source and precompiled hex file of the bootloader as `hex/s132_nrf52_2.0.0_softdevice.hex`.
+
+The bootloader has the softdevice s132 in it, so no other action is needed to use the BLEPeripheral library.
+
+Bootloader mode is triggered by pressing and holding both prss buttons on bluey and releasing the reset button. The blue LED will start blinkng at an accelerating rate rpeatedly to 
+indicate that the bootloader mode is active.
 
 ## Installing
 
@@ -14,46 +20,6 @@ Uploading without programmer requires bootloader programmed on the board. [Repo]
  6. Select 'Electronut labs bluey' from the Tools -> Board menu
 
 __NOTE:__ During installation it takes the Arduino IDE a few minutes to extract the tools after they have been downloaded, please be patient.
-
-#### OS Specific Setup
-
-##### OS X
-
-No additional setup required.
-
-##### Linux
-
-No additional setup required.
-
-#####  Windows
-
-###### Driver Setup for Segger J-Link
-
- 1. Download [Zadig](http://zadig.akeo.ie)
- 2. Plugin Segger J-Link or DK board
- 3. Start ```Zadig```
- 4. Select ```Options -> List All Devices```
- 5. Select ```J-Link (Interface 2)``` from the device dropdown
- 6. Click ```Replace Driver```
-
-__NOTE__: To roll back to the original driver go to: Device Manager -> Open Device -> Update Driver
-
-### Flashing a SoftDevice
-
- 1. ```cd <SKETCHBOOK>```, where ```<SKETCHBOOK>``` is your Arduino Sketch folder:
-  * OS X: ```~/Documents/Arduino```
-  * Linux: ```~/Arduino```
-  * Windows: ```~/Documents/Arduino```
- 2. Create the following directories: ```tools/nRF5FlashSoftDevice/tool/```
- 3. Download [nRF5FlashSoftDevice.jar](https://github.com/sandeepmistry/arduino-nRF5/releases/download/tools/nRF5FlashSoftDevice.jar) to ```<SKETCHBOOK>/tools/nRF5FlashSoftDevice/tool/```
- 4. Restart the Arduino IDE
- 5. Select your nRF board from the Tools -> Board menu
- 6. Select a SoftDevice from the Tools -> "SoftDevice: " menu
- 7. Select a Programmer (J-Link, ST-Link V2, or CMSIS-DAP) from the Tools -> "Programmer: " menu
- 8. Select Tools -> nRF5 Flash SoftDevice
- 9. Read license agreement
- 10. Click "Accept" to accept license and continue, or "Decline" to decline and abort
- 11. If accepted, SoftDevice binary will be flashed to the board
 
 ## BLE
 
