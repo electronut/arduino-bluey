@@ -100,6 +100,43 @@ bluey.menu.lfclk.lfsynt.build.lfclk_flags=-DUSE_LFSYNT
 
 
 
+hackaBLE.name=Electronut labs hackaBLE
+
+hackaBLE.upload.tool=sandeepmistry:openocd
+hackaBLE.upload.target=nrf52
+hackaBLE.upload.maximum_size=524288
+
+hackaBLE.bootloader.tool=sandeepmistry:openocd
+
+hackaBLE.build.mcu=cortex-m4
+hackaBLE.build.f_cpu=16000000
+hackaBLE.build.board=ELECTRONUT_HACKABLE
+hackaBLE.build.core=nRF5
+hackaBLE.build.variant=hackaBLE
+hackaBLE.build.variant_system_lib=
+hackaBLE.build.extra_flags=-DNRF52
+hackaBLE.build.float_flags=-mfloat-abi=hard -mfpu=fpv4-sp-d16
+hackaBLE.build.ldscript=nrf52_xxaa.ld
+
+hackaBLE.menu.softdevice.none=None
+hackaBLE.menu.softdevice.none.softdevice=none
+hackaBLE.menu.softdevice.none.softdeviceversion=
+
+hackaBLE.menu.softdevice.s132=S132
+hackaBLE.menu.softdevice.s132.softdevice=s132
+hackaBLE.menu.softdevice.s132.softdeviceversion=2.0.1
+hackaBLE.menu.softdevice.s132.upload.maximum_size=409600
+hackaBLE.menu.softdevice.s132.build.extra_flags=-DNRF52 -DS132 -DNRF51_S132
+hackaBLE.menu.softdevice.s132.build.ldscript=armgcc_s132_nrf52832_xxaa.ld
+
+hackaBLE.menu.lfclk.lfxo=Crystal Oscillator
+hackaBLE.menu.lfclk.lfxo.build.lfclk_flags=-DUSE_LFXO
+hackaBLE.menu.lfclk.lfrc=RC Oscillator
+hackaBLE.menu.lfclk.lfrc.build.lfclk_flags=-DUSE_LFRC
+hackaBLE.menu.lfclk.lfsynt=Synthesized
+hackaBLE.menu.lfclk.lfsynt.build.lfclk_flags=-DUSE_LFSYNT
+
+
 Blend2.name=RedBear Blend 2
 
 Blend2.vid.0=0x0204
