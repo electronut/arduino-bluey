@@ -18,3 +18,11 @@ cmsisdap.protocol=cmsis-dap
 cmsisdap.program.protocol=cmsis-dap
 cmsisdap.program.tool=openocd
 cmsisdap.program.setup_command=;
+
+blackmagicprobe.name=Black Magic Probe (GDB)
+blackmagicprobe.communication=USB
+blackmagicprobe.protocol=
+blackmagicprobe.program.protocol=
+blackmagicprobe.program.tool=blackmagicprobe
+blackmagicprobe.bootloader.tool=sandeepmistry:blackmagicprobe
+blackmagicprobe.program.extra_params=;
