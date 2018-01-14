@@ -34,7 +34,54 @@ extern "C"
 #endif // __cplusplus
 
 // Number of pins defined in PinDescription array
-#ifndef PCA10000
+#ifdef PCA10000
+  /* PCA10000
+   * *********/
+
+  #define PINS_COUNT           (7u)
+  #define NUM_DIGITAL_PINS     (7u)
+  #define NUM_ANALOG_INPUTS    (0u)
+  #define NUM_ANALOG_OUTPUTS   (0u)
+
+  // LEDs
+  #define PIN_LED1                (4)
+  #define PIN_LED2                (5)
+  #define PIN_LED3                (6)
+  #define LED_BUILTIN             PIN_LED1
+
+  /*
+   * Serial interfaces
+   */
+  #define PIN_SERIAL_RX       (3)
+  #define PIN_SERIAL_CTS      (2)
+  #define PIN_SERIAL_TX       (1)
+  #define PIN_SERIAL_RTS      (0)
+#elif defined(PCA10001)
+  /* PCA10001
+   * *********/
+
+  #define PINS_COUNT           (32u)
+  #define NUM_DIGITAL_PINS     (32u)
+  #define NUM_ANALOG_INPUTS    (0u)
+  #define NUM_ANALOG_OUTPUTS   (0u)
+
+  // LEDs
+  #define PIN_LED0                (18)
+  #define PIN_LED1                (19)
+  #define LED_BUILTIN             PIN_LED0
+
+  // Buttons
+  #define PIN_BUTTON0             (16)
+  #define PIN_BUTTON1             (17)
+
+  /*
+   * Serial interfaces
+   */
+  #define PIN_SERIAL_RX       (11)
+  #define PIN_SERIAL_CTS      (10)
+  #define PIN_SERIAL_TX       (9)
+  #define PIN_SERIAL_RTS      (8)
+#else
   /* PCA1000[1,2,3,4] on nRF6310
    * ****************************/
   #define PINS_COUNT           (32u)
@@ -113,28 +160,6 @@ extern "C"
   static const uint8_t SDA = PIN_WIRE_SDA;
   static const uint8_t SCL = PIN_WIRE_SCL;
 
-#else
-  /* PCA10000
-   * *********/
-
-  #define PINS_COUNT           (7u)
-  #define NUM_DIGITAL_PINS     (7u)
-  #define NUM_ANALOG_INPUTS    (0u)
-  #define NUM_ANALOG_OUTPUTS   (0u)
-
-  // LEDs
-  #define PIN_LED1                (4)
-  #define PIN_LED2                (5)
-  #define PIN_LED3                (6)
-  #define LED_BUILTIN             PIN_LED1
-
-  /*
-   * Serial interfaces
-   */
-  #define PIN_SERIAL_RX       (3)
-  #define PIN_SERIAL_CTS      (2)
-  #define PIN_SERIAL_TX       (1)
-  #define PIN_SERIAL_RTS      (0)
 #endif
 
 #ifdef __cplusplus
