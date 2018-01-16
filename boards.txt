@@ -467,14 +467,14 @@ PCA1000X.menu.softdevice.s110=S110
 PCA1000X.menu.softdevice.s110.softdevice=s110
 PCA1000X.menu.softdevice.s110.softdeviceversion=8.0.0
 PCA1000X.menu.softdevice.s110.upload.maximum_size=151552
-PCA1000X.menu.softdevice.s110.build.extra_flags=-DNRF51 -DS110 -DNRF51_S110
+PCA1000X.menu.softdevice.s110.build.extra_flags=-DNRF51 -D{board.variant} -DS110 -DNRF51_S110
 PCA1000X.menu.softdevice.s110.build.ldscript=armgcc_s110_nrf51822_xxaa.ld
 
 PCA1000X.menu.softdevice.s130=S130
 PCA1000X.menu.softdevice.s130.softdevice=s130
 PCA1000X.menu.softdevice.s130.softdeviceversion=2.0.1
 PCA1000X.menu.softdevice.s130.upload.maximum_size=151552
-PCA1000X.menu.softdevice.s130.build.extra_flags=-DNRF51 -DS130 -DNRF51_S130
+PCA1000X.menu.softdevice.s130.build.extra_flags=-DNRF51 -D{board.variant} -DS130 -DNRF51_S130
 PCA1000X.menu.softdevice.s130.build.ldscript=armgcc_s130_nrf51822_xxaa.ld
 
 PCA1000X.menu.lfclk.lfxo=Crystal Oscillator
