@@ -454,6 +454,8 @@ PCA1000X.upload.setup_command=transport select swd; set WORKAREASIZE 0;
 
 PCA1000X.menu.board_variant.pca10000=PCA10000
 PCA1000X.menu.board_variant.pca10000.board.variant=PCA10000
+PCA1000X.menu.board_variant.pca10001=PCA10001
+PCA1000X.menu.board_variant.pca10001.board.variant=PCA10001
 PCA1000X.menu.board_variant.nrf6310=PCA1000X (via nRF6310)
 PCA1000X.menu.board_variant.nrf6310.board.variant=NRF6310
 
