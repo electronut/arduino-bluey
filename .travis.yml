@@ -6,7 +6,7 @@ addons:
       - libstdc++6:i386
 env:
   global:
-    - IDE_VERSION=1.8.1
+    - IDE_VERSION=1.8.5
 before_install:
   - wget http://downloads.arduino.cc/arduino-$IDE_VERSION-linux64.tar.xz
   - tar xf arduino-$IDE_VERSION-linux64.tar.xz
