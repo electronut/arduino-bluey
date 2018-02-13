@@ -95,9 +95,7 @@ Become a sponsor and get your logo on our README on Github with a link to your s
  * [BBC micro:bit](https://microbit.org)
  * [Bluz DK](http://bluz.io)
  * Nordic Semiconductor  [nRF51822 Development Kit](https://www.nordicsemi.com/eng/Products/Bluetooth-low-energy/nRF51822-Development-Kit) + [nRF51422 Development Kit](https://www.nordicsemi.com/eng/Products/ANT/nRF51422-Development-Kit)
-  * PCA10000
-  * PCA10001
-  * PCA10001, PCA10002, PCA10003, PCA10004 via nRF6310(nRFgo)
+   * Nordic SemiconductornRF51x22 Development Kits (PCA1000x)
  * [Nordic Semiconductor NRF51 Smart Beacon Kit](https://www.nordicsemi.com/eng/Products/Bluetooth-low-energy/nRF51822-Bluetooth-Smart-Beacon-Kit)
  * [Nordic Semiconductor NRF51 Dongle](http://www.nordicsemi.com/eng/Products/nRF51-Dongle)
  * [OSHChip](http://www.oshchip.org/)
