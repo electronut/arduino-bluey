@@ -84,6 +84,7 @@ Become a sponsor and get your logo on our README on Github with a link to your s
  * [Plain nRF52 MCU](https://www.nordicsemi.com/eng/Products/Bluetooth-low-energy/nRF52832)
  * [Nordic Semiconductor nRF52 DK](https://www.nordicsemi.com/eng/Products/Bluetooth-Smart-Bluetooth-low-energy/nRF52-DK)
    * For boards prior to ```2016.9``` (see sticker), the lastest JLink bootloader is required to upload sketches. To upgrade, press the boot/reset button while powering on the board and copy over the latest [bootloader](https://www.nordicsemi.com/eng/nordic/Products/nRF52-DK/nRF5x-OB-JLink-IF/52275).
+   * To see how the silkscreened MCU pin names map to Arduino-compatible pin names, see ```PCA10040_Schematic_And_PCB.pdf``` -> ```GPIO pin mapping``` from the [PCA10040_Schematic](https://www.nordicsemi.com/eng/nordic/Products/nRF52-DK/nRF52-HW/50980).
  * [Shenzhen Taida Century Technology nRF52 low cost development board](https://www.aliexpress.com/item/NRF52832-high-cost-development-board-gold-core-board/32725601299.html)
  * [RedBear Blend 2](https://github.com/redbear/nRF5x#blend-2)
  * [RedBear Nano 2](https://github.com/redbear/nRF5x#ble-nano-2)
