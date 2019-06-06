@@ -14,12 +14,11 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#ifndef _VARIANT_NRF52_DK_
-#define _VARIANT_NRF52_DK_
+#ifndef _VARIANT_ELECTRONUT_BLUEY_
+#define _VARIANT_ELECTRONUT_BLUEY_
 
 /** Master clock frequency */
-// TODO confirm
-#define VARIANT_MCK       (16000000ul)
+#define VARIANT_MCK       (64000000ul)
 
 /*----------------------------------------------------------------------------
  *        Headers
@@ -33,8 +32,6 @@ extern "C"
 #endif // __cplusplus
 
 // Number of pins defined in PinDescription array
-// NOTE: NUM_DIGITAL_PINS does not seem to be used anywhere,
-// and not sure how it is actually counted
 #define PINS_COUNT           (27u)
 #define NUM_DIGITAL_PINS     (27u)
 #define NUM_ANALOG_INPUTS    (7u)
@@ -69,8 +66,6 @@ static const uint8_t A5  = PIN_A5 ; // AIN6
 static const uint8_t A6  = PIN_A6 ; // AIN7
 #define ADC_RESOLUTION    10
 
-// XXX check ADC resolution, doesn't seem to be in use
-
 // Other pins
 #define PIN_AREF           (16)
 static const uint8_t AREF = PIN_AREF;
@@ -103,6 +98,11 @@ static const uint8_t SCK  = PIN_SPI_SCK ;
 
 #define PIN_WIRE_SDA         (12u)
 #define PIN_WIRE_SCL         (10u)
+
+/*
+ * Reset Button at P0.21
+ */
+#define RESET_PIN            21
 
 #ifdef __cplusplus
 }

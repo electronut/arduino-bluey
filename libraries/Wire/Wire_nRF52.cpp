@@ -39,6 +39,14 @@ TwoWire::TwoWire(NRF_TWIM_Type * p_twim, NRF_TWIS_Type * p_twis, IRQn_Type IRQn,
   transmissionBegun = false;
 }
 
+#ifdef ARDUINO_GENERIC
+void TwoWire::setPins(uint8_t pinSDA, uint8_t pinSCL)
+{
+  this->_uc_pinSDA = g_ADigitalPinMap[pinSDA];
+  this->_uc_pinSCL = g_ADigitalPinMap[pinSCL];
+}
+#endif // ARDUINO_GENERIC
+
 void TwoWire::begin(void) {
   //Master Mode
   master = true;
@@ -214,7 +222,9 @@ uint8_t TwoWire::endTransmission(bool stopBit)
   while(!_p_twim->EVENTS_TXSTARTED && !_p_twim->EVENTS_ERROR);
   _p_twim->EVENTS_TXSTARTED = 0x0UL;
 
-  while(!_p_twim->EVENTS_LASTTX && !_p_twim->EVENTS_ERROR);
+  if (txBuffer.available()) {
+    while(!_p_twim->EVENTS_LASTTX && !_p_twim->EVENTS_ERROR);
+  }
   _p_twim->EVENTS_LASTTX = 0x0UL;
 
   if (stopBit || _p_twim->EVENTS_ERROR)

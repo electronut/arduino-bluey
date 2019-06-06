@@ -100,6 +100,9 @@ class SPIClass {
   void attachInterrupt();
   void detachInterrupt();
 
+#ifdef ARDUINO_GENERIC
+  void setPins(uint8_t uc_pinMISO, uint8_t uc_pinSCK, uint8_t uc_pinMOSI);
+#endif // ARDUINO_GENERIC
   void begin();
   void end();
 
@@ -135,6 +138,9 @@ void SPIClass::transfer(void *buf, size_t count)
 
 #if SPI_INTERFACES_COUNT > 0
 extern SPIClass SPI;
+#endif
+#if SPI_INTERFACES_COUNT > 1
+extern SPIClass SPI1;
 #endif
 
 // For compatibility with sketches designed for AVR @ 16 MHz

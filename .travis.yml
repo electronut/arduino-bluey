@@ -6,7 +6,7 @@ addons:
       - libstdc++6:i386
 env:
   global:
-    - IDE_VERSION=1.8.1
+    - IDE_VERSION=1.8.5
 before_install:
   - wget http://downloads.arduino.cc/arduino-$IDE_VERSION-linux64.tar.xz
   - tar xf arduino-$IDE_VERSION-linux64.tar.xz
@@ -23,12 +23,18 @@ script:
   - buildExampleSketch sandeepmistry:nRF5:BLENano:version=1_0 01.Basics Blink
   - buildExampleSketch sandeepmistry:nRF5:RedBearLab_nRF51822:version=1_0 01.Basics Blink
   - buildExampleSketch sandeepmistry:nRF5:BBCmicrobit 01.Basics Blink
+  - buildExampleSketch sandeepmistry:nRF5:CalliopeMini 01.Basics Blink
   - buildExampleSketch sandeepmistry:nRF5:Generic_nRF51822:chip=xxac 01.Basics Blink
   - buildExampleSketch sandeepmistry:nRF5:Generic_nRF52832 01.Basics Blink
   - buildExampleSketch sandeepmistry:nRF5:OSHChip 01.Basics Blink
   - buildExampleSketch sandeepmistry:nRF5:STCT_nRF52_minidev 01.Basics Blink
   - buildExampleSketch sandeepmistry:nRF5:PCA1000X:board_variant=pca10000 01.Basics Blink
+  - buildExampleSketch sandeepmistry:nRF5:PCA1000X:board_variant=pca10001 01.Basics Blink
   - buildExampleSketch sandeepmistry:nRF5:PCA1000X:board_variant=nrf6310 01.Basics Blink
   - buildExampleSketch sandeepmistry:nRF5:nRF51Dongle:version=1_1_0 01.Basics Blink
   - buildExampleSketch sandeepmistry:nRF5:Blend2 01.Basics Blink
   - buildExampleSketch sandeepmistry:nRF5:BLENano2 01.Basics Blink
+  - buildExampleSketch sandeepmistry:nRF5:TinyBLE 01.Basics Blink
+  - buildExampleSketch sandeepmistry:nRF5:bluey 01.Basics Blink
+  - buildExampleSketch sandeepmistry:nRF5:hackaBLE 01.Basics Blink
+  - buildExampleSketch sandeepmistry:nRF5:Sinobit 01.Basics BareMinimum
