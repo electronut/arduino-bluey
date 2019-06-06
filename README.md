@@ -1,4 +1,7 @@
-# Arduino Core for Electronut labs bluey
+# Arduino Core for nRF52832 based boards from Electronut labs
+
+__NOTE__: The following describes mainly Bluey, but this repo contains code and
+tools for HackaBLE also.
 
 Uploading without programmer requires bootloader programmed on the board. The repo [electronut/bluey_serial_dfu_bootloader](https://github.com/electronut/bluey_serial_dfu_bootloader/) 
 contains the source and precompiled hex file of the bootloader as `hex/s132_nrf52_2.0.0_softdevice.hex`.
