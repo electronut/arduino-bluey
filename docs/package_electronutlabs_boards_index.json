@@ -74,6 +74,40 @@
               "version": "0.5.2-SFE"
             }
           ]
+        },
+        {
+          "name": "Electronut labs nRF5 boards",
+          "architecture": "nRF5", 
+          "version": "0.2.1", 
+          "category": "Contributed", 
+          "help":{
+            "online":"https://github.com/electronut/ElectronutLabs-bluey/issues"
+          },
+          "url":"https://github.com/electronut/arduino-bluey/archive/v0.2.1.zip",
+          "archiveFileName":"arduino-bluey-0.2.1.zip",
+          "checksum":"SHA-256:ef5858f589160e0012c6cd0f4bd29dcc95a1de2b78c402bb1fbdb389472d1c11",
+          "size": "870023",
+          "boards":[ 
+                {"name": "Electronut Labs bluey"},
+                {"name": "Electronut Labs Hackable_v2"}
+          ],
+          "toolsDependencies": [
+            {
+              "packager": "electronutlabs",
+              "name": "gcc-arm-none-eabi",
+              "version": "5_2-2015q4"
+            },
+            {
+              "packager": "electronutlabs",
+              "name": "openocd",
+              "version": "0.10.0-dev.nrf5"
+            },
+            {
+              "packager": "electronutlabs", 
+              "name": "nrfutil",
+              "version": "0.5.2-SFE"
+            }
+          ]
         }
       ], 
       "tools": [
