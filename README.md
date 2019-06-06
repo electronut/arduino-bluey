@@ -21,6 +21,11 @@ indicate that the bootloader mode is active.
 
 __NOTE:__ During installation it takes the Arduino IDE a few minutes to extract the tools after they have been downloaded, please be patient.
 
+__NOTE2:__ We have seen that on linux, for some reason the nrfutil binary is
+marked as not-executable sometimes. If you get an error while compiling, you may
+have to manually mark it as executable. Open a terminal and ype in
+`chmod +x $HOME/.arduino15/packages/electronutlabs/tools/nrfutil/0.5.2-SFE/dist/nrfutil`.
+
 ## BLE
 
 This Arduino Core does **not** contain any Arduino style API's for BLE functionality. All the relevant Nordic SoftDevice (S110, S130, S132) header files are included build path when a SoftDevice is selected via the `Tools` menu.
