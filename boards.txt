@@ -37,7 +37,7 @@ bluey.upload.use_1200bps_touch=false
 bluey.upload.wait_for_upload_port=false
 bluey.upload.native_usb=false
 
-bluey.bootloader.tool=sandeepmistry:openocd
+bluey.bootloader.tool=openocd
 bluey.bootloader.file=bluey/s132_nrf52_2.0.0_softdevice.hex
 
 bluey.build.mcu=cortex-m4
@@ -69,11 +69,11 @@ bluey.menu.lfclk.lfsynt.build.lfclk_flags=-DUSE_LFSYNT
 
 hackaBLE_v2.name=Electronut labs hackaBLE_v2
 
-hackaBLE_v2.upload.tool=sandeepmistry:openocd
+hackaBLE_v2.upload.tool=openocd
 hackaBLE_v2.upload.target=nrf52
 hackaBLE_v2.upload.maximum_size=524288
 
-hackaBLE_v2.bootloader.tool=sandeepmistry:openocd
+hackaBLE_v2.bootloader.tool=openocd
 
 hackaBLE_v2.build.mcu=cortex-m4
 hackaBLE_v2.build.f_cpu=16000000
