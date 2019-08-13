@@ -102,3 +102,39 @@ hackaBLE_v2.menu.lfclk.lfrc=RC Oscillator
 hackaBLE_v2.menu.lfclk.lfrc.build.lfclk_flags=-DUSE_LFRC
 hackaBLE_v2.menu.lfclk.lfsynt=Synthesized
 hackaBLE_v2.menu.lfclk.lfsynt.build.lfclk_flags=-DUSE_LFSYNT
+
+hackaBLE_v0p3.name=Electronut labs hackaBLE_v0.3
+
+hackaBLE_v0p3.upload.tool=openocd
+hackaBLE_v0p3.upload.target=nrf52
+hackaBLE_v0p3.upload.maximum_size=524288
+
+hackaBLE_v0p3.bootloader.tool=openocd
+
+hackaBLE_v0p3.build.mcu=cortex-m4
+hackaBLE_v0p3.build.f_cpu=16000000
+hackaBLE_v0p3.build.board=ELECTRONUT_hackaBLE_v0p3
+hackaBLE_v0p3.build.core=nRF5
+hackaBLE_v0p3.build.variant=hackaBLE_v0p3
+hackaBLE_v0p3.build.variant_system_lib=
+hackaBLE_v0p3.build.extra_flags=-DNRF52
+hackaBLE_v0p3.build.float_flags=-mfloat-abi=hard -mfpu=fpv4-sp-d16
+hackaBLE_v0p3.build.ldscript=nrf52_xxaa.ld
+
+hackaBLE_v0p3.menu.softdevice.none=None
+hackaBLE_v0p3.menu.softdevice.none.softdevice=none
+hackaBLE_v0p3.menu.softdevice.none.softdeviceversion=
+
+hackaBLE_v0p3.menu.softdevice.s132=S132
+hackaBLE_v0p3.menu.softdevice.s132.softdevice=s132
+hackaBLE_v0p3.menu.softdevice.s132.softdeviceversion=2.0.1
+hackaBLE_v0p3.menu.softdevice.s132.upload.maximum_size=409600
+hackaBLE_v0p3.menu.softdevice.s132.build.extra_flags=-DNRF52 -DS132 -DNRF51_S132
+hackaBLE_v0p3.menu.softdevice.s132.build.ldscript=armgcc_s132_nrf52832_xxaa.ld
+
+hackaBLE_v0p3.menu.lfclk.lfxo=Crystal Oscillator
+hackaBLE_v0p3.menu.lfclk.lfxo.build.lfclk_flags=-DUSE_LFXO
+hackaBLE_v0p3.menu.lfclk.lfrc=RC Oscillator
+hackaBLE_v0p3.menu.lfclk.lfrc.build.lfclk_flags=-DUSE_LFRC
+hackaBLE_v0p3.menu.lfclk.lfsynt=Synthesized
+hackaBLE_v0p3.menu.lfclk.lfsynt.build.lfclk_flags=-DUSE_LFSYNT
