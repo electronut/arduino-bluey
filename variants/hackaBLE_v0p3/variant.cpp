@@ -18,7 +18,7 @@
 */
 
 #include "variant.h"
-
+#include "Arduino.h"
 
 const uint32_t g_ADigitalPinMap[] = {
   0,
@@ -54,3 +54,17 @@ const uint32_t g_ADigitalPinMap[] = {
   30,
   31
 };
+
+// workaround for production issue with RGB LED
+void initVariant()
+{
+  // common pin needs to be high
+  pinMode(PIN_LED_COMMON, OUTPUT);
+  digitalWrite(PIN_LED_COMMON, HIGH);
+
+  // LEDs are active low
+  pinMode(PIN_LEDR, OUTPUT);
+  pinMode(PIN_LEDG, OUTPUT);
+  digitalWrite(PIN_LEDR, HIGH);
+  digitalWrite(PIN_LEDG, HIGH);
+}

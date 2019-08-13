@@ -38,10 +38,11 @@ extern "C"
 #define NUM_ANALOG_OUTPUTS   (0u)
 
 // LEDs
-#define PIN_LEDR               (19)
-#define PIN_LEDG               (20)
-#define PIN_LEDB               (17)
-#define LED_BUILTIN            PIN_LEDB
+// production issue with RGB LED workaround
+#define PIN_LED_COMMON         (19)
+#define PIN_LEDR               (20)
+#define PIN_LEDG               (17)
+#define LED_BUILTIN            PIN_LEDR
 
 /*
  * Analog pins
